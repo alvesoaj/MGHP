@@ -10,24 +10,26 @@
 
 // Importando bibliotecas úteis
 #include <string> // Para trabalhar com strings
-
 class UsinaHidroeletrica {
-public:
-	// Atributos da classe Usina
-	std::string nome = "";
+private:
+	// Atributos privados da classe Usina
 	unsigned int codigo;
+	std::string nome = "";
 	double volumeMorto;
 	double volumeMaximoMaximorum;
 	double vazaoDefluenteMinima;
 	double vazaoDefluenteMaxima;
 	double nivelMedioJusante;
 	double produtibilidadeEspecifica;
-	CasaDeMaquinas casaDeMaquinas;
-	UsinaHidroeletrica* usinaMontante;
-	PolinomioJusante polinomioJusante;
+	CasaDeMaquinas casaDeMaquinas = NULL;
+	PolinomioJusante polinomioJusante = NULL;
+	UsinaHidroeletrica usinaMontante = NULL;
 
+public:
 	// Métodos da classe Usina
-	UsinaHidroeletrica();
+	void setCasaDeMaquinas(CasaDeMaquinas casaDeMaquinas);
+	void setPolinomioJusante(PolinomioJusante polinomioJusante);
+	void setUsinaMontante(UsinaHidroeletrica usinaMontante);
 };
 
 #endif /* USINAHIDROELETRICA_H_ */

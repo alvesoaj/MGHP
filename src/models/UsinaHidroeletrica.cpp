@@ -7,6 +7,16 @@
 
 #include "UsinaHidroeletrica.h"
 
-UsinaHidroeletrica::UsinaHidroeletrica() {
-	// TODO Auto-generated constructor stub
+void UsinaHidroeletrica::setCasaDeMaquinas(CasaDeMaquinas casaDeMaquinas) {
+	this->casaDeMaquinas = casaDeMaquinas;
+}
+
+void UsinaHidroeletrica::setPolinomioJusante(
+		PolinomioJusante polinomioJusante) {
+	this->polinomioJusante = polinomioJusante;
+
+}
+
+void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica usinaMontante) {
+	this->usinaMontante = usinaMontante;
 }

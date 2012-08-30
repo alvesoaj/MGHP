@@ -12,7 +12,7 @@ class PolinomioJusante : public Polinomio {
 public:
 	// Atributos da classe Polinomio de Jusante
 	// Métodos da classe Polinomio de Jusante
-	PolinomioJusante();
+	PolinomioJusante(std::vector<double> coeficientes);
 };
 
 #endif /* POLINOMIOJUSANTE_H_ */

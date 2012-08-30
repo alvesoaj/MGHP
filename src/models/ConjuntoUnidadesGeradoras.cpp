@@ -7,8 +7,14 @@
 
 #include "ConjuntoUnidadesGeradoras.h"
 
-ConjuntoUnidadesGeradoras::ConjuntoUnidadesGeradoras() {
-	// TODO Auto-generated constructor stub
-
+ConjuntoUnidadesGeradoras::ConjuntoUnidadesGeradoras(unsigned int id,
+		unsigned int numeroUnidadesGeradoras, double potenciaEfetiva,
+		double engolimentoEfetivo, double alutraQuedaEfetiva, int tipoTurbinasHidraulicas) {
+	this->id = id;
+	this->numeroUnidadesGeradoras = numeroUnidadesGeradoras;
+	this->potenciaEfetiva = potenciaEfetiva;
+	this->engolimentoEfetivo = engolimentoEfetivo;
+	this->alutraQuedaEfetiva = alutraQuedaEfetiva;
+	this->tipoTurbinasHidraulicas = tipoTurbinasHidraulicas;
 }
 

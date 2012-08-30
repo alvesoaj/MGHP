@@ -10,14 +10,17 @@
 
 // Importando bibliotecas úteis
 #include <vector> // Para trabalhar com vetores
-
 class CasaDeMaquinas {
-public:
-	// Atributos da classe Casa de Maquinas
+private:
+	// Atributos privados da classe Casa de Maquinas
 	std::vector<ConjuntoUnidadesGeradoras> listaConjuntoUnidadesGeradoras;
-
+public:
 	// Métodos da classe Casa de Maquinas
 	CasaDeMaquinas();
+	bool adicionarConjuntoUnidadesGeradoras(
+			ConjuntoUnidadesGeradoras conjuntoUnidadesGeradoras);
+	bool removerConjuntoUnidadesGeradoras(
+			ConjuntoUnidadesGeradoras conjuntoUnidadesGeradoras);
 };
 
 #endif /* CASADEMAQUINAS_H_ */

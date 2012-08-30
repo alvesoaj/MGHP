@@ -14,11 +14,10 @@
 class Polinomio {
 public:
 	// Atributos da classe Polinomio
-	int grau;
 	std::vector<double> coeficientes;
 
 	// Métodos da classe Polinomio
-	Polinomio();
+	int getGrau();
 };
 
 #endif /* POLINOMIO_H_ */

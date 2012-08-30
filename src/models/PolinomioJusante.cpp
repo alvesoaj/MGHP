@@ -7,8 +7,7 @@
 
 #include "PolinomioJusante.h"
 
-PolinomioJusante::PolinomioJusante() {
-	// TODO Auto-generated constructor stub
-
+PolinomioJusante::PolinomioJusante(std::vector<double> coeficientes) {
+	this->coeficientes = coeficientes;
 }
 

@@ -7,8 +7,6 @@
 
 #include "Polinomio.h"
 
-Polinomio::Polinomio() {
-	// TODO Auto-generated constructor stub
-
+int Polinomio::getGrau() {
+	return this->coeficientes.size();
 }
-

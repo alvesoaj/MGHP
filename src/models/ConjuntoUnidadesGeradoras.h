@@ -12,13 +12,16 @@ class ConjuntoUnidadesGeradoras {
 public:
 	// Atributos da classe Conujonto de Unidades Geradoras
 	unsigned int id;
-	int numeroUnidadesGeradoras;
-	double potencialEfetivo;
+	unsigned int numeroUnidadesGeradoras;
+	double potenciaEfetiva;
 	double engolimentoEfetivo;
 	double alutraQuedaEfetiva;
+	int tipoTurbinasHidraulicas;
 
 	// Métodos da classe Unidades Geradoras
-	ConjuntoUnidadesGeradoras();
+	ConjuntoUnidadesGeradoras(unsigned int id,unsigned int numeroUnidadesGeradoras,
+			double potenciaEfetiva, double engolimentoEfetivo,
+			double alutraQuedaEfetiva, int tipoTurbinasHidraulicas);
 };
 
 #endif /* CONJUNTOUNIDADESGERADORAS_H_ */
