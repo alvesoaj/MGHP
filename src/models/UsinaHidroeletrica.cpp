@@ -7,16 +7,95 @@
 
 #include "UsinaHidroeletrica.h"
 
-void UsinaHidroeletrica::setCasaDeMaquinas(CasaDeMaquinas casaDeMaquinas) {
+UsinaHidroeletrica::UsinaHidroeletrica() {
+}
+
+unsigned int UsinaHidroeletrica::getCodigo() {
+	return codigo;
+}
+
+std::string UsinaHidroeletrica::getNome() {
+	return nome;
+}
+
+double UsinaHidroeletrica::getVolumeMorto() {
+	return volumeMorto;
+}
+
+double UsinaHidroeletrica::getVolumeMaximoMaximorum() {
+	return volumeMaximoMaximorum;
+}
+
+double UsinaHidroeletrica::getVazaoDefluenteMinima() {
+	return vazaoDefluenteMinima;
+}
+
+double UsinaHidroeletrica::getVazaoDefluenteMaxima() {
+	return vazaoDefluenteMaxima;
+}
+
+double UsinaHidroeletrica::getProdutibilidadeEspecifica() {
+	return produtibilidadeEspecifica;
+}
+
+double UsinaHidroeletrica::getNivelMedioJusante() {
+	return nivelMedioJusante;
+}
+
+CasaDeMaquinas* UsinaHidroeletrica::getCasaDeMaquinas() {
+	return casaDeMaquinas;
+}
+
+PolinomioJusante* UsinaHidroeletrica::getPolinomioJusante() {
+	return polinomioJusante;
+}
+
+UsinaHidroeletrica* UsinaHidroeletrica::getUsinaMontante() {
+	return usinaMontante;
+}
+
+void UsinaHidroeletrica::setCodigo(unsigned int codigo) {
+	this->codigo = codigo;
+}
+
+void UsinaHidroeletrica::setNome(std::string nome = "") {
+	this->nome = nome;
+}
+
+void UsinaHidroeletrica::setVolumeMorto(double volumeMorto) {
+	this->volumeMorto = volumeMorto;
+}
+
+void UsinaHidroeletrica::setVolumeMaximoMaximorum(double volumeMaximoMaximorum) {
+	this->volumeMaximoMaximorum = volumeMaximoMaximorum;
+}
+
+void UsinaHidroeletrica::setVazaoDefluenteMinima(double vazaoDefluenteMinima) {
+	this->vazaoDefluenteMinima = vazaoDefluenteMinima;
+}
+
+void UsinaHidroeletrica::setVazaoDefluenteMaxima(double vazaoDefluenteMaxima) {
+	this->vazaoDefluenteMaxima = vazaoDefluenteMaxima;
+}
+
+void UsinaHidroeletrica::setProdutibilidadeEspecifica(
+		double produtibilidadeEspecifica) {
+	this->produtibilidadeEspecifica = produtibilidadeEspecifica;
+}
+
+void UsinaHidroeletrica::setNivelMedioJusante(double nivelMedioJusante) {
+	this->nivelMedioJusante = nivelMedioJusante;
+}
+
+void UsinaHidroeletrica::setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas) {
 	this->casaDeMaquinas = casaDeMaquinas;
 }
 
-void UsinaHidroeletrica::setPolinomioJusante(
-		PolinomioJusante polinomioJusante) {
+void UsinaHidroeletrica::setPolinomioJusante(PolinomioJusante* polinomioJusante) {
 	this->polinomioJusante = polinomioJusante;
 
 }
 
-void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica usinaMontante) {
+void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica* usinaMontante) {
 	this->usinaMontante = usinaMontante;
 }

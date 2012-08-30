@@ -8,13 +8,15 @@
 #ifndef HIDROELETRICAFIODAAGUA_H_
 #define HIDROELETRICAFIODAAGUA_H_
 
-class HidroeletricaFioDaAgua : public UsinaHidroeletrica {
+#include "UsinaHidroeletrica.h"
+
+class HidroeletricaFioDaAgua: public UsinaHidroeletrica {
 public:
 	// Atributos da classe Usina Hidroeletrica a Fio D'Água
 	double volumeOperativo;
 	double volumeMontante;
 	// Métodos da classe Usina Hidroeletrica a Fio D'Água
-	HidroeletricaFioDaAgua();
+	HidroeletricaFioDaAgua(unsigned int codigo, std::string nome);
 };
 
 #endif /* HIDROELETRICAFIODAAGUA_H_ */

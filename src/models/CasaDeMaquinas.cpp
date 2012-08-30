@@ -12,11 +12,11 @@ CasaDeMaquinas::CasaDeMaquinas() {
 }
 
 bool CasaDeMaquinas::adicionarConjuntoUnidadesGeradoras(
-		ConjuntoUnidadesGeradoras conjuntoUnidadesGeradoras) {
+		ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradoras) {
 	bool exists = false;
-	for (int i; i < this->listaConjuntoUnidadesGeradoras.size(); i++) {
-		if (this->listaConjuntoUnidadesGeradoras[i]
-				== conjuntoUnidadesGeradoras) {
+	for (unsigned int i; i < this->listaConjuntoUnidadesGeradoras.size(); i++) {
+		if (this->listaConjuntoUnidadesGeradoras.at(i)->getId()
+				== conjuntoUnidadesGeradoras->getId()) {
 			exists = true;
 			break;
 		}
@@ -31,11 +31,11 @@ bool CasaDeMaquinas::adicionarConjuntoUnidadesGeradoras(
 }
 
 bool CasaDeMaquinas::removerConjuntoUnidadesGeradoras(
-		ConjuntoUnidadesGeradoras conjuntoUnidadesGeradoras) {
+		ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradoras) {
 	int toDelete = -1;
-	for (int i; i < this->listaConjuntoUnidadesGeradoras.size(); i++) {
-		if (this->listaConjuntoUnidadesGeradoras[i]
-				== conjuntoUnidadesGeradoras) {
+	for (unsigned int i; i < this->listaConjuntoUnidadesGeradoras.size(); i++) {
+		if (this->listaConjuntoUnidadesGeradoras.at(i)->getId()
+				== conjuntoUnidadesGeradoras->getId()) {
 			toDelete = i;
 			break;
 		}

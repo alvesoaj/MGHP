@@ -7,8 +7,8 @@
 
 #include "HidroeletricaFioDaAgua.h"
 
-HidroeletricaFioDaAgua::HidroeletricaFioDaAgua() {
-	// TODO Auto-generated constructor stub
-
+HidroeletricaFioDaAgua::HidroeletricaFioDaAgua(unsigned int codigo,
+		std::string nome) {
+	this->codigo = codigo;
+	this->nome = nome;
 }
-

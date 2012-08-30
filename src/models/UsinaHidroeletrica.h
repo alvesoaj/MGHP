@@ -10,26 +10,51 @@
 
 // Importando bibliotecas úteis
 #include <string> // Para trabalhar com strings
+#include "CasaDeMaquinas.h"
+#include "PolinomioJusante.h"
+
 class UsinaHidroeletrica {
-private:
+protected:
 	// Atributos privados da classe Usina
 	unsigned int codigo;
-	std::string nome = "";
+	std::string nome;
 	double volumeMorto;
 	double volumeMaximoMaximorum;
 	double vazaoDefluenteMinima;
 	double vazaoDefluenteMaxima;
 	double nivelMedioJusante;
 	double produtibilidadeEspecifica;
-	CasaDeMaquinas casaDeMaquinas = NULL;
-	PolinomioJusante polinomioJusante = NULL;
-	UsinaHidroeletrica usinaMontante = NULL;
+	CasaDeMaquinas* casaDeMaquinas;
+	PolinomioJusante* polinomioJusante;
+	UsinaHidroeletrica* usinaMontante;
 
 public:
 	// Métodos da classe Usina
-	void setCasaDeMaquinas(CasaDeMaquinas casaDeMaquinas);
-	void setPolinomioJusante(PolinomioJusante polinomioJusante);
-	void setUsinaMontante(UsinaHidroeletrica usinaMontante);
+	UsinaHidroeletrica();
+
+	unsigned int getCodigo();
+	std::string getNome();
+	double getVolumeMorto();
+	double getVolumeMaximoMaximorum();
+	double getVazaoDefluenteMinima();
+	double getVazaoDefluenteMaxima();
+	double getProdutibilidadeEspecifica();
+	double getNivelMedioJusante();
+	CasaDeMaquinas* getCasaDeMaquinas();
+	PolinomioJusante* getPolinomioJusante();
+	UsinaHidroeletrica* getUsinaMontante();
+
+	void setCodigo(unsigned int codigo);
+	void setNome(std::string nome);
+	void setVolumeMorto(double volumeMorto);
+	void setVolumeMaximoMaximorum(double volumeMaximoMaximorum);
+	void setVazaoDefluenteMinima(double vazaoDefluenteMinima);
+	void setVazaoDefluenteMaxima(double vazaoDefluenteMaxima);
+	void setNivelMedioJusante(double nivelMedioJusante);
+	void setProdutibilidadeEspecifica(double produtibilidadeEspecifica);
+	void setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas);
+	void setPolinomioJusante(PolinomioJusante* polinomioJusante);
+	void setUsinaMontante(UsinaHidroeletrica* usinaMontante);
 };
 
 #endif /* USINAHIDROELETRICA_H_ */

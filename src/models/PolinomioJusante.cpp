@@ -7,7 +7,9 @@
 
 #include "PolinomioJusante.h"
 
+PolinomioJusante::PolinomioJusante() {
+}
+
 PolinomioJusante::PolinomioJusante(std::vector<double> coeficientes) {
 	this->coeficientes = coeficientes;
 }
-
