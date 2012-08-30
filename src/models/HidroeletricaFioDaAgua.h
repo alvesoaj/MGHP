@@ -11,12 +11,19 @@
 #include "UsinaHidroeletrica.h"
 
 class HidroeletricaFioDaAgua: public UsinaHidroeletrica {
-public:
+private:
 	// Atributos da classe Usina Hidroeletrica a Fio D'Água
-	double volumeOperativo;
 	double volumeMontante;
+	double volumeOperativo;
+
+public:
 	// Métodos da classe Usina Hidroeletrica a Fio D'Água
 	HidroeletricaFioDaAgua(unsigned int codigo, std::string nome);
+
+	double getVolumeMontante();
+	double getVolumeOperativo();
+	void setVolumeMontante(double volumeMontante);
+	void setVolumeOperativo(double volumeOperativo);
 };
 
 #endif /* HIDROELETRICAFIODAAGUA_H_ */

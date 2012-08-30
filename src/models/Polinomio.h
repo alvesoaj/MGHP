@@ -12,10 +12,11 @@
 #include <vector> // Para trabalhar com vetores
 
 class Polinomio {
-public:
+protected:
 	// Atributos da classe Polinomio
 	std::vector<double> coeficientes;
 
+public:
 	// Métodos da classe Polinomio
 	int getGrau();
 };

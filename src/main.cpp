@@ -11,8 +11,6 @@
 #include <string> // Para trabalhar fácil com strings
 #include <sstream> // Para trabalhar fácil com strings
 #include <math.h> // Para ajudar em calculos matemáticos
-#include <ctime>  // Para usar o time() e fornecer um bom seed para o random
-#include <cstdlib> // Para gerar numeros randômicos
 #include "models/HidroeletricaReservatorio.h"
 
 // Constantes
@@ -26,13 +24,16 @@ HidroeletricaReservatorio* itumbiara = new HidroeletricaReservatorio(1,
 HidroeletricaReservatorio* emborcacao = new HidroeletricaReservatorio(2,
 		"Emborcação");
 
+string number_to_string(double n);
+
 int main(int argc, char *argv[]) {
 	// Configurando as usinas
 	// Itubiara
 	ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradoras =
 			new ConjuntoUnidadesGeradoras(1, 4, 298, 262, 130.30, 1);
 	CasaDeMaquinas* casaDeMaquinas = new CasaDeMaquinas();
-	casaDeMaquinas->adicionarConjuntoUnidadesGeradoras(conjuntoUnidadesGeradoras);
+	casaDeMaquinas->adicionarConjuntoUnidadesGeradoras(
+			conjuntoUnidadesGeradoras);
 	itumbiara->setCasaDeMaquinas(casaDeMaquinas);
 
 	vector<double> coeficientesJusante;
@@ -65,7 +66,15 @@ int main(int argc, char *argv[]) {
 
 	// Emborcação
 
+	cout << itumbiara->getNome() << endl;
+
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 
 	return 0;
+}
+
+string number_to_string(double n) {
+	stringstream out;
+	out << n;
+	return out.str();
 }
