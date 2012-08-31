@@ -136,6 +136,8 @@ int main(int argc, char *argv[]) {
 							volumes[intervalo - 1][indice_usina],
 							volumes[intervalo][indice_usina],
 							vazoes[intervalo][indice_usina]);
+			cout << altura_montante << endl;
+			cout << vazao_defluente << endl;
 		}
 	}
 
