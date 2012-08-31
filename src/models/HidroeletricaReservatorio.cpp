@@ -48,3 +48,7 @@ void HidroeletricaReservatorio::setVolumeUtil(double volumeUtil) {
 	this->volumeUtil = volumeUtil;
 }
 
+double HidroeletricaReservatorio::calcularAlturaMontante(double volume) {
+	return this->polinomioMontante->calcularValor(volume);
+}
+

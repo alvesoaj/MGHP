@@ -23,6 +23,7 @@ protected:
 	double vazaoDefluenteMinima;
 	double vazaoDefluenteMaxima;
 	double nivelMedioJusante;
+	double coeficientePerdaCargaHidraulica;
 	double produtibilidadeEspecifica;
 	CasaDeMaquinas* casaDeMaquinas;
 	PolinomioJusante* polinomioJusante;
@@ -38,8 +39,9 @@ public:
 	double getVolumeMaximoMaximorum();
 	double getVazaoDefluenteMinima();
 	double getVazaoDefluenteMaxima();
-	double getProdutibilidadeEspecifica();
 	double getNivelMedioJusante();
+	double getCoeficientePerdaCargaHidraulica();
+	double getProdutibilidadeEspecifica();
 	CasaDeMaquinas* getCasaDeMaquinas();
 	PolinomioJusante* getPolinomioJusante();
 	UsinaHidroeletrica* getUsinaMontante();
@@ -52,9 +54,14 @@ public:
 	void setVazaoDefluenteMaxima(double vazaoDefluenteMaxima);
 	void setNivelMedioJusante(double nivelMedioJusante);
 	void setProdutibilidadeEspecifica(double produtibilidadeEspecifica);
+	void setCoeficientePerdaCargaHidraulica(
+			double coeficientePerdaCargaHidraulica);
 	void setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas);
 	void setPolinomioJusante(PolinomioJusante* polinomioJusante);
 	void setUsinaMontante(UsinaHidroeletrica* usinaMontante);
+
+	double calcularVazaoDefluente(double volumeAnterior, double volumeAtual,
+			double vazaoIncremental);
 };
 
 #endif /* USINAHIDROELETRICA_H_ */

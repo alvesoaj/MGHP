@@ -19,6 +19,8 @@ protected:
 public:
 	// Métodos da classe Polinomio
 	int getGrau();
+
+	double calcularValor(double volume);
 };
 
 #endif /* POLINOMIO_H_ */

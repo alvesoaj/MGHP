@@ -38,6 +38,10 @@ double UsinaHidroeletrica::getProdutibilidadeEspecifica() {
 	return produtibilidadeEspecifica;
 }
 
+double UsinaHidroeletrica::getCoeficientePerdaCargaHidraulica() {
+	return coeficientePerdaCargaHidraulica;
+}
+
 double UsinaHidroeletrica::getNivelMedioJusante() {
 	return nivelMedioJusante;
 }
@@ -66,7 +70,8 @@ void UsinaHidroeletrica::setVolumeMorto(double volumeMorto) {
 	this->volumeMorto = volumeMorto;
 }
 
-void UsinaHidroeletrica::setVolumeMaximoMaximorum(double volumeMaximoMaximorum) {
+void UsinaHidroeletrica::setVolumeMaximoMaximorum(
+		double volumeMaximoMaximorum) {
 	this->volumeMaximoMaximorum = volumeMaximoMaximorum;
 }
 
@@ -76,6 +81,11 @@ void UsinaHidroeletrica::setVazaoDefluenteMinima(double vazaoDefluenteMinima) {
 
 void UsinaHidroeletrica::setVazaoDefluenteMaxima(double vazaoDefluenteMaxima) {
 	this->vazaoDefluenteMaxima = vazaoDefluenteMaxima;
+}
+
+void UsinaHidroeletrica::setCoeficientePerdaCargaHidraulica(
+		double coeficientePerdaCargaHidraulica) {
+	this->coeficientePerdaCargaHidraulica = coeficientePerdaCargaHidraulica;
 }
 
 void UsinaHidroeletrica::setProdutibilidadeEspecifica(
@@ -91,11 +101,17 @@ void UsinaHidroeletrica::setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas) {
 	this->casaDeMaquinas = casaDeMaquinas;
 }
 
-void UsinaHidroeletrica::setPolinomioJusante(PolinomioJusante* polinomioJusante) {
+void UsinaHidroeletrica::setPolinomioJusante(
+		PolinomioJusante* polinomioJusante) {
 	this->polinomioJusante = polinomioJusante;
 
 }
 
 void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica* usinaMontante) {
 	this->usinaMontante = usinaMontante;
+}
+
+double UsinaHidroeletrica::calcularVazaoDefluente(double volumeAnterior,
+		double volumeAtual, double vazaoIncremental) {
+	return volumeAtual - (volumeAnterior + vazaoIncremental);
 }

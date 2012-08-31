@@ -32,6 +32,8 @@ public:
 	void setVolumeMaximoOperativo(double volumeMaximoOperativo);
 	void setVolumeMinimoOperativo(double volumeMinimoOperativo);
 	void setVolumeUtil(double volumeUtil);
+
+	double calcularAlturaMontante(double volume);
 };
 
 #endif /* HIDROELETRICARESERVATORIO_H_ */
