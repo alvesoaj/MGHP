@@ -52,3 +52,17 @@ double HidroeletricaReservatorio::calcularAlturaMontante(double volume) {
 	return this->polinomioMontante->calcularValor(volume);
 }
 
+double HidroeletricaReservatorio::calcularAlturaQuedaBruta(
+		double alturaMontante, double alturaJusante) {
+	return alturaMontante - alturaJusante;
+}
+
+double HidroeletricaReservatorio::calcularPerdaCarga(double alturaQuedaBruta) {
+	return this->coeficientePerdaCargaHidraulica * alturaQuedaBruta;
+}
+
+double HidroeletricaReservatorio::calcularAlturaQuedaLiquida(
+		double alturaQuedaBruta, double perdaCarga) {
+	return alturaQuedaBruta - perdaCarga;
+}
+

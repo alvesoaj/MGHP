@@ -62,6 +62,7 @@ public:
 
 	double calcularVazaoDefluente(double volumeAnterior, double volumeAtual,
 			double vazaoIncremental);
+	double calcularAlturaJusante(double vazaoDefluente);
 };
 
 #endif /* USINAHIDROELETRICA_H_ */

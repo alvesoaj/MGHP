@@ -34,6 +34,11 @@ public:
 	void setVolumeUtil(double volumeUtil);
 
 	double calcularAlturaMontante(double volume);
+	double calcularAlturaQuedaBruta(double alturaMontante,
+			double alturaJusante);
+	double calcularPerdaCarga(double alturaQuedaBruta);
+	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
+			double perdaCarga);
 };
 
 #endif /* HIDROELETRICARESERVATORIO_H_ */

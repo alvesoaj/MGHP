@@ -6,7 +6,9 @@
  */
 
 // Importando bibliotecas necessárias
-#include <iostream>
+#include <iostream> // Biblioteca  padrão de I/O
+#include <algorithm>
+#include <fstream> // Para manipular arquivos
 #include <vector> // Para fácil uso de vetores
 #include <string> // Para trabalhar fácil com strings
 #include <sstream> // Para trabalhar fácil com strings
@@ -16,24 +18,22 @@
 using namespace std;
 
 // Constantes
-#define INTERVALOS 10
+#define INTERVALOS 60
 #define QUANTIDADE_USINAS 2
 
 // Variáveis
 HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
-double volumes[INTERVALOS][QUANTIDADE_USINAS] = { { 250.0, 152.0 }, { 300.0,
-		200.0 }, { 290.0, 100.0 }, { 785.0, 123.0 }, { 500.0, 369.0 }, { 456.0,
-		265.0 }, { 158.0, 421.0 }, { 364.0, 965.0 }, { 154.0, 369.0 }, { 234.0,
-		165.0 } };
-double vazoes[INTERVALOS][QUANTIDADE_USINAS] = { { 25.0, 15.0 }, { 30.0, 20.0 },
-		{ 29.0, 10.0 }, { 78.0, 12.0 }, { 50.0, 36.0 }, { 45.0, 26.0 }, { 15.0,
-				42.0 }, { 36.0, 96.0 }, { 15.0, 36.0 }, { 23.0, 16.0 } };
+double volumes[INTERVALOS][QUANTIDADE_USINAS];
 double geracao_hidraulica_total = 0.0;
 
-string number_to_string(double n);
+string double_para_string(double n);
+double string_para_double(const string& s);
+void carregar_volumes();
 
 int main(int argc, char *argv[]) {
 	int contador_usina = 0;
+
+	carregar_volumes();
 
 	// Configurando as usinas
 	// Itubiara
@@ -128,16 +128,33 @@ int main(int argc, char *argv[]) {
 		double geracao_hidraulica = 0.0;
 		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
 				indice_usina++) {
+
 			double altura_montante =
 					hidroeletricas[indice_usina]->calcularAlturaMontante(
 							volumes[intervalo][indice_usina]);
+
 			double vazao_defluente =
 					hidroeletricas[indice_usina]->calcularVazaoDefluente(
 							volumes[intervalo - 1][indice_usina],
-							volumes[intervalo][indice_usina],
-							vazoes[intervalo][indice_usina]);
-			cout << altura_montante << endl;
-			cout << vazao_defluente << endl;
+							volumes[intervalo][indice_usina], 0);
+
+			double altura_jusante =
+					hidroeletricas[indice_usina]->calcularAlturaJusante(
+							vazao_defluente);
+
+			double altura_queda_bruta =
+					hidroeletricas[indice_usina]->calcularAlturaQuedaBruta(
+							altura_montante, altura_jusante);
+
+			double perda_carga =
+					hidroeletricas[indice_usina]->calcularPerdaCarga(
+							altura_queda_bruta);
+
+			double altura_queda_liquida =
+					hidroeletricas[indice_usina]->calcularAlturaQuedaLiquida(
+							altura_queda_bruta, perda_carga);
+
+			cout << altura_queda_liquida << endl;
 		}
 	}
 
@@ -146,8 +163,47 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-string number_to_string(double n) {
+string double_para_string(double d) {
 	stringstream out;
-	out << n;
+	out << d;
 	return out.str();
+}
+
+double string_para_double(const string& s) {
+	istringstream instr(s);
+	double val;
+	instr >> val;
+	return val;
+}
+
+void carregar_volumes() {
+	int contador_usina = 0;
+	string line;
+	ifstream itumbiara_file("./assets/Itumbiara.txt"); // ifstream = padrão ios:in
+	if (itumbiara_file.is_open()) {
+		int contador_interacao = 0;
+		//enquanto end of file for false continua
+		while (!itumbiara_file.eof()) {
+			getline(itumbiara_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+			double d = string_para_double(line);
+			volumes[contador_usina][contador_interacao] = d;
+		}
+		itumbiara_file.close();
+	} else {
+		cout << "Impossivel abrir o arquivo!";
+	}
+	contador_usina++;
+	ifstream emborcacao_file("./assets/Emborcacao.txt"); // ifstream = padrão ios:in
+	if (emborcacao_file.is_open()) {
+		int contador_interacao = 0;
+		//enquanto end of file for false continua
+		while (!emborcacao_file.eof()) {
+			getline(emborcacao_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+			double d = string_para_double(line);
+			volumes[contador_usina][contador_interacao] = d;
+		}
+		emborcacao_file.close();
+	} else {
+		cout << "Impossivel abrir o arquivo!";
+	}
 }
