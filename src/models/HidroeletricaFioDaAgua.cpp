@@ -13,16 +13,8 @@ HidroeletricaFioDaAgua::HidroeletricaFioDaAgua(unsigned int codigo,
 	this->nome = nome;
 }
 
-double HidroeletricaFioDaAgua::getVolumeMontante() {
-	return volumeMontante;
-}
-
 double HidroeletricaFioDaAgua::getVolumeOperativo() {
 	return volumeOperativo;
-}
-
-void HidroeletricaFioDaAgua::setVolumeMontante(double volumeMontante) {
-	this->volumeMontante = volumeMontante;
 }
 
 void HidroeletricaFioDaAgua::setVolumeOperativo(double volumeOperativo) {

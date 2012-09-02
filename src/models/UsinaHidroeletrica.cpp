@@ -34,8 +34,8 @@ double UsinaHidroeletrica::getVazaoDefluenteMaxima() {
 	return vazaoDefluenteMaxima;
 }
 
-double UsinaHidroeletrica::getProdutibilidadeEspecifica() {
-	return produtibilidadeEspecifica;
+double UsinaHidroeletrica::getCoeficienteProdutibilidadeEspecifica() {
+	return coeficienteProdutibilidadeEspecifica;
 }
 
 double UsinaHidroeletrica::getCoeficientePerdaCargaHidraulica() {
@@ -88,9 +88,10 @@ void UsinaHidroeletrica::setCoeficientePerdaCargaHidraulica(
 	this->coeficientePerdaCargaHidraulica = coeficientePerdaCargaHidraulica;
 }
 
-void UsinaHidroeletrica::setProdutibilidadeEspecifica(
-		double produtibilidadeEspecifica) {
-	this->produtibilidadeEspecifica = produtibilidadeEspecifica;
+void UsinaHidroeletrica::setCoeficienteProdutibilidadeEspecifica(
+		double coeficienteProdutibilidadeEspecifica) {
+	this->coeficienteProdutibilidadeEspecifica =
+			coeficienteProdutibilidadeEspecifica;
 }
 
 void UsinaHidroeletrica::setNivelMedioJusante(double nivelMedioJusante) {

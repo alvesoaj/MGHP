@@ -24,7 +24,7 @@ protected:
 	double vazaoDefluenteMaxima;
 	double nivelMedioJusante;
 	double coeficientePerdaCargaHidraulica;
-	double produtibilidadeEspecifica;
+	double coeficienteProdutibilidadeEspecifica;
 	CasaDeMaquinas* casaDeMaquinas;
 	PolinomioJusante* polinomioJusante;
 	UsinaHidroeletrica* usinaMontante;
@@ -41,11 +41,10 @@ public:
 	double getVazaoDefluenteMaxima();
 	double getNivelMedioJusante();
 	double getCoeficientePerdaCargaHidraulica();
-	double getProdutibilidadeEspecifica();
+	double getCoeficienteProdutibilidadeEspecifica();
 	CasaDeMaquinas* getCasaDeMaquinas();
 	PolinomioJusante* getPolinomioJusante();
 	UsinaHidroeletrica* getUsinaMontante();
-
 	void setCodigo(unsigned int codigo);
 	void setNome(std::string nome);
 	void setVolumeMorto(double volumeMorto);
@@ -53,7 +52,8 @@ public:
 	void setVazaoDefluenteMinima(double vazaoDefluenteMinima);
 	void setVazaoDefluenteMaxima(double vazaoDefluenteMaxima);
 	void setNivelMedioJusante(double nivelMedioJusante);
-	void setProdutibilidadeEspecifica(double produtibilidadeEspecifica);
+	void setCoeficienteProdutibilidadeEspecifica(
+			double coeficienteProdutibilidadeEspecifica);
 	void setCoeficientePerdaCargaHidraulica(
 			double coeficientePerdaCargaHidraulica);
 	void setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas);

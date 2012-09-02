@@ -23,6 +23,8 @@ public:
 			ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradoras);
 	bool removerConjuntoUnidadesGeradoras(
 			ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradoras);
+	double calcularEngolimentoEfetivoTotal();
+	double calcularEngolimentoMaximoTotal(double alturaQuedaLiquida);
 };
 
 #endif /* CASADEMAQUINAS_H_ */

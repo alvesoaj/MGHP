@@ -8,6 +8,14 @@
 #ifndef CONJUNTOUNIDADESGERADORAS_H_
 #define CONJUNTOUNIDADESGERADORAS_H_
 
+// Para ajudar em calculos matemáticos
+#include <math.h>
+
+// Constantes
+#define FRANCIS	 1
+#define KAPLAN	 2
+#define PELTRON	 3
+
 class ConjuntoUnidadesGeradoras {
 private:
 	// Atributos privados da classe Conujonto de Unidades Geradoras
@@ -18,6 +26,8 @@ private:
 	double potenciaEfetiva;
 	int tipoTurbinasHidraulicas;
 
+	double calcularAlfa(double alturaQuedaLiquida);
+
 public:
 	// Métodos da classe Unidades Geradoras
 	ConjuntoUnidadesGeradoras(unsigned int id,
@@ -25,17 +35,19 @@ public:
 			double engolimentoEfetivo, double alutraQuedaEfetiva,
 			int tipoTurbinasHidraulicas);
 
-	unsigned int getId() const;
-	double getAlutraQuedaEfetiva() const;
-	double getEngolimentoEfetivo() const;
-	unsigned int getNumeroUnidadesGeradoras() const;
-	double getPotenciaEfetiva() const;
-	int getTipoTurbinasHidraulicas() const;
+	unsigned int getId();
+	double getAlutraQuedaEfetiva();
+	double getEngolimentoEfetivo();
+	unsigned int getNumeroUnidadesGeradoras();
+	double getPotenciaEfetiva();
+	int getTipoTurbinasHidraulicas();
 	void setAlutraQuedaEfetiva(double alutraQuedaEfetiva);
 	void setEngolimentoEfetivo(double engolimentoEfetivo);
 	void setNumeroUnidadesGeradoras(unsigned int numeroUnidadesGeradoras);
 	void setPotenciaEfetiva(double potenciaEfetiva);
 	void setTipoTurbinasHidraulicas(int tipoTurbinasHidraulicas);
+
+	double calcularEngolimentoMaximo(double alturaQuedaLiquida);
 };
 
 #endif /* CONJUNTOUNIDADESGERADORAS_H_ */

@@ -48,3 +48,25 @@ bool CasaDeMaquinas::removerConjuntoUnidadesGeradoras(
 		return false;
 	}
 }
+
+double CasaDeMaquinas::calcularEngolimentoEfetivoTotal() {
+	double engolimentoEfetivoTotal = 0.0;
+	for (unsigned int i = 0; i < this->listaConjuntoUnidadesGeradoras.size();
+			i++) {
+		engolimentoEfetivoTotal +=
+				this->listaConjuntoUnidadesGeradoras.at(i)->getEngolimentoEfetivo();
+	}
+	return engolimentoEfetivoTotal;
+}
+
+double CasaDeMaquinas::calcularEngolimentoMaximoTotal(
+		double alturaQuedaLiquida) {
+	double engolimentoMaximoTotal = 0.0;
+	for (unsigned int i = 0; i < this->listaConjuntoUnidadesGeradoras.size();
+			i++) {
+		engolimentoMaximoTotal +=
+				this->listaConjuntoUnidadesGeradoras.at(i)->calcularEngolimentoMaximo(
+						alturaQuedaLiquida);
+	}
+	return engolimentoMaximoTotal;
+}

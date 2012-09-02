@@ -66,3 +66,41 @@ double HidroeletricaReservatorio::calcularAlturaQuedaLiquida(
 	return alturaQuedaBruta - perdaCarga;
 }
 
+double HidroeletricaReservatorio::calcularEngolimento(double volumeAnterior,
+		double volumeAtual) {
+
+	double engolimentoEfetivoTotal = 0.0;
+	double engolimentoMaximoTotal = 0.0;
+
+	double nivelMontante = this->calcularNivelMontante(volumeAtual);
+
+	double vazaoDefluente = this->calcularVazaoDefluente(volumeAnterior,
+			volumeAtual);
+
+	double nivelJusante = this->calcularNivelJusante(vazaoDefluente);
+
+	double alturaQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
+			nivelJusante);
+
+	double perdaCarga = this->calcularPerdaCarga(alturaQuedaBruta);
+
+	double alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(
+			alturaQuedaBruta, perdaCarga);
+
+	engolimentoEfetivoTotal =
+			this->casaDeMaquinas->calcularEngolimentoEfetivoTotal();
+
+	engolimentoMaximoTotal =
+			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+					alturaQuedaLiquida);
+
+	return engolimentoMaximoTotal;
+}
+
+double HidroeletricaReservatorio::calcularGeracaoHidraulica(
+		double alturaQuedaLiquida, double engolimento) {
+	double geracaoHidraulica = this->coeficienteProdutibilidadeEspecifica
+			* alturaQuedaLiquida * engolimento;
+	return geracaoHidraulica;
+}
+

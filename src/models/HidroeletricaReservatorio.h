@@ -37,6 +37,9 @@ public:
 	double calcularPerdaCarga(double alturaQuedaBruta);
 	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
 			double perdaCarga);
+	double calcularEngolimento(double volumeAnterior, double volumeAtual);
+	double calcularGeracaoHidraulica(double alturaQuedaLiquida,
+			double engolimento);
 };
 
 #endif /* HIDROELETRICARESERVATORIO_H_ */

@@ -24,6 +24,7 @@ using namespace std;
 // Variáveis
 HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
 double volumes[QUANTIDADE_USINAS][INTERVALOS];
+double geracao_hidraulica_intervalos[INTERVALOS];
 double geracao_hidraulica_total = 0.0;
 
 string double_para_string(double n);
@@ -74,7 +75,7 @@ int main(int argc, char *argv[]) {
 	itumbiara->setVazaoDefluenteMaxima(1E20);
 	itumbiara->setNivelMedioJusante(521.9);
 	itumbiara->setCoeficientePerdaCargaHidraulica(0.0127);
-	itumbiara->setProdutibilidadeEspecifica(0.008731);
+	itumbiara->setCoeficienteProdutibilidadeEspecifica(0.008731);
 
 	hidroeletricas[contador_usina] = itumbiara;
 	contador_usina++;
@@ -117,21 +118,22 @@ int main(int argc, char *argv[]) {
 	emborcacao->setVazaoDefluenteMaxima(1E20);
 	emborcacao->setNivelMedioJusante(435.6);
 	emborcacao->setCoeficientePerdaCargaHidraulica(0.0120);
-	emborcacao->setProdutibilidadeEspecifica(0.008829);
+	emborcacao->setCoeficienteProdutibilidadeEspecifica(0.008829);
 
 	emborcacao->setUsinaMontante(itumbiara);
 
 	hidroeletricas[contador_usina] = emborcacao;
 
 	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
-		double geracao_hidraulica = 0.0;
-		double vazoes_defluentes[QUANTIDADE_USINAS];
+		double geracao_hidraulica_total = 0.0;
 		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
 				indice_usina++) {
 
 			cout
 					<< hidroeletricas[indice_usina]->getNome() + ", Intervalo: "
 							+ double_para_string(intervalo) << endl;
+
+			// Teste
 
 			double altura_montante =
 					hidroeletricas[indice_usina]->calcularNivelMontante(
@@ -172,12 +174,33 @@ int main(int argc, char *argv[]) {
 					hidroeletricas[indice_usina]->calcularAlturaQuedaLiquida(
 							altura_queda_bruta, perda_carga);
 
-			cout << "hl: " + double_para_string(altura_queda_liquida) + "\n"
+			cout << "hl: " + double_para_string(altura_queda_liquida) << endl;
+
+			// Fim teste
+
+			double engolimento =
+					hidroeletricas[indice_usina]->calcularEngolimento(
+							volumes[indice_usina][intervalo - 1],
+							volumes[indice_usina][intervalo]);
+
+			cout << "q: " + double_para_string(engolimento) << endl;
+
+			double geracao_hidraulica =
+					hidroeletricas[indice_usina]->calcularGeracaoHidraulica(
+							altura_queda_liquida, engolimento);
+
+			cout << "gh: " + double_para_string(geracao_hidraulica) + "\n"
 					<< endl;
+
+			geracao_hidraulica_total += geracao_hidraulica;
 		}
+
+		cout << "ght: " + double_para_string(geracao_hidraulica_total) + "\n"
+				<< endl;
+		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
 	}
 
-	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
+//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 
 	return 0;
 }
