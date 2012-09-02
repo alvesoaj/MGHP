@@ -111,11 +111,20 @@ void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica* usinaMontante) {
 	this->usinaMontante = usinaMontante;
 }
 
-double UsinaHidroeletrica::calcularVazaoDefluente(double volumeAnterior,
-		double volumeAtual, double vazaoIncremental) {
-	return volumeAtual - (volumeAnterior + vazaoIncremental);
+bool UsinaHidroeletrica::temUsinaMontante() {
+	if (this->usinaMontante == NULL) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
-double UsinaHidroeletrica::calcularAlturaJusante(double vazaoDefluente) {
-	return this->polinomioJusante->calcularValor(vazaoDefluente);
+double UsinaHidroeletrica::calcularVazaoDefluente(double volumeAnterior,
+		double volumeAtual) {
+	return volumeAnterior - volumeAtual;
+}
+
+double UsinaHidroeletrica::calcularNivelJusante(double vazaoDefluente) {
+	return this->polinomioJusante->calcularValor(
+			vazaoDefluente + this->nivelMedioJusante);
 }

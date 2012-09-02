@@ -28,3 +28,11 @@ void HidroeletricaFioDaAgua::setVolumeMontante(double volumeMontante) {
 void HidroeletricaFioDaAgua::setVolumeOperativo(double volumeOperativo) {
 	this->volumeOperativo = volumeOperativo;
 }
+
+void HidroeletricaFioDaAgua::setNivelMontante(double nivelMontante) {
+	this->nivelMontante = nivelMontante;
+}
+
+double HidroeletricaFioDaAgua::calcularNivelMontante(double volume) {
+	return this->nivelMontante;
+}

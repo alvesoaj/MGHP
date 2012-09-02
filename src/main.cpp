@@ -48,24 +48,24 @@ int main(int argc, char *argv[]) {
 	itumbiara->setCasaDeMaquinas(casaDeMaquinasItumbiara);
 
 	vector<double> coeficientesMontanteItumbiara;
-	coeficientesMontanteItumbiara.push_back(568.09);
-	coeficientesMontanteItumbiara.push_back(1.4506E-02);
-	coeficientesMontanteItumbiara.push_back(-1.2028E-06);
-	coeficientesMontanteItumbiara.push_back(5.8303E-11);
-	coeficientesMontanteItumbiara.push_back(-1.1245E-15);
-	PolinomioMontante* polinomioMontanteItumbiara = new PolinomioMontante(
+	coeficientesMontanteItumbiara.push_back(471.16);
+	coeficientesMontanteItumbiara.push_back(7.2805E-03);
+	coeficientesMontanteItumbiara.push_back(-5.6098E-07);
+	coeficientesMontanteItumbiara.push_back(2.59776E-11);
+	coeficientesMontanteItumbiara.push_back(-4.845359E-16);
+	PolinomioMontante* polinomioMontanteEmborcacao = new PolinomioMontante(
 			coeficientesMontanteItumbiara);
-	itumbiara->setPolinomioMontante(polinomioMontanteItumbiara);
+	itumbiara->setPolinomioMontante(polinomioMontanteEmborcacao);
 
 	vector<double> coeficientesJusanteItumbiara;
-	coeficientesJusanteItumbiara.push_back(519.78);
-	coeficientesJusanteItumbiara.push_back(3.9966E-03);
-	coeficientesJusanteItumbiara.push_back(-1.0987E-06);
-	coeficientesJusanteItumbiara.push_back(2.3438E-10);
-	coeficientesJusanteItumbiara.push_back(-1.7646E-14);
-	PolinomioJusante* polinomioJusanteItumbiara = new PolinomioJusante(
+	coeficientesJusanteItumbiara.push_back(433.0);
+	coeficientesJusanteItumbiara.push_back(1.59584E-03);
+	coeficientesJusanteItumbiara.push_back(-8.177386E-08);
+	coeficientesJusanteItumbiara.push_back(3.1735E-12);
+	coeficientesJusanteItumbiara.push_back(0.0);
+	PolinomioJusante* polinomioJusanteEmborcacao = new PolinomioJusante(
 			coeficientesJusanteItumbiara);
-	itumbiara->setPolinomioJusante(polinomioJusanteItumbiara);
+	itumbiara->setPolinomioJusante(polinomioJusanteEmborcacao);
 
 	itumbiara->setVolumeMinimoOperativo(4669.0);
 	itumbiara->setVolumeMaximoOperativo(17190.0);
@@ -91,24 +91,24 @@ int main(int argc, char *argv[]) {
 	emborcacao->setCasaDeMaquinas(casaDeMaquinasEmborcacao);
 
 	vector<double> coeficientesMontanteEmborcacao;
-	coeficientesMontanteEmborcacao.push_back(471.16);
-	coeficientesMontanteEmborcacao.push_back(7.2805E-03);
-	coeficientesMontanteEmborcacao.push_back(-5.6098E-07);
-	coeficientesMontanteEmborcacao.push_back(2.59776E-11);
-	coeficientesMontanteEmborcacao.push_back(-4.845359E-16);
-	PolinomioMontante* polinomioMontanteEmborcacao = new PolinomioMontante(
+	coeficientesMontanteEmborcacao.push_back(568.09);
+	coeficientesMontanteEmborcacao.push_back(1.4506E-02);
+	coeficientesMontanteEmborcacao.push_back(-1.2028E-06);
+	coeficientesMontanteEmborcacao.push_back(5.8303E-11);
+	coeficientesMontanteEmborcacao.push_back(-1.1245E-15);
+	PolinomioMontante* polinomioMontanteItumbiara = new PolinomioMontante(
 			coeficientesMontanteEmborcacao);
-	emborcacao->setPolinomioMontante(polinomioMontanteEmborcacao);
+	emborcacao->setPolinomioMontante(polinomioMontanteItumbiara);
 
 	vector<double> coeficientesJusanteEmborcacao;
-	coeficientesJusanteEmborcacao.push_back(433.0);
-	coeficientesJusanteEmborcacao.push_back(1.59584E-03);
-	coeficientesJusanteEmborcacao.push_back(-8.177386E-08);
-	coeficientesJusanteEmborcacao.push_back(3.1735E-12);
-	coeficientesJusanteEmborcacao.push_back(0.0);
-	PolinomioJusante* polinomioJusanteEmborcacao = new PolinomioJusante(
+	coeficientesJusanteEmborcacao.push_back(519.78);
+	coeficientesJusanteEmborcacao.push_back(3.9966E-03);
+	coeficientesJusanteEmborcacao.push_back(-1.0987E-06);
+	coeficientesJusanteEmborcacao.push_back(2.3438E-10);
+	coeficientesJusanteEmborcacao.push_back(-1.7646E-14);
+	PolinomioJusante* polinomioJusanteItumbiara = new PolinomioJusante(
 			coeficientesJusanteEmborcacao);
-	emborcacao->setPolinomioJusante(polinomioJusanteEmborcacao);
+	emborcacao->setPolinomioJusante(polinomioJusanteItumbiara);
 
 	emborcacao->setVolumeMinimoOperativo(4573.0);
 	emborcacao->setVolumeMaximoOperativo(17027.0);
@@ -126,35 +126,51 @@ int main(int argc, char *argv[]) {
 
 	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
 		double geracao_hidraulica = 0.0;
+		double vazoes_defluentes[QUANTIDADE_USINAS];
 		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
 				indice_usina++) {
 
+			cout
+					<< hidroeletricas[indice_usina]->getNome() + ", Intervalo: "
+							+ double_para_string(intervalo) << endl;
+
 			double altura_montante =
-					hidroeletricas[indice_usina]->calcularAlturaMontante(
+					hidroeletricas[indice_usina]->calcularNivelMontante(
 							volumes[intervalo][indice_usina]);
+
+			cout << "hmon: " + double_para_string(altura_montante) << endl;
 
 			double vazao_defluente =
 					hidroeletricas[indice_usina]->calcularVazaoDefluente(
 							volumes[intervalo - 1][indice_usina],
-							volumes[intervalo][indice_usina], 0);
+							volumes[intervalo][indice_usina]);
+
+			cout << "u: " + double_para_string(vazao_defluente) << endl;
 
 			double altura_jusante =
-					hidroeletricas[indice_usina]->calcularAlturaJusante(
+					hidroeletricas[indice_usina]->calcularNivelJusante(
 							vazao_defluente);
+
+			cout << "hjus: " + double_para_string(altura_jusante) << endl;
 
 			double altura_queda_bruta =
 					hidroeletricas[indice_usina]->calcularAlturaQuedaBruta(
 							altura_montante, altura_jusante);
 
+			cout << "hb: " + double_para_string(altura_queda_bruta) << endl;
+
 			double perda_carga =
 					hidroeletricas[indice_usina]->calcularPerdaCarga(
 							altura_queda_bruta);
+
+			cout << "hp: " + double_para_string(perda_carga) << endl;
 
 			double altura_queda_liquida =
 					hidroeletricas[indice_usina]->calcularAlturaQuedaLiquida(
 							altura_queda_bruta, perda_carga);
 
-			cout << altura_queda_liquida << endl;
+			cout << "hl: " + double_para_string(altura_queda_liquida) + "\n"
+					<< endl;
 		}
 	}
 

@@ -15,6 +15,7 @@ private:
 	// Atributos da classe Usina Hidroeletrica a Fio D'Água
 	double volumeMontante;
 	double volumeOperativo;
+	double nivelMontante;
 
 public:
 	// Métodos da classe Usina Hidroeletrica a Fio D'Água
@@ -24,6 +25,9 @@ public:
 	double getVolumeOperativo();
 	void setVolumeMontante(double volumeMontante);
 	void setVolumeOperativo(double volumeOperativo);
+	void setNivelMontante(double nivelMontante);
+
+	double calcularNivelMontante(double volume);
 };
 
 #endif /* HIDROELETRICAFIODAAGUA_H_ */

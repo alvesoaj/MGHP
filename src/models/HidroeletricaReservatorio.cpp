@@ -25,10 +25,6 @@ double HidroeletricaReservatorio::getVolumeMinimoOperativo() {
 	return volumeMinimoOperativo;
 }
 
-double HidroeletricaReservatorio::getVolumeUtil() {
-	return volumeUtil;
-}
-
 void HidroeletricaReservatorio::setPolinomioMontante(
 		PolinomioMontante* polinomioMontante) {
 	this->polinomioMontante = polinomioMontante;
@@ -44,11 +40,15 @@ void HidroeletricaReservatorio::setVolumeMinimoOperativo(
 	this->volumeMinimoOperativo = volumeMinimoOperativo;
 }
 
-void HidroeletricaReservatorio::setVolumeUtil(double volumeUtil) {
-	this->volumeUtil = volumeUtil;
+double HidroeletricaReservatorio::calcularVolumeUtil() {
+	return this->volumeMaximoOperativo - this->volumeMinimoOperativo;
 }
 
-double HidroeletricaReservatorio::calcularAlturaMontante(double volume) {
+double HidroeletricaReservatorio::calcularVolumeSeguranca() {
+	return this->volumeMaximoMaximorum - this->volumeMaximoOperativo;
+}
+
+double HidroeletricaReservatorio::calcularNivelMontante(double volume) {
 	return this->polinomioMontante->calcularValor(volume);
 }
 

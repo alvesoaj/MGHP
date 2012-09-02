@@ -60,9 +60,11 @@ public:
 	void setPolinomioJusante(PolinomioJusante* polinomioJusante);
 	void setUsinaMontante(UsinaHidroeletrica* usinaMontante);
 
-	double calcularVazaoDefluente(double volumeAnterior, double volumeAtual,
-			double vazaoIncremental);
-	double calcularAlturaJusante(double vazaoDefluente);
+	bool temUsinaMontante();
+	double calcularVazaoDefluente(double volumeAnterior, double volumeAtual);
+	// virtual double calcularNivelMontante(double volume);
+	double calcularNivelMontante(double volume);
+	double calcularNivelJusante(double vazaoDefluente);
 };
 
 #endif /* USINAHIDROELETRICA_H_ */
