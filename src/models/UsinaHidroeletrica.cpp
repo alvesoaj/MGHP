@@ -125,6 +125,6 @@ double UsinaHidroeletrica::calcularVazaoDefluente(double volumeAnterior,
 }
 
 double UsinaHidroeletrica::calcularNivelJusante(double vazaoDefluente) {
-	return this->polinomioJusante->calcularValor(
-			vazaoDefluente + this->nivelMedioJusante);
+	//return this->polinomioJusante->calcularValor(vazaoDefluente + this->nivelMedioJusante);
+	return this->polinomioJusante->calcularValor(vazaoDefluente);
 }

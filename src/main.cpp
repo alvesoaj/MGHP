@@ -23,7 +23,7 @@ using namespace std;
 
 // Variáveis
 HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
-double volumes[INTERVALOS][QUANTIDADE_USINAS];
+double volumes[QUANTIDADE_USINAS][INTERVALOS];
 double geracao_hidraulica_total = 0.0;
 
 string double_para_string(double n);
@@ -122,7 +122,6 @@ int main(int argc, char *argv[]) {
 	emborcacao->setUsinaMontante(itumbiara);
 
 	hidroeletricas[contador_usina] = emborcacao;
-	contador_usina++;
 
 	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
 		double geracao_hidraulica = 0.0;
@@ -136,14 +135,18 @@ int main(int argc, char *argv[]) {
 
 			double altura_montante =
 					hidroeletricas[indice_usina]->calcularNivelMontante(
-							volumes[intervalo][indice_usina]);
+							volumes[indice_usina][intervalo]);
 
-			cout << "hmon: " + double_para_string(altura_montante) << endl;
+			cout
+					<< "hmon("
+							+ double_para_string(
+									volumes[indice_usina][intervalo]) + "): "
+							+ double_para_string(altura_montante) << endl;
 
 			double vazao_defluente =
 					hidroeletricas[indice_usina]->calcularVazaoDefluente(
-							volumes[intervalo - 1][indice_usina],
-							volumes[intervalo][indice_usina]);
+							volumes[indice_usina][intervalo - 1],
+							volumes[indice_usina][intervalo]);
 
 			cout << "u: " + double_para_string(vazao_defluente) << endl;
 
@@ -203,6 +206,7 @@ void carregar_volumes() {
 			getline(itumbiara_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
+			contador_interacao++;
 		}
 		itumbiara_file.close();
 	} else {
@@ -217,6 +221,7 @@ void carregar_volumes() {
 			getline(emborcacao_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
+			contador_interacao++;
 		}
 		emborcacao_file.close();
 	} else {
