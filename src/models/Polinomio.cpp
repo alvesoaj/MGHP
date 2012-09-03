@@ -12,9 +12,11 @@ int Polinomio::getGrau() {
 }
 
 double Polinomio::calcularValor(double volume) {
-	double valor = 0.0;
-	for (int i = 0; i < this->getGrau(); i++) {
-		valor += this->coeficientes.at(i) * volume;
+	double valor = this->coeficientes.at(0);
+	for (int i = 1; i < this->getGrau(); i++) {
+		// std::cout << "coef: " << this->coeficientes.at(i) << endl;
+		// std::cout << "val: " << valor << endl;
+		valor += this->coeficientes.at(i) * pow(volume, i);
 	}
 	return valor;
 }

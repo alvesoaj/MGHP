@@ -10,6 +10,9 @@
 
 // Importando bibliotecas úteis
 #include <vector> // Para trabalhar com vetores
+#include <iostream> // Biblioteca  padrão de I/O
+#include <math.h> // Para ajudar em calculos matemáticos
+using namespace std;
 
 class Polinomio {
 protected:
