@@ -13,7 +13,9 @@
 #include <string> // Para trabalhar fácil com strings
 #include <sstream> // Para trabalhar fácil com strings
 #include <math.h> // Para ajudar em calculos matemáticos
-#include "models/HidroeletricaReservatorio.h"
+#include "modelos/SistemaHidroeletrico.h"
+#include "modelos/HidroeletricaReservatorio.h"
+#include "ferramentas/Conversor.h"
 
 using namespace std;
 
@@ -22,18 +24,18 @@ using namespace std;
 #define QUANTIDADE_USINAS 2
 
 // Variáveis
-HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
+SistemaHidroeletrico sistemaHidroeletrico;
+// HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
 double volumes[QUANTIDADE_USINAS][INTERVALOS];
 double geracao_hidraulica_intervalos[INTERVALOS];
 double geracao_hidraulica_total = 0.0;
+Conversor conversor;
 
 string double_para_string(double n);
 double string_para_double(const string& s);
 void carregar_volumes();
 
 int main(int argc, char *argv[]) {
-	int contador_usina = 0;
-
 	carregar_volumes();
 
 	// Configurando as usinas
@@ -77,8 +79,7 @@ int main(int argc, char *argv[]) {
 	itumbiara->setCoeficientePerdaCargaHidraulica(0.0127);
 	itumbiara->setCoeficienteProdutibilidadeEspecifica(0.008731);
 
-	hidroeletricas[contador_usina] = itumbiara;
-	contador_usina++;
+	sistemaHidroeletrico.adicionarUsinaHidroeletrica(itumbiara);
 
 	// Emborcação
 	HidroeletricaReservatorio* emborcacao = new HidroeletricaReservatorio(2,
@@ -122,104 +123,34 @@ int main(int argc, char *argv[]) {
 
 	emborcacao->setUsinaMontante(itumbiara);
 
-	hidroeletricas[contador_usina] = emborcacao;
+	sistemaHidroeletrico.adicionarUsinaHidroeletrica(emborcacao);
 
-	double nm = emborcacao->calcularNivelMontante(12000);
-	cout << "nm emborcacao: " + double_para_string(nm) + "\n" << endl;
+	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+		double geracao_hidraulica_total = 0.0;
+		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
+				indice_usina++) {
 
-	/*
-	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
-	 double geracao_hidraulica_total = 0.0;
-	 for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
-	 indice_usina++) {
+			double geracao_hidraulica = 0.0;
 
-	 cout
-	 << hidroeletricas[indice_usina]->getNome() + ", Intervalo: "
-	 + double_para_string(intervalo) << endl;
+			double engolimento = sistemaHidroeletrico.calcularEngolimentoUsina(
+					indice_usina + 1, volumes[indice_usina][intervalo], 500,
+					200);
 
-	 // Teste
+			cout << "gh: " + conversor.double_para_string(engolimento) + "\n"
+					<< endl;
 
-	 double altura_montante =
-	 hidroeletricas[indice_usina]->calcularNivelMontante(
-	 volumes[indice_usina][intervalo]);
+			geracao_hidraulica_total += geracao_hidraulica;
+		}
 
-	 cout
-	 << "hmon("
-	 + double_para_string(
-	 volumes[indice_usina][intervalo]) + "): "
-	 + double_para_string(altura_montante) << endl;
-
-	 double vazao_defluente =
-	 hidroeletricas[indice_usina]->calcularVazaoDefluente(
-	 volumes[indice_usina][intervalo - 1],
-	 volumes[indice_usina][intervalo]);
-
-	 cout << "u: " + double_para_string(vazao_defluente) << endl;
-
-	 double altura_jusante =
-	 hidroeletricas[indice_usina]->calcularNivelJusante(
-	 vazao_defluente);
-
-	 cout << "hjus: " + double_para_string(altura_jusante) << endl;
-
-	 double altura_queda_bruta =
-	 hidroeletricas[indice_usina]->calcularAlturaQuedaBruta(
-	 altura_montante, altura_jusante);
-
-	 cout << "hb: " + double_para_string(altura_queda_bruta) << endl;
-
-	 double perda_carga =
-	 hidroeletricas[indice_usina]->calcularPerdaCarga(
-	 altura_queda_bruta);
-
-	 cout << "hp: " + double_para_string(perda_carga) << endl;
-
-	 double altura_queda_liquida =
-	 hidroeletricas[indice_usina]->calcularAlturaQuedaLiquida(
-	 altura_queda_bruta, perda_carga);
-
-	 cout << "hl: " + double_para_string(altura_queda_liquida) << endl;
-
-	 // Fim teste
-
-	 double engolimento =
-	 hidroeletricas[indice_usina]->calcularEngolimento(
-	 volumes[indice_usina][intervalo - 1],
-	 volumes[indice_usina][intervalo]);
-
-	 cout << "q: " + double_para_string(engolimento) << endl;
-
-	 double geracao_hidraulica =
-	 hidroeletricas[indice_usina]->calcularGeracaoHidraulica(
-	 altura_queda_liquida, engolimento);
-
-	 cout << "gh: " + double_para_string(geracao_hidraulica) + "\n"
-	 << endl;
-
-	 geracao_hidraulica_total += geracao_hidraulica;
-	 }
-
-
-	 cout << "ght: " + double_para_string(geracao_hidraulica_total) + "\n" << endl;
-	 geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
-	 }
-	 */
+		cout
+				<< "ght: "
+						+ conversor.double_para_string(geracao_hidraulica_total)
+						+ "\n" << endl;
+		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+	}
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 
 	return 0;
-}
-
-string double_para_string(double d) {
-	stringstream out;
-	out << d;
-	return out.str();
-}
-
-double string_para_double(const string& s) {
-	istringstream instr(s);
-	double val;
-	instr >> val;
-	return val;
 }
 
 void carregar_volumes() {
@@ -231,7 +162,7 @@ void carregar_volumes() {
 		//enquanto end of file for false continua
 		while (!itumbiara_file.eof()) {
 			getline(itumbiara_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
-			double d = string_para_double(line);
+			double d = conversor.string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
 			contador_interacao++;
 		}
@@ -246,7 +177,7 @@ void carregar_volumes() {
 		//enquanto end of file for false continua
 		while (!emborcacao_file.eof()) {
 			getline(emborcacao_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
-			double d = string_para_double(line);
+			double d = conversor.string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
 			contador_interacao++;
 		}
