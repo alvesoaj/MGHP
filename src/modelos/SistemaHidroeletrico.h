@@ -11,20 +11,28 @@
 #include <iostream> // Biblioteca  padrão de I/O
 #include <vector> // Para trabalhar com vetores
 #include "../ferramentas/Conversor.h"
-#include "UsinaHidroeletrica.h"
+#include "HidroeletricaReservatorio.h"
 //
 class SistemaHidroeletrico {
 private:
 	Conversor conversor;
-	std::vector<UsinaHidroeletrica*> usinas;
+	std::vector<HidroeletricaReservatorio*> usinas;
 
 public:
 	SistemaHidroeletrico();
 
-	bool adicionarUsinaHidroeletrica(UsinaHidroeletrica* usinaHidroeletrica);
-	bool removerUsinaHidroeletrica(UsinaHidroeletrica* usinaHidroeletrica);
+	bool adicionarUsinaHidroeletrica(
+			HidroeletricaReservatorio* usinaHidroeletrica);
+	bool removerUsinaHidroeletrica(
+			HidroeletricaReservatorio* usinaHidroeletrica);
+
+	double calcularAlturaQuedaLiquidaUsina(unsigned int codigo, double volume,
+			double vazaoDefluente);
 
 	double calcularEngolimentoUsina(unsigned int codigo, double volume,
+			double vazaoDefluente, double tolerancia);
+
+	double calcularGeracaoHidraulicaUsina(unsigned int codigo, double volume,
 			double vazaoDefluente, double tolerancia);
 };
 

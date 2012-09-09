@@ -13,7 +13,7 @@ SistemaHidroeletrico::SistemaHidroeletrico() {
 }
 
 bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
-		UsinaHidroeletrica* usinaHidroeletrica) {
+		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool exists = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo()
@@ -32,7 +32,7 @@ bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 }
 
 bool SistemaHidroeletrico::removerUsinaHidroeletrica(
-		UsinaHidroeletrica* usinaHidroeletrica) {
+		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo()
@@ -49,20 +49,69 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 	}
 }
 
-double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
-		double volume, double vazaoDefluente, double tolerancia) {
-	double geracaoHidraulica = 0.0;
-	UsinaHidroeletrica* usina;
+double SistemaHidroeletrico::calcularAlturaQuedaLiquidaUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
-			usina = this->usinas.at(i);
+			double nivelMontante = this->usinas.at(i)->calcularNivelMontante(
+					volume);
+
+			double nivelJusante = this->usinas.at(i)->calcularNivelJusante(
+					vazaoDefluente);
+
+			double altuaraQuedaBruta =
+					this->usinas.at(i)->calcularAlturaQuedaBruta(nivelMontante,
+							nivelJusante);
+
+			double perdaCarga = this->usinas.at(i)->calcularPerdaCarga(
+					altuaraQuedaBruta);
+
+			return this->usinas.at(i)->calcularAlturaQuedaLiquida(
+					altuaraQuedaBruta, perdaCarga);
 		}
 	}
+	return 0.0;
 
-	if (usina->getCodigo() == codigo) {
-		geracaoHidraulica = usina->calcularEngolimento(volume, vazaoDefluente,
-				tolerancia);
+}
+
+double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
+		double volume, double vazaoDefluente, double tolerancia) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			return this->usinas.at(i)->calcularEngolimento(volume,
+					vazaoDefluente, tolerancia);
+		}
 	}
+	return 0.0;
+}
 
-	return geracaoHidraulica;
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
+		double volume, double vazaoDefluente, double tolerancia) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			double nivelMontante = this->usinas.at(i)->calcularNivelMontante(
+					volume);
+
+			double nivelJusante = this->usinas.at(i)->calcularNivelJusante(
+					vazaoDefluente);
+
+			double altuaraQuedaBruta =
+					this->usinas.at(i)->calcularAlturaQuedaBruta(nivelMontante,
+							nivelJusante);
+
+			double perdaCarga = this->usinas.at(i)->calcularPerdaCarga(
+					altuaraQuedaBruta);
+
+			double alturaQuedaLiquida =
+					this->usinas.at(i)->calcularAlturaQuedaLiquida(
+							altuaraQuedaBruta, perdaCarga);
+
+			double engolimento = this->usinas.at(i)->calcularEngolimento(volume,
+					vazaoDefluente, tolerancia);
+
+			return this->usinas.at(i)->calcularGeracaoHidraulica(
+					alturaQuedaLiquida, engolimento);
+		}
+	}
+	return 0.0;
 }

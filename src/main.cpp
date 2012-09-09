@@ -31,8 +31,6 @@ double geracao_hidraulica_intervalos[INTERVALOS];
 double geracao_hidraulica_total = 0.0;
 Conversor conversor;
 
-string double_para_string(double n);
-double string_para_double(const string& s);
 void carregar_volumes();
 
 int main(int argc, char *argv[]) {
@@ -125,31 +123,64 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico.adicionarUsinaHidroeletrica(emborcacao);
 
-	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
-		double geracao_hidraulica_total = 0.0;
-		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
-				indice_usina++) {
+	// double nivel_montante = emborcacao->calcularNivelMontante(12000);
+	double nivel_montante = emborcacao->calcularNivelMontante(8000);
 
-			double geracao_hidraulica = 0.0;
+	cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
 
-			double engolimento = sistemaHidroeletrico.calcularEngolimentoUsina(
-					indice_usina + 1, volumes[indice_usina][intervalo], 500,
-					200);
+	double nivel_jusante = emborcacao->calcularNivelJusante(600);
 
-			cout << "gh: " + conversor.double_para_string(engolimento) + "\n"
-					<< endl;
+	cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
 
-			geracao_hidraulica_total += geracao_hidraulica;
-		}
+	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
+			nivel_montante, nivel_jusante);
 
-		cout
-				<< "ght: "
-						+ conversor.double_para_string(geracao_hidraulica_total)
-						+ "\n" << endl;
-		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
-	}
+	cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
+
+	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
+
+	cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
+
+	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
+			altura_queda_bruta, perda_carga);
+
+	cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
+
+	double engolimento = emborcacao->calcularEngolimento(8000, 600, 1000);
+
+	cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
+
+	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
+			altura_queda_liquida, engolimento);
+
+	cout << "gh: " + conversor.double_para_string(geracao_hidraulica) << endl;
+
+	/*
+	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+	 double geracao_hidraulica_total = 0.0;
+	 for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
+	 indice_usina++) {
+
+	 double geracao_hidraulica =
+	 sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
+	 indice_usina + 1, volumes[indice_usina][intervalo],
+	 500, 200);
+
+	 cout
+	 << "gh: " + conversor.double_para_string(geracao_hidraulica)
+	 + "\n" << endl;
+
+	 geracao_hidraulica_total += geracao_hidraulica;
+	 }
+
+	 cout
+	 << "ght: "
+	 + conversor.double_para_string(geracao_hidraulica_total)
+	 + "\n" << endl;
+	 geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+	 }
+	 */
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
-
 	return 0;
 }
 

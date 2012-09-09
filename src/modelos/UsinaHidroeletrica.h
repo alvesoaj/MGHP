@@ -70,6 +70,7 @@ public:
 	double calcularPerdaCarga(double alturaQuedaBruta);
 	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
 			double perdaCarga);
+	// virtual double calcularEngolimento(double volume, double vazaoDefluente, double tolerancia);
 	double calcularEngolimento(double volume, double vazaoDefluente,
 			double tolerancia);
 	double calcularGeracaoHidraulica(double alturaQuedaLiquida,

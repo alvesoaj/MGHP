@@ -99,7 +99,6 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 						alturaQuedaLiquida);
 
 		if (engolimentoMaximoAtual >= vazaoDefluenteBase) {
-			//engolimentoMaximoUsinaAnterior
 			vazaoDefluente = engolimentoMaximoAtual;
 			// vazaoTurbinada = engolimentoMaximoAtual;
 		} else {
