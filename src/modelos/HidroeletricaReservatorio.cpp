@@ -67,43 +67,68 @@ double HidroeletricaReservatorio::calcularAlturaQuedaLiquida(
 }
 
 double HidroeletricaReservatorio::calcularEngolimento(double volume,
-		double vazaoDefluente, double tolerancia) {
-	double nivelMontante;
-	double nivelJusante;
+		double vazaoDefluente) {
+	bool convergencia = false;
+	double tolerancia = 1.0;
+	double nivelMontante = this->calcularNivelMontante(volume);
 	double vazaoDefluenteBase = vazaoDefluente;
-	double altuaraQuedaBruta;
-	double perdaCarga;
-	double alturaQuedaLiquida;
+	// double vazaoTurbinada = engolimentoEfetivo;
+	// double vazaoVertida = 0.0;
+	double nivelJusante = this->calcularNivelJusante(vazaoDefluente);
+	double altuaraQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
+			nivelJusante);
+	double perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
+	double alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(
+			altuaraQuedaBruta, perdaCarga);
 	double engolimentoEfetivo =
 			this->casaDeMaquinas->calcularEngolimentoEfetivoTotal();
-	double engolimentoMaximoAtual;
 	double engolimentoMaximoAnterior = engolimentoEfetivo;
-	// double vazaoTurbinada = engolimentoEfetivo;
-	bool convergencia = false;
+	double engolimentoMaximoAtual =
+			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+					alturaQuedaLiquida);
 
 	do {
-		nivelMontante = this->calcularNivelMontante(volume);
-
-		nivelJusante = this->calcularNivelJusante(vazaoDefluente);
-
-		altuaraQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
-				nivelJusante);
-
-		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
-
-		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
-				perdaCarga);
-
-		engolimentoMaximoAtual =
-				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
-						alturaQuedaLiquida);
-
 		if (engolimentoMaximoAtual >= vazaoDefluenteBase) {
 			vazaoDefluente = engolimentoMaximoAtual;
 			// vazaoTurbinada = engolimentoMaximoAtual;
 		} else {
 			// vazaoTurbinada = engolimentoMaximoAtual;
+			// vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		}
+
+		cout << "x: " + conversor.double_para_string(volume) << endl;
+		cout << "u: " + conversor.double_para_string(vazaoDefluente) << endl;
+
+		nivelMontante = this->calcularNivelMontante(volume);
+
+		cout << "hm: " + conversor.double_para_string(nivelMontante) << endl;
+
+		nivelJusante = this->calcularNivelJusante(vazaoDefluente);
+
+		cout << "hj: " + conversor.double_para_string(nivelJusante) << endl;
+
+		altuaraQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
+				nivelJusante);
+
+		cout << "hb: " + conversor.double_para_string(altuaraQuedaBruta)
+				<< endl;
+
+		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
+
+		cout << "hp: " + conversor.double_para_string(perdaCarga) << endl;
+
+		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
+				perdaCarga);
+
+		cout << "hl: " + conversor.double_para_string(alturaQuedaLiquida)
+				<< endl;
+
+		engolimentoMaximoAtual =
+				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+						alturaQuedaLiquida);
+
+		cout << "qmax: " + conversor.double_para_string(engolimentoMaximoAtual)
+				<< endl;
 
 		// Teste de Convergência
 		if (fabs(engolimentoMaximoAtual - engolimentoMaximoAnterior)

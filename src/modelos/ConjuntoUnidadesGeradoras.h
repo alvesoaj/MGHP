@@ -47,6 +47,7 @@ public:
 	void setPotenciaEfetiva(double potenciaEfetiva);
 	void setTipoTurbinasHidraulicas(int tipoTurbinasHidraulicas);
 
+	double calcularEngolimentoEfetivo();
 	double calcularEngolimentoMaximo(double alturaQuedaLiquida);
 };
 

@@ -54,7 +54,7 @@ double CasaDeMaquinas::calcularEngolimentoEfetivoTotal() {
 	for (unsigned int i = 0; i < this->listaConjuntoUnidadesGeradoras.size();
 			i++) {
 		engolimentoEfetivoTotal +=
-				this->listaConjuntoUnidadesGeradoras.at(i)->getEngolimentoEfetivo();
+				this->listaConjuntoUnidadesGeradoras.at(i)->calcularEngolimentoEfetivo();
 	}
 	return engolimentoEfetivoTotal;
 }

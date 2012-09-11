@@ -30,10 +30,10 @@ public:
 			double vazaoDefluente);
 
 	double calcularEngolimentoUsina(unsigned int codigo, double volume,
-			double vazaoDefluente, double tolerancia);
+			double vazaoDefluente);
 
 	double calcularGeracaoHidraulicaUsina(unsigned int codigo, double volume,
-			double vazaoDefluente, double tolerancia);
+			double vazaoDefluente);
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */

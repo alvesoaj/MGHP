@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 			"Itumbiara");
 
 	ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradorasItumbiara =
-			new ConjuntoUnidadesGeradoras(1, 4, 298.0, 262.0, 130.30, 1);
+			new ConjuntoUnidadesGeradoras(1, 6, 380.0, 537.0, 80.20, 1);
 	CasaDeMaquinas* casaDeMaquinasItumbiara = new CasaDeMaquinas();
 	casaDeMaquinasItumbiara->adicionarConjuntoUnidadesGeradoras(
 			conjuntoUnidadesGeradorasItumbiara);
@@ -68,14 +68,14 @@ int main(int argc, char *argv[]) {
 			coeficientesJusanteItumbiara);
 	itumbiara->setPolinomioJusante(polinomioJusanteEmborcacao);
 
-	itumbiara->setVolumeMinimoOperativo(4669.0);
-	itumbiara->setVolumeMaximoOperativo(17190.0);
-	itumbiara->setVolumeMaximoMaximorum(17427.0);
-	itumbiara->setVazaoDefluenteMinima(77.0);
+	itumbiara->setVolumeMinimoOperativo(4573.0);
+	itumbiara->setVolumeMaximoOperativo(17027.0);
+	itumbiara->setVolumeMaximoMaximorum(17975.0);
+	itumbiara->setVazaoDefluenteMinima(254.0);
 	itumbiara->setVazaoDefluenteMaxima(1E20);
-	itumbiara->setNivelMedioJusante(521.9);
-	itumbiara->setCoeficientePerdaCargaHidraulica(0.0127);
-	itumbiara->setCoeficienteProdutibilidadeEspecifica(0.008731);
+	itumbiara->setNivelMedioJusante(435.6);
+	itumbiara->setCoeficientePerdaCargaHidraulica(0.0120);
+	itumbiara->setCoeficienteProdutibilidadeEspecifica(0.008829);
 
 	sistemaHidroeletrico.adicionarUsinaHidroeletrica(itumbiara);
 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 			"Emborcação");
 
 	ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradorasEmborcacao =
-			new ConjuntoUnidadesGeradoras(2, 6, 380.0, 537.0, 80.20, 1);
+			new ConjuntoUnidadesGeradoras(2, 4, 298.0, 262.0, 130.30, 1);
 	CasaDeMaquinas* casaDeMaquinasEmborcacao = new CasaDeMaquinas();
 	casaDeMaquinasEmborcacao->adicionarConjuntoUnidadesGeradoras(
 			conjuntoUnidadesGeradorasEmborcacao);
@@ -110,14 +110,14 @@ int main(int argc, char *argv[]) {
 			coeficientesJusanteEmborcacao);
 	emborcacao->setPolinomioJusante(polinomioJusanteItumbiara);
 
-	emborcacao->setVolumeMinimoOperativo(4573.0);
-	emborcacao->setVolumeMaximoOperativo(17027.0);
-	emborcacao->setVolumeMaximoMaximorum(17975.0);
-	emborcacao->setVazaoDefluenteMinima(254.0);
+	emborcacao->setVolumeMinimoOperativo(4669.0);
+	emborcacao->setVolumeMaximoOperativo(17190.0);
+	emborcacao->setVolumeMaximoMaximorum(17427.0);
+	emborcacao->setVazaoDefluenteMinima(77.0);
 	emborcacao->setVazaoDefluenteMaxima(1E20);
-	emborcacao->setNivelMedioJusante(435.6);
-	emborcacao->setCoeficientePerdaCargaHidraulica(0.0120);
-	emborcacao->setCoeficienteProdutibilidadeEspecifica(0.008829);
+	emborcacao->setNivelMedioJusante(521.9);
+	emborcacao->setCoeficientePerdaCargaHidraulica(0.0127);
+	emborcacao->setCoeficienteProdutibilidadeEspecifica(0.008731);
 
 	emborcacao->setUsinaMontante(itumbiara);
 
@@ -126,29 +126,29 @@ int main(int argc, char *argv[]) {
 	// double nivel_montante = emborcacao->calcularNivelMontante(12000);
 	double nivel_montante = emborcacao->calcularNivelMontante(8000);
 
-	cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
+	// cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
 
 	double nivel_jusante = emborcacao->calcularNivelJusante(600);
 
-	cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
+	// cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
 
 	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
 			nivel_montante, nivel_jusante);
 
-	cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
+	// cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
 
 	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
 
-	cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
+	// cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
 
 	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
 			altura_queda_bruta, perda_carga);
 
-	cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
+	// cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
 
-	double engolimento = emborcacao->calcularEngolimento(8000, 600, 1000);
+	double engolimento = emborcacao->calcularEngolimento(8000, 600);
 
-	cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
+	// cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
 
 	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
 			altura_queda_liquida, engolimento);

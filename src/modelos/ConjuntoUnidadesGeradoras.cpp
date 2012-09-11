@@ -67,11 +67,16 @@ void ConjuntoUnidadesGeradoras::setTipoTurbinasHidraulicas(
 	this->tipoTurbinasHidraulicas = tipoTurbinasHidraulicas;
 }
 
+double ConjuntoUnidadesGeradoras::calcularEngolimentoEfetivo() {
+	return this->getEngolimentoEfetivo() * this->getNumeroUnidadesGeradoras();
+}
+
 double ConjuntoUnidadesGeradoras::calcularEngolimentoMaximo(
 		double alturaQuedaLiquida) {
 	double engolimentoMaximo = this->engolimentoEfetivo
 			* pow(alturaQuedaLiquida / this->alutraQuedaEfetiva,
-					this->calcularAlfa(alutraQuedaEfetiva));
+					this->calcularAlfa(alutraQuedaEfetiva))
+			* this->getNumeroUnidadesGeradoras();
 	return engolimentoMaximo;
 }
 

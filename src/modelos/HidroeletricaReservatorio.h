@@ -8,9 +8,13 @@
 #ifndef HIDROELETRICARESERVATORIO_H_
 #define HIDROELETRICARESERVATORIO_H_
 
+#include <iostream> // Biblioteca  padrão de I/O
 #include <math.h> // Para ajudar em calculos matemáticos
 #include "UsinaHidroeletrica.h"
 #include "PolinomioMontante.h"
+#include "../ferramentas/Conversor.h"
+
+using namespace std;
 
 class HidroeletricaReservatorio: public UsinaHidroeletrica {
 private:
@@ -18,6 +22,7 @@ private:
 	PolinomioMontante* polinomioMontante;
 	double volumeMaximoOperativo;
 	double volumeMinimoOperativo;
+	Conversor conversor;
 
 public:
 	// Métodos da classe Usina Hidroeletrica a Reservatório
@@ -38,8 +43,7 @@ public:
 	double calcularPerdaCarga(double alturaQuedaBruta);
 	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
 			double perdaCarga);
-	double calcularEngolimento(double volume, double vazaoDefluente,
-			double tolerancia);
+	double calcularEngolimento(double volume, double vazaoDefluente);
 	double calcularGeracaoHidraulica(double alturaQuedaLiquida,
 			double engolimento);
 };
