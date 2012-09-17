@@ -54,9 +54,9 @@ int main(int argc, char *argv[]) {
 	coeficientesMontanteItumbiara.push_back(-5.6098E-07);
 	coeficientesMontanteItumbiara.push_back(2.59776E-11);
 	coeficientesMontanteItumbiara.push_back(-4.845359E-16);
-	PolinomioMontante* polinomioMontanteEmborcacao = new PolinomioMontante(
+	PolinomioMontante* polinomioMontanteItumbiara = new PolinomioMontante(
 			coeficientesMontanteItumbiara);
-	itumbiara->setPolinomioMontante(polinomioMontanteEmborcacao);
+	itumbiara->setPolinomioMontante(polinomioMontanteItumbiara);
 
 	vector<double> coeficientesJusanteItumbiara;
 	coeficientesJusanteItumbiara.push_back(433.0);
@@ -64,9 +64,9 @@ int main(int argc, char *argv[]) {
 	coeficientesJusanteItumbiara.push_back(-8.177386E-08);
 	coeficientesJusanteItumbiara.push_back(3.1735E-12);
 	coeficientesJusanteItumbiara.push_back(0.0);
-	PolinomioJusante* polinomioJusanteEmborcacao = new PolinomioJusante(
+	PolinomioJusante* polinomioJusanteItumbiara = new PolinomioJusante(
 			coeficientesJusanteItumbiara);
-	itumbiara->setPolinomioJusante(polinomioJusanteEmborcacao);
+	itumbiara->setPolinomioJusante(polinomioJusanteItumbiara);
 
 	itumbiara->setVolumeMinimoOperativo(4573.0);
 	itumbiara->setVolumeMaximoOperativo(17027.0);
@@ -96,9 +96,9 @@ int main(int argc, char *argv[]) {
 	coeficientesMontanteEmborcacao.push_back(-1.2028E-06);
 	coeficientesMontanteEmborcacao.push_back(5.8303E-11);
 	coeficientesMontanteEmborcacao.push_back(-1.1245E-15);
-	PolinomioMontante* polinomioMontanteItumbiara = new PolinomioMontante(
+	PolinomioMontante* polinomioMontanteEmborcacao = new PolinomioMontante(
 			coeficientesMontanteEmborcacao);
-	emborcacao->setPolinomioMontante(polinomioMontanteItumbiara);
+	emborcacao->setPolinomioMontante(polinomioMontanteEmborcacao);
 
 	vector<double> coeficientesJusanteEmborcacao;
 	coeficientesJusanteEmborcacao.push_back(519.78);
@@ -106,9 +106,9 @@ int main(int argc, char *argv[]) {
 	coeficientesJusanteEmborcacao.push_back(-1.0987E-06);
 	coeficientesJusanteEmborcacao.push_back(2.3438E-10);
 	coeficientesJusanteEmborcacao.push_back(-1.7646E-14);
-	PolinomioJusante* polinomioJusanteItumbiara = new PolinomioJusante(
+	PolinomioJusante* polinomioJusanteEmborcacao = new PolinomioJusante(
 			coeficientesJusanteEmborcacao);
-	emborcacao->setPolinomioJusante(polinomioJusanteItumbiara);
+	emborcacao->setPolinomioJusante(polinomioJusanteEmborcacao);
 
 	emborcacao->setVolumeMinimoOperativo(4669.0);
 	emborcacao->setVolumeMaximoOperativo(17190.0);
@@ -126,29 +126,29 @@ int main(int argc, char *argv[]) {
 	// double nivel_montante = emborcacao->calcularNivelMontante(12000);
 	double nivel_montante = emborcacao->calcularNivelMontante(8000);
 
-	// cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
+	cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
 
 	double nivel_jusante = emborcacao->calcularNivelJusante(600);
 
-	// cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
+	cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
 
 	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
 			nivel_montante, nivel_jusante);
 
-	// cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
+	cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
 
 	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
 
-	// cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
+	cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
 
 	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
 			altura_queda_bruta, perda_carga);
 
-	// cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
+	cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
 
 	double engolimento = emborcacao->calcularEngolimento(8000, 600);
 
-	// cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
+	cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
 
 	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
 			altura_queda_liquida, engolimento);

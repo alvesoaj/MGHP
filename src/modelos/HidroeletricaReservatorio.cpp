@@ -83,6 +83,7 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 	double engolimentoEfetivo =
 			this->casaDeMaquinas->calcularEngolimentoEfetivoTotal();
 	double engolimentoMaximoAnterior = engolimentoEfetivo;
+	cout << "eng ef: " + conversor.double_para_string(engolimentoEfetivo) << endl;
 	double engolimentoMaximoAtual =
 			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 					alturaQuedaLiquida);

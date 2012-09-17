@@ -75,13 +75,14 @@ double ConjuntoUnidadesGeradoras::calcularEngolimentoMaximo(
 		double alturaQuedaLiquida) {
 	double engolimentoMaximo = this->engolimentoEfetivo
 			* pow(alturaQuedaLiquida / this->alutraQuedaEfetiva,
-					this->calcularAlfa(alutraQuedaEfetiva))
+					this->calcularAlfa(alturaQuedaLiquida))
 			* this->getNumeroUnidadesGeradoras();
 	return engolimentoMaximo;
 }
 
 double ConjuntoUnidadesGeradoras::calcularAlfa(double alturaQuedaLiquida) {
 	double alfa = 0.0;
+	std::cout << "alt q ef" << alturaQuedaLiquida << std::endl;
 	if (alturaQuedaLiquida >= this->alutraQuedaEfetiva) {
 		alfa = -1;
 	} else if (alturaQuedaLiquida < this->alutraQuedaEfetiva
