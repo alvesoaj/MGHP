@@ -89,28 +89,8 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
 		double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
-			double nivelMontante = this->usinas.at(i)->calcularNivelMontante(
-					volume);
-
-			double nivelJusante = this->usinas.at(i)->calcularNivelJusante(
+			return this->usinas.at(i)->calcularGeracaoHidraulica(volume,
 					vazaoDefluente);
-
-			double altuaraQuedaBruta =
-					this->usinas.at(i)->calcularAlturaQuedaBruta(nivelMontante,
-							nivelJusante);
-
-			double perdaCarga = this->usinas.at(i)->calcularPerdaCarga(
-					altuaraQuedaBruta);
-
-			double alturaQuedaLiquida =
-					this->usinas.at(i)->calcularAlturaQuedaLiquida(
-							altuaraQuedaBruta, perdaCarga);
-
-			double engolimento = this->usinas.at(i)->calcularEngolimento(volume,
-					vazaoDefluente);
-
-			return this->usinas.at(i)->calcularGeracaoHidraulica(
-					alturaQuedaLiquida, engolimento);
 		}
 	}
 	return 0.0;

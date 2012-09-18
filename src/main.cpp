@@ -27,14 +27,14 @@ using namespace std;
 SistemaHidroeletrico sistemaHidroeletrico;
 // HidroeletricaReservatorio* hidroeletricas[QUANTIDADE_USINAS];
 double volumes[QUANTIDADE_USINAS][INTERVALOS];
+double vazoes[QUANTIDADE_USINAS][INTERVALOS];
 double geracao_hidraulica_intervalos[INTERVALOS];
-double geracao_hidraulica_total = 0.0;
 Conversor conversor;
 
-void carregar_volumes();
+void carregar_valores();
 
 int main(int argc, char *argv[]) {
-	carregar_volumes();
+	carregar_valores();
 
 	// Configurando as usinas
 	// Itubiara
@@ -123,81 +123,104 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico.adicionarUsinaHidroeletrica(emborcacao);
 
-	double nivel_montante = emborcacao->calcularNivelMontante(8000);
-
-	double nivel_jusante = emborcacao->calcularNivelJusante(600);
-
-	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
-			nivel_montante, nivel_jusante);
-
-	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
-
-	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
-			altura_queda_bruta, perda_carga);
-
-	double engolimento = emborcacao->calcularEngolimento(8000, 600);
-
-	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
-			altura_queda_liquida, engolimento);
-
 	/*
-	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
-	 double geracao_hidraulica_total = 0.0;
-	 for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
-	 indice_usina++) {
-
-	 double geracao_hidraulica =
-	 sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
-	 indice_usina + 1, volumes[indice_usina][intervalo],
-	 500, 200);
-
-	 cout
-	 << "gh: " + conversor.double_para_string(geracao_hidraulica)
-	 + "\n" << endl;
-
-	 geracao_hidraulica_total += geracao_hidraulica;
-	 }
-
-	 cout
-	 << "ght: "
-	 + conversor.double_para_string(geracao_hidraulica_total)
-	 + "\n" << endl;
-	 geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
-	 }
+	 double nivel_montante = emborcacao->calcularNivelMontante(8000);
+	 double nivel_jusante = emborcacao->calcularNivelJusante(600);
+	 double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
+	 nivel_montante, nivel_jusante);
+	 double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
+	 double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
+	 altura_queda_bruta, perda_carga);
+	 double engolimento = emborcacao->calcularEngolimento(8000, 600);
+	 double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
+	 altura_queda_liquida, engolimento);
 	 */
+
+	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+		double geracao_hidraulica_total = 0.0;
+		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
+				indice_usina++) {
+
+			double geracao_hidraulica =
+					sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
+							indice_usina + 1, volumes[indice_usina][intervalo],
+							vazoes[indice_usina][intervalo]);
+
+			cout
+					<< "gh: " + conversor.double_para_string(geracao_hidraulica)
+							+ "\n" << endl;
+
+			geracao_hidraulica_total += geracao_hidraulica;
+		}
+
+		cout
+				<< "ght: "
+						+ conversor.double_para_string(geracao_hidraulica_total)
+						+ "\n" << endl;
+		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+	}
+
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
 }
 
-void carregar_volumes() {
+void carregar_valores() {
 	int contador_usina = 0;
 	string line;
-	ifstream itumbiara_file("./assets/Itumbiara.txt"); // ifstream = padrão ios:in
-	if (itumbiara_file.is_open()) {
+	ifstream itumbiara_volumes_file("./assets/Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
+	if (itumbiara_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
-		while (!itumbiara_file.eof()) {
-			getline(itumbiara_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+		while (!itumbiara_volumes_file.eof()) {
+			getline(itumbiara_volumes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = conversor.string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
 			contador_interacao++;
 		}
-		itumbiara_file.close();
+		itumbiara_volumes_file.close();
+	} else {
+		cout << "Impossivel abrir o arquivo!";
+	}
+	ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+	if (itumbiara_vazoes_file.is_open()) {
+		int contador_interacao = 0;
+		//enquanto end of file for false continua
+		while (!itumbiara_vazoes_file.eof()) {
+			getline(itumbiara_vazoes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+			double d = conversor.string_para_double(line);
+			vazoes[contador_usina][contador_interacao] = d;
+			contador_interacao++;
+		}
+		itumbiara_vazoes_file.close();
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	contador_usina++;
-	ifstream emborcacao_file("./assets/Emborcacao.txt"); // ifstream = padrão ios:in
-	if (emborcacao_file.is_open()) {
+	ifstream emborcacao_volumes_file("./assets/Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
+	if (emborcacao_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
-		while (!emborcacao_file.eof()) {
-			getline(emborcacao_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+		while (!emborcacao_volumes_file.eof()) {
+			getline(emborcacao_volumes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = conversor.string_para_double(line);
 			volumes[contador_usina][contador_interacao] = d;
 			contador_interacao++;
 		}
-		emborcacao_file.close();
+		emborcacao_volumes_file.close();
+	} else {
+		cout << "Impossivel abrir o arquivo!";
+	}
+	ifstream emborcacao_vazoes_file("./assets/Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+	if (emborcacao_vazoes_file.is_open()) {
+		int contador_interacao = 0;
+		//enquanto end of file for false continua
+		while (!emborcacao_vazoes_file.eof()) {
+			getline(emborcacao_vazoes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
+			double d = conversor.string_para_double(line);
+			volumes[contador_usina][contador_interacao] = d;
+			contador_interacao++;
+		}
+		emborcacao_vazoes_file.close();
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
