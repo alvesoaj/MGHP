@@ -83,7 +83,6 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 	double engolimentoEfetivo =
 			this->casaDeMaquinas->calcularEngolimentoEfetivoTotal();
 	double engolimentoMaximoAnterior = engolimentoEfetivo;
-	cout << "eng ef: " + conversor.double_para_string(engolimentoEfetivo) << endl;
 	double engolimentoMaximoAtual =
 			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 					alturaQuedaLiquida);
@@ -97,39 +96,21 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 			// vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		}
 
-		cout << "x: " + conversor.double_para_string(volume) << endl;
-		cout << "u: " + conversor.double_para_string(vazaoDefluente) << endl;
-
 		nivelMontante = this->calcularNivelMontante(volume);
 
-		cout << "hm: " + conversor.double_para_string(nivelMontante) << endl;
-
 		nivelJusante = this->calcularNivelJusante(vazaoDefluente);
-
-		cout << "hj: " + conversor.double_para_string(nivelJusante) << endl;
 
 		altuaraQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
 				nivelJusante);
 
-		cout << "hb: " + conversor.double_para_string(altuaraQuedaBruta)
-				<< endl;
-
 		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
-
-		cout << "hp: " + conversor.double_para_string(perdaCarga) << endl;
 
 		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
 				perdaCarga);
 
-		cout << "hl: " + conversor.double_para_string(alturaQuedaLiquida)
-				<< endl;
-
 		engolimentoMaximoAtual =
 				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 						alturaQuedaLiquida);
-
-		cout << "qmax: " + conversor.double_para_string(engolimentoMaximoAtual)
-				<< endl;
 
 		// Teste de Convergência
 		if (fabs(engolimentoMaximoAtual - engolimentoMaximoAnterior)

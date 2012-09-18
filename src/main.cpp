@@ -123,37 +123,22 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico.adicionarUsinaHidroeletrica(emborcacao);
 
-	// double nivel_montante = emborcacao->calcularNivelMontante(12000);
 	double nivel_montante = emborcacao->calcularNivelMontante(8000);
 
-	cout << "hm: " + conversor.double_para_string(nivel_montante) << endl;
-
 	double nivel_jusante = emborcacao->calcularNivelJusante(600);
-
-	cout << "hj: " + conversor.double_para_string(nivel_jusante) << endl;
 
 	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
 			nivel_montante, nivel_jusante);
 
-	cout << "hb: " + conversor.double_para_string(altura_queda_bruta) << endl;
-
 	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
-
-	cout << "hp: " + conversor.double_para_string(perda_carga) << endl;
 
 	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
 			altura_queda_bruta, perda_carga);
 
-	cout << "hl: " + conversor.double_para_string(altura_queda_liquida) << endl;
-
 	double engolimento = emborcacao->calcularEngolimento(8000, 600);
-
-	cout << "qmax: " + conversor.double_para_string(engolimento) << endl;
 
 	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
 			altura_queda_liquida, engolimento);
-
-	cout << "gh: " + conversor.double_para_string(geracao_hidraulica) << endl;
 
 	/*
 	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {

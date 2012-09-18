@@ -21,7 +21,7 @@ public:
 	// Métodos da classe Polinomio
 	int getGrau();
 
-	double calcularValor(double volume);
+	double calcularValor(double argumento);
 };
 
 #endif /* POLINOMIO_H_ */
