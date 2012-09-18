@@ -82,7 +82,6 @@ double ConjuntoUnidadesGeradoras::calcularEngolimentoMaximo(
 
 double ConjuntoUnidadesGeradoras::calcularAlfa(double alturaQuedaLiquida) {
 	double alfa = 0.0;
-	std::cout << "alt q ef" << alturaQuedaLiquida << std::endl;
 	if (alturaQuedaLiquida >= this->alutraQuedaEfetiva) {
 		alfa = -1;
 	} else if (alturaQuedaLiquida < this->alutraQuedaEfetiva
