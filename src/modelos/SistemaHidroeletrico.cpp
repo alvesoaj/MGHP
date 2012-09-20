@@ -49,6 +49,15 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 	}
 }
 
+string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			return this->usinas.at(i)->getNome();
+		}
+	}
+	return "Indefinido";
+}
+
 double SistemaHidroeletrico::calcularAlturaQuedaLiquidaUsina(
 		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
@@ -71,7 +80,6 @@ double SistemaHidroeletrico::calcularAlturaQuedaLiquidaUsina(
 		}
 	}
 	return 0.0;
-
 }
 
 double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,

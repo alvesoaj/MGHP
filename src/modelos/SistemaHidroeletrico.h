@@ -26,6 +26,8 @@ public:
 	bool removerUsinaHidroeletrica(
 			HidroeletricaReservatorio* usinaHidroeletrica);
 
+	string getNomeUsina(unsigned int codigo);
+
 	double calcularAlturaQuedaLiquidaUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);
 

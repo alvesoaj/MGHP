@@ -137,7 +137,9 @@ int main(int argc, char *argv[]) {
 	 */
 
 	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+		string output = "";
 		double geracao_hidraulica_total = 0.0;
+
 		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
 				indice_usina++) {
 
@@ -146,18 +148,20 @@ int main(int argc, char *argv[]) {
 							indice_usina + 1, volumes[indice_usina][intervalo],
 							vazoes[indice_usina][intervalo]);
 
-			cout
-					<< "gh: " + conversor.double_para_string(geracao_hidraulica)
-							+ "\n" << endl;
+			output += "gh("
+					+ sistemaHidroeletrico.getNomeUsina(indice_usina + 1)
+					+ "): " + conversor.double_para_string(geracao_hidraulica)
+					+ " ";
 
 			geracao_hidraulica_total += geracao_hidraulica;
 		}
 
-		cout
-				<< "ght: "
-						+ conversor.double_para_string(geracao_hidraulica_total)
-						+ "\n" << endl;
+		output += "\n ght I(" + conversor.double_para_string(intervalo) + "): "
+				+ conversor.double_para_string(geracao_hidraulica_total) + "\n";
+
 		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+
+		cout << output << endl;
 	}
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
@@ -217,7 +221,7 @@ void carregar_valores() {
 		while (!emborcacao_vazoes_file.eof()) {
 			getline(emborcacao_vazoes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = conversor.string_para_double(line);
-			volumes[contador_usina][contador_interacao] = d;
+			vazoes[contador_usina][contador_interacao] = d;
 			contador_interacao++;
 		}
 		emborcacao_vazoes_file.close();
