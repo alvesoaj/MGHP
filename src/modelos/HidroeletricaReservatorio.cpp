@@ -105,11 +105,11 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 
 		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
 
-		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(
-				altuaraQuedaBruta, perdaCarga);
+		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
+				perdaCarga);
 
-		engolimentoMaximoAtual
-				= this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+		engolimentoMaximoAtual =
+				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 						alturaQuedaLiquida);
 
 		// Teste de Convergência
@@ -130,9 +130,6 @@ double HidroeletricaReservatorio::calcularGeracaoHidraulica(
 	if (vazao < engolimento) {
 		engolimento = vazao;
 	}
-
-	std::cout << "q: " << engolimento << std::endl;
-
 	double geracaoHidraulica = this->coeficienteProdutibilidadeEspecifica
 			* alturaQuedaLiquida * engolimento;
 	return geracaoHidraulica;

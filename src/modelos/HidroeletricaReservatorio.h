@@ -9,7 +9,6 @@
 #define HIDROELETRICARESERVATORIO_H_
 
 #include <math.h> // Para ajudar em calculos matemáticos
-#include <iostream> // Biblioteca  padrão de I/O
 #include "UsinaHidroeletrica.h"
 #include "PolinomioMontante.h"
 #include "../ferramentas/Conversor.h"

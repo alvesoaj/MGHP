@@ -123,67 +123,73 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico.adicionarUsinaHidroeletrica(emborcacao);
 
-	double vol_itu = 17027;
-	double vaz_itu = 996.70746333983;
-	double nivel_montante_itu = itumbiara->calcularNivelMontante(vol_itu);
-	double nivel_jusante_itu = itumbiara->calcularNivelJusante(vaz_itu);
-	double altura_queda_bruta_itu = itumbiara->calcularAlturaQuedaBruta(
-			nivel_montante_itu, nivel_jusante_itu);
-	double perda_carga_itu = itumbiara->calcularPerdaCarga(
-			altura_queda_bruta_itu);
-	double altura_queda_liquida_itu = itumbiara->calcularAlturaQuedaLiquida(
-			altura_queda_bruta_itu, perda_carga_itu);
-	cout << "hl Itu: " << altura_queda_liquida_itu << endl;
-	double engolimento_itu = itumbiara->calcularEngolimento(vol_itu, vaz_itu);
-	cout << "qMax Itu: " << engolimento_itu << endl;
-	double geracao_hidraulica_itu = itumbiara->calcularGeracaoHidraulica(
-			altura_queda_liquida_itu, vaz_itu, engolimento_itu);
-	cout << "GH Itu: " << geracao_hidraulica_itu << "\n" << endl;
-
-	double vol_emb = 16997.2263931715;
-	double vaz_emb = 397.70746333983;
-	double nivel_montante = emborcacao->calcularNivelMontante(vol_emb);
-	double nivel_jusante = emborcacao->calcularNivelJusante(vaz_emb);
-	double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
-			nivel_montante, nivel_jusante);
-	double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
-	double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
-			altura_queda_bruta, perda_carga);
-	cout << "hl Emb: " << altura_queda_liquida << endl;
-	double engolimento = emborcacao->calcularEngolimento(vol_emb, vaz_emb);
-	cout << "qMax Emb: " << engolimento << endl;
-	double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
-			altura_queda_liquida, vaz_emb, engolimento);
-	cout << "GH Emb: " << geracao_hidraulica << endl;
-
-
 	/*
-	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
-	 string output = "";
-	 double geracao_hidraulica_total = 0.0;
+	 double vol_itu = 17027;
+	 double vaz_itu = 996.70746333983;
+	 double nivel_montante_itu = itumbiara->calcularNivelMontante(vol_itu);
+	 double nivel_jusante_itu = itumbiara->calcularNivelJusante(vaz_itu);
+	 double altura_queda_bruta_itu = itumbiara->calcularAlturaQuedaBruta(
+	 nivel_montante_itu, nivel_jusante_itu);
+	 double perda_carga_itu = itumbiara->calcularPerdaCarga(
+	 altura_queda_bruta_itu);
+	 double altura_queda_liquida_itu = itumbiara->calcularAlturaQuedaLiquida(
+	 altura_queda_bruta_itu, perda_carga_itu);
+	 cout << "hl Itu: " << altura_queda_liquida_itu << endl;
+	 double engolimento_itu = itumbiara->calcularEngolimento(vol_itu, vaz_itu);
+	 cout << "qMax Itu: " << engolimento_itu << endl;
+	 double geracao_hidraulica_itu = itumbiara->calcularGeracaoHidraulica(
+	 altura_queda_liquida_itu, vaz_itu, engolimento_itu);
+	 cout << "GH Itu: " << geracao_hidraulica_itu << "\n" << endl;
 
-	 for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS; indice_usina++) {
-
-	 double geracao_hidraulica =
-	 sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
-	 indice_usina + 1, volumes[indice_usina][intervalo],
-	 vazoes[indice_usina][intervalo]);
-
-	 output += "gh(" + sistemaHidroeletrico.getNomeUsina(
-	 indice_usina + 1) + "): " + conversor.double_para_string(
-	 geracao_hidraulica) + " ";
-
-	 geracao_hidraulica_total += geracao_hidraulica;
-	 }
-
-	 output += "\n ght I(" + conversor.double_para_string(intervalo) + "): "
-	 + conversor.double_para_string(geracao_hidraulica_total) + "\n";
-
-	 geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
-
-	 cout << output << endl;
-	 }
+	 double vol_emb = 16997.2263931715;
+	 double vaz_emb = 397.70746333983;
+	 double nivel_montante = emborcacao->calcularNivelMontante(vol_emb);
+	 double nivel_jusante = emborcacao->calcularNivelJusante(vaz_emb);
+	 double altura_queda_bruta = emborcacao->calcularAlturaQuedaBruta(
+	 nivel_montante, nivel_jusante);
+	 double perda_carga = emborcacao->calcularPerdaCarga(altura_queda_bruta);
+	 double altura_queda_liquida = emborcacao->calcularAlturaQuedaLiquida(
+	 altura_queda_bruta, perda_carga);
+	 cout << "hl Emb: " << altura_queda_liquida << endl;
+	 double engolimento = emborcacao->calcularEngolimento(vol_emb, vaz_emb);
+	 cout << "qMax Emb: " << engolimento << endl;
+	 double geracao_hidraulica = emborcacao->calcularGeracaoHidraulica(
+	 altura_queda_liquida, vaz_emb, engolimento);
+	 cout << "GH Emb: " << geracao_hidraulica << endl;
 	 */
+	/*
+	 double g_h = sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(1, vol_itu,
+	 vaz_itu);
+
+	 cout << g_h << endl;
+	 */
+
+	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+		string output = "";
+		double geracao_hidraulica_total = 0.0;
+
+		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
+				indice_usina++) {
+
+			double geracao_hidraulica =
+					sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
+							indice_usina + 1, volumes[indice_usina][intervalo],
+							vazoes[indice_usina][intervalo]);
+
+			geracao_hidraulica_total += geracao_hidraulica;
+			output += "gh("
+					+ sistemaHidroeletrico.getNomeUsina(indice_usina + 1)
+					+ "): " + conversor.double_para_string(geracao_hidraulica)
+					+ " ";
+		}
+
+		output += "\n ght I(" + conversor.double_para_string(intervalo) + "): "
+				+ conversor.double_para_string(geracao_hidraulica_total) + "\n";
+
+		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+
+		cout << output << endl;
+	}
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
