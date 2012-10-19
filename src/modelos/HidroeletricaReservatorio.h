@@ -9,6 +9,7 @@
 #define HIDROELETRICARESERVATORIO_H_
 
 #include <math.h> // Para ajudar em calculos matemáticos
+#include <iostream> // Biblioteca  padrão de I/O
 #include "UsinaHidroeletrica.h"
 #include "PolinomioMontante.h"
 #include "../ferramentas/Conversor.h"
@@ -37,13 +38,13 @@ public:
 	double calcularVolumeUtil();
 	double calcularVolumeSeguranca();
 	double calcularNivelMontante(double volume);
-	double calcularAlturaQuedaBruta(double alturaMontante,
-			double alturaJusante);
+	double
+	calcularAlturaQuedaBruta(double alturaMontante, double alturaJusante);
 	double calcularPerdaCarga(double alturaQuedaBruta);
 	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
 			double perdaCarga);
 	double calcularEngolimento(double volume, double vazaoDefluente);
-	double calcularGeracaoHidraulica(double alturaQuedaLiquida,
+	double calcularGeracaoHidraulica(double alturaQuedaLiquida, double vazao,
 			double engolimento);
 };
 

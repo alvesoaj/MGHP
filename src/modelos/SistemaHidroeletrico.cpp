@@ -16,8 +16,7 @@ bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool exists = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			exists = true;
 			break;
 		}
@@ -35,8 +34,7 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -93,12 +91,12 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
-		double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->calcularGeracaoHidraulica(volume,
-					vazaoDefluente);
+					vazaoDefluente, vazaoDefluente);
 		}
 	}
 	return 0.0;
