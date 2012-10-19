@@ -156,6 +156,7 @@ int main(int argc, char *argv[]) {
 			altura_queda_liquida, vaz_emb, engolimento);
 	cout << "GH Emb: " << geracao_hidraulica << endl;
 
+
 	/*
 	 for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
 	 string output = "";
