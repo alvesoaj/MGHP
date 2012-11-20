@@ -30,8 +30,10 @@ double volumes[QUANTIDADE_USINAS][INTERVALOS];
 double vazoes[QUANTIDADE_USINAS][INTERVALOS];
 double geracao_hidraulica_intervalos[INTERVALOS];
 Conversor conversor;
+double demanda = 3472; // 3472 MW
 
 void carregar_valores();
+double calcularCusto();
 
 int main(int argc, char *argv[]) {
 	carregar_valores();
@@ -191,8 +193,20 @@ int main(int argc, char *argv[]) {
 		cout << output << endl;
 	}
 
+	double custo = calcularCusto();
+
+	cout << "Custo: " << custo << endl;
+
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
+}
+
+double calcularCusto() {
+	double needSum = 0;
+	for (int i = 0; i < INTERVALOS; i++) {
+		needSum = pow(demanda - geracao_hidraulica_intervalos[i], 2);
+	}
+	return needSum / 2;
 }
 
 void carregar_valores() {
