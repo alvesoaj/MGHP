@@ -166,12 +166,11 @@ int main(int argc, char *argv[]) {
 	 cout << g_h << endl;
 	 */
 
-	for (int intervalo = 1; intervalo < INTERVALOS; intervalo++) {
+	for (int intervalo = 0; intervalo < INTERVALOS; intervalo++) {
 		string output = "";
 		double geracao_hidraulica_total = 0.0;
 
-		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
-				indice_usina++) {
+		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS; indice_usina++) {
 
 			double geracao_hidraulica =
 					sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
@@ -179,10 +178,9 @@ int main(int argc, char *argv[]) {
 							vazoes[indice_usina][intervalo]);
 
 			geracao_hidraulica_total += geracao_hidraulica;
-			output += "gh("
-					+ sistemaHidroeletrico.getNomeUsina(indice_usina + 1)
-					+ "): " + conversor.double_para_string(geracao_hidraulica)
-					+ " ";
+			output += "gh(" + sistemaHidroeletrico.getNomeUsina(
+					indice_usina + 1) + "): " + conversor.double_para_string(
+					geracao_hidraulica) + " ";
 		}
 
 		output += "\n ght I(" + conversor.double_para_string(intervalo) + "): "
@@ -204,7 +202,9 @@ int main(int argc, char *argv[]) {
 double calcularCusto() {
 	double needSum = 0;
 	for (int i = 0; i < INTERVALOS; i++) {
-		needSum = pow(demanda - geracao_hidraulica_intervalos[i], 2);
+		if (demanda > geracao_hidraulica_intervalos[i]) {
+			needSum += pow(demanda - geracao_hidraulica_intervalos[i], 2);
+		}
 	}
 	return needSum / 2;
 }
