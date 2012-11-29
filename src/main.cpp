@@ -212,7 +212,7 @@ double calcularCusto() {
 void carregar_valores() {
 	int contador_usina = 0;
 	string line;
-	ifstream itumbiara_volumes_file("./assets/Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_volumes_file("./assets/2-Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -226,7 +226,7 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_vazoes_file("./assets/2-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -241,7 +241,7 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	contador_usina++;
-	ifstream emborcacao_volumes_file("./assets/Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_volumes_file("./assets/2-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -255,7 +255,7 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	ifstream emborcacao_vazoes_file("./assets/Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_vazoes_file("./assets/2-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
