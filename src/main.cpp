@@ -179,6 +179,7 @@ int main(int argc, char *argv[]) {
 							vazoes[indice_usina][intervalo]);
 
 			geracao_hidraulica_total += geracao_hidraulica;
+
 			output += "gh("
 					+ sistemaHidroeletrico.getNomeUsina(indice_usina + 1)
 					+ "): " + conversor.double_para_string(geracao_hidraulica)
@@ -202,13 +203,13 @@ int main(int argc, char *argv[]) {
 }
 
 double calcularCusto() {
-	double needSum = 0;
+	double needSum = 0.0;
 	for (int i = 0; i < INTERVALOS; i++) {
 		if (demanda > geracao_hidraulica_intervalos[i]) {
 			needSum += pow(demanda - geracao_hidraulica_intervalos[i], 2);
 		}
 	}
-	return needSum / 2;
+	return needSum / 2.0;
 }
 
 void carregar_valores() {
