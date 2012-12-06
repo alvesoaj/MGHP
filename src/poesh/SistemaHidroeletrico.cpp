@@ -7,17 +7,19 @@
 
 #include "SistemaHidroeletrico.h"
 
-SistemaHidroeletrico::SistemaHidroeletrico() {
-	// TODO Auto-generated constructor stub
-
+SistemaHidroeletrico::SistemaHidroeletrico(int intervalos, int demanda,
+		vector<vector<double> > volumes, vector<vector<double> > vazoes) {
+	this->intervalos = intervalos;
+	this->demanda = demanda;
+	this->volumes = volumes;
+	this->vazoes = vazoes;
 }
 
 bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool exists = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			exists = true;
 			break;
 		}
@@ -35,8 +37,7 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -93,8 +94,8 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
-		double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
@@ -106,4 +107,32 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
 		}
 	}
 	return 0.0;
+}
+
+double SistemaHidroeletrico::calcularCustoTotal() {
+	double geracao_hidraulica_intervalos[this->intervalos];
+
+	for (int intervalo = 0; intervalo < this->intervalos; intervalo++) {
+		double geracao_hidraulica_total = 0.0;
+
+		for (unsigned int indice_usina = 0; indice_usina < this->usinas.size(); indice_usina++) {
+
+			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
+					indice_usina + 1, this->volumes[indice_usina][intervalo],
+					this->vazoes[indice_usina][intervalo]);
+
+			geracao_hidraulica_total += geracao_hidraulica;
+		}
+
+		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+	}
+
+	double needSum = 0.0;
+	for (int i = 0; i < this->intervalos; i++) {
+		if (this->demanda > geracao_hidraulica_intervalos[i]) {
+			needSum += pow(this->demanda - geracao_hidraulica_intervalos[i], 2);
+		}
+	}
+
+	return needSum / 2.0;
 }

@@ -8,18 +8,24 @@
 #ifndef SISTEMAHIDROELETRICO_H_
 #define SISTEMAHIDROELETRICO_H_
 // Importando bibliotecas úteis
-#include <iostream> // Biblioteca  padrão de I/O
 #include <vector> // Para trabalhar com vetores
 #include "../ferramentas/Conversor.h"
 #include "HidroeletricaReservatorio.h"
-//
+
+using std::vector;
+
 class SistemaHidroeletrico {
 private:
+	int intervalos;
+	int demanda;
 	Conversor conversor;
-	std::vector<HidroeletricaReservatorio*> usinas;
+	vector<vector<double> > volumes;
+	vector<vector<double> > vazoes;
+	vector<HidroeletricaReservatorio*> usinas;
 
 public:
-	SistemaHidroeletrico();
+	SistemaHidroeletrico(int intervalos, int demanda,
+			vector<vector<double> > volumes, vector<vector<double> > vazoes);
 
 	bool adicionarUsinaHidroeletrica(
 			HidroeletricaReservatorio* usinaHidroeletrica);
@@ -36,6 +42,8 @@ public:
 
 	double calcularGeracaoHidraulicaUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);
+
+	double calcularCustoTotal();
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */
