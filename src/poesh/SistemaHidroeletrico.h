@@ -24,6 +24,8 @@ private:
 	vector<HidroeletricaReservatorio*> usinas;
 
 public:
+	SistemaHidroeletrico(int intervalos, int demanda);
+
 	SistemaHidroeletrico(int intervalos, int demanda,
 			vector<vector<double> > volumes, vector<vector<double> > vazoes);
 
@@ -33,6 +35,10 @@ public:
 			HidroeletricaReservatorio* usinaHidroeletrica);
 
 	string getNomeUsina(unsigned int codigo);
+
+	void setVolumes(vector<vector<double> > volumes);
+
+	void setVazoes(vector<vector<double> > vazoes);
 
 	double calcularAlturaQuedaLiquidaUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);

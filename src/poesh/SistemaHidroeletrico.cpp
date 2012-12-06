@@ -7,6 +7,11 @@
 
 #include "SistemaHidroeletrico.h"
 
+SistemaHidroeletrico::SistemaHidroeletrico(int intervalos, int demanda) {
+	this->intervalos = intervalos;
+	this->demanda = demanda;
+}
+
 SistemaHidroeletrico::SistemaHidroeletrico(int intervalos, int demanda,
 		vector<vector<double> > volumes, vector<vector<double> > vazoes) {
 	this->intervalos = intervalos;
@@ -19,7 +24,8 @@ bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool exists = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo()
+				== usinaHidroeletrica->getCodigo()) {
 			exists = true;
 			break;
 		}
@@ -37,7 +43,8 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo()
+				== usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -57,6 +64,14 @@ string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
 		}
 	}
 	return "Indefinido";
+}
+
+void SistemaHidroeletrico::setVolumes(vector<vector<double> > volumes) {
+	this->volumes = volumes;
+}
+
+void SistemaHidroeletrico::setVazoes(vector<vector<double> > vazoes) {
+	this->vazoes = vazoes;
 }
 
 double SistemaHidroeletrico::calcularAlturaQuedaLiquidaUsina(
@@ -94,8 +109,8 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
-		unsigned int codigo, double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
+		double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
@@ -115,7 +130,8 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 	for (int intervalo = 0; intervalo < this->intervalos; intervalo++) {
 		double geracao_hidraulica_total = 0.0;
 
-		for (unsigned int indice_usina = 0; indice_usina < this->usinas.size(); indice_usina++) {
+		for (unsigned int indice_usina = 0; indice_usina < this->usinas.size();
+				indice_usina++) {
 
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
 					indice_usina + 1, this->volumes[indice_usina][intervalo],
