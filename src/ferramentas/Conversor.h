@@ -11,6 +11,8 @@
 // Importando bibliotecas úteis
 #include <string> // Para trabalhar fácil com strings
 #include <sstream> // Para trabalhar fácil com strings
+#include <ctime>  // Para usar o time() e fornecer um bom seed para o random
+#include <cstdlib> // Para gerar numeros randômicos
 //
 class Conversor {
 public:
@@ -19,6 +21,7 @@ public:
 
 	std::string double_para_string(double d);
 	double string_para_double(const std::string& s);
+	int get_random_number(int from, int to);
 };
 
 #endif /* CONVERSOR_H_ */

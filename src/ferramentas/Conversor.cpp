@@ -23,3 +23,10 @@ double Conversor::string_para_double(const std::string& s) {
 	instr >> val;
 	return val;
 }
+
+int Conversor::get_random_number(int from, int to) {
+	// Inicializando o gerador de números randômicos com um seed temporal
+	srand(time(0));
+
+	return (from < to) ? (rand() % to) + from : 0;
+}

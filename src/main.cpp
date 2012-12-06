@@ -13,8 +13,9 @@
 #include <string> // Para trabalhar fácil com strings
 #include <sstream> // Para trabalhar fácil com strings
 #include <math.h> // Para ajudar em calculos matemáticos
-#include "modelos/SistemaHidroeletrico.h"
-#include "modelos/HidroeletricaReservatorio.h"
+#include <time.h> // Calcular o tempo de execução
+#include "poesh/SistemaHidroeletrico.h"
+#include "poesh/HidroeletricaReservatorio.h"
 #include "ferramentas/Conversor.h"
 
 using namespace std;
@@ -32,10 +33,12 @@ double geracao_hidraulica_intervalos[INTERVALOS];
 Conversor conversor;
 double demanda = 3472; // 3472 MW
 
+double calcular_tempo(clock_t start, clock_t end);
+double calcular_custo();
 void carregar_valores();
-double calcularCusto();
 
 int main(int argc, char *argv[]) {
+	clock_t time_start = clock();
 	carregar_valores();
 
 	// Configurando as usinas
@@ -170,8 +173,7 @@ int main(int argc, char *argv[]) {
 		string output = "";
 		double geracao_hidraulica_total = 0.0;
 
-		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS;
-				indice_usina++) {
+		for (int indice_usina = 0; indice_usina < QUANTIDADE_USINAS; indice_usina++) {
 
 			double geracao_hidraulica =
 					sistemaHidroeletrico.calcularGeracaoHidraulicaUsina(
@@ -180,10 +182,9 @@ int main(int argc, char *argv[]) {
 
 			geracao_hidraulica_total += geracao_hidraulica;
 
-			output += "gh("
-					+ sistemaHidroeletrico.getNomeUsina(indice_usina + 1)
-					+ "): " + conversor.double_para_string(geracao_hidraulica)
-					+ " ";
+			output += "gh(" + sistemaHidroeletrico.getNomeUsina(
+					indice_usina + 1) + "): " + conversor.double_para_string(
+					geracao_hidraulica) + " ";
 		}
 
 		output += "\n ght I(" + conversor.double_para_string(intervalo) + "): "
@@ -194,15 +195,22 @@ int main(int argc, char *argv[]) {
 		cout << output << endl;
 	}
 
-	double custo = calcularCusto();
+	double custo = calcular_custo();
 
-	cout << "Custo: " << custo << endl;
+	cout << "Custo Total: " << custo << endl;
+
+	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start, clock())
+			<< " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
 }
 
-double calcularCusto() {
+double calcular_tempo(clock_t start, clock_t end) {
+	return 1000.0 * ((double) (end - start) / (double) CLOCKS_PER_SEC);
+}
+
+double calcular_custo() {
 	double needSum = 0.0;
 	for (int i = 0; i < INTERVALOS; i++) {
 		if (demanda > geracao_hidraulica_intervalos[i]) {
