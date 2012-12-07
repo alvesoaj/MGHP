@@ -9,9 +9,11 @@
 #define ACO_H_
 
 // Importando bibliotecas necessárias
+#include <iostream> // Biblioteca  padrão de I/O
 #include <vector>
 #include "Ant.h"
 #include "../ferramentas/Conversor.h"
+#include "../poesh/SistemaHidroeletrico.h"
 
 using std::vector;
 
@@ -29,7 +31,8 @@ public:
 	// Construtor
 	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 			int maxIterationSize, double pheromoneRate, double evaporationRate,
-			double positiveConstant);
+			double positiveConstant,
+			SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();
@@ -47,6 +50,7 @@ private:
 	vector<vector<vector<double> > > pheromoneLinks;
 	vector<Ant*> ants;
 	Conversor conversor;
+	SistemaHidroeletrico* sistemaHidroeletrico;
 
 	// Métodos privados
 	void initializeAnts();
@@ -54,6 +58,7 @@ private:
 	void buildSolutions();
 	double getValue(int position);
 	void checkBestSolution();
+	double calculateFitness(vector<vector<double> > routes);
 	void pheromoneEvaporates();
 	void updatePheromone();
 };

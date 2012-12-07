@@ -17,13 +17,21 @@
 #include "poesh/SistemaHidroeletrico.h"
 #include "poesh/HidroeletricaReservatorio.h"
 #include "ferramentas/Conversor.h"
+#include "aco/ACO.h"
 
 using namespace std;
 
-// Constantes
+// Constantes POSH
 #define INTERVALOS 60
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
+// Constantes ACO
+#define POPULATION_SIZE 30
+#define DISCRETIZACAO 11
+#define MAX_ITERATIONS 30
+#define PHEROMONE_RATE 0.1
+#define EVAPORATION_RATE 0.5
+#define POSITIVE_CONTS 0.75
 
 // Variáveis
 Conversor conversor;
@@ -131,10 +139,20 @@ int main(int argc, char *argv[]) {
 
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
-	cout << "Custo Total: " << custo << endl;
+	cout << "Custo Total (Arquivos): " << custo << endl;
 
-	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
-			clock()) << " ms" << endl;
+	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
+			DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
+			POSITIVE_CONTS, sistemaHidroeletrico);
+
+	aco->calculateSolution();
+
+	cout << "Pior Custo (ACO): " << aco->worseFitness << endl;
+
+	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
+
+	cout << "\nTempo de execução (MGHP): "
+			<< calcular_tempo(time_start, clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;

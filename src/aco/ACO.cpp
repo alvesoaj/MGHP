@@ -10,7 +10,7 @@
 // Construtor
 ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 		int maxIterationSize, double pheromoneRate, double evaporationRate,
-		double positiveConstant) {
+		double positiveConstant, SistemaHidroeletrico* sistemaHidroeletrico) {
 	this->populationSize = populationSize;
 	this->plantSize = plantSize;
 	this->intervalSize = intervalSize;
@@ -21,6 +21,7 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->evaporationRate = evaporationRate;
 	this->bestFitness = INVALID;
 	this->worseFitness = INVALID;
+	this->sistemaHidroeletrico = sistemaHidroeletrico;
 }
 
 // Métodos públicos
@@ -33,9 +34,9 @@ void ACO::calculateSolution() {
 
 	while (iteration < maxIterationSize) {
 		this->buildSolutions();
-		checkBestSolution();
-		pheromoneEvaporates();
-		updatePheromone();
+		this->checkBestSolution();
+		this->pheromoneEvaporates();
+		this->updatePheromone();
 		iteration++;
 	}
 }
@@ -46,8 +47,7 @@ void ACO::initializeAnts() {
 		Ant *a = new Ant(i, this->plantSize, this->intervalSize);
 		// Iniciar com o reservatório cheio, 100%
 		for (int p = 0; p < this->plantSize; p++) {
-			a->addInRouteAtPositionValue(p, 0,
-					this->getValue((this->valueSize - 1)));
+			a->addInRouteAtPositionValue(p, 0, this->getValue(this->valueSize));
 		}
 		// adicionar a formiga ao aray de formigas
 		this->ants.push_back(a);
@@ -56,11 +56,15 @@ void ACO::initializeAnts() {
 
 void ACO::seedInitialPheromone() {
 	for (int i = 0; i < this->plantSize; i++) {
+		vector<vector<double> > tempIntervalArray;
 		for (int j = 0; j < this->intervalSize; j++) {
+			vector<double> tempValueArray;
 			for (int v = 0; v < this->valueSize; v++) {
-				this->pheromoneLinks[i][j][v] = this->pheromoneRate;
+				tempValueArray.push_back(this->pheromoneRate);
 			}
+			tempIntervalArray.push_back(tempValueArray);
 		}
+		this->pheromoneLinks.push_back(tempIntervalArray);
 	}
 }
 
@@ -69,7 +73,7 @@ void ACO::buildSolutions() {
 	for (int i = 0; i < this->populationSize; i++) {
 		ants.at(i)->initSearch();
 		// Enquanto não passar por todos os intervalos
-		while (ants.at(i)->getPosition() < this->intervalSize) {
+		while (ants.at(i)->getPosition() < (this->intervalSize - 1)) {
 			int position = ants.at(i)->getPosition();
 			double transition_probability[this->plantSize][this->valueSize];
 			double link_rate_sum[this->plantSize];
@@ -83,8 +87,8 @@ void ACO::buildSolutions() {
 			// Calculando a probabilidade de transição
 			for (int p = 0; p < this->plantSize; p++) {
 				for (int j = 0; j < this->valueSize; j++) {
-					transition_probability[p][j]
-							= this->pheromoneLinks[p][position][j]
+					transition_probability[p][j] =
+							this->pheromoneLinks[p][position][j]
 									/ link_rate_sum[p];
 				}
 			}
@@ -118,16 +122,18 @@ double ACO::getValue(int position) {
 void ACO::checkBestSolution() {
 	if (this->ants.size() > 0) {
 		if (this->bestFitness == INVALID and this->worseFitness == INVALID) {
-			this->bestFitness = this->ants.at(0)->calculateFitness();
+			this->bestFitness = this->calculateFitness(
+					this->ants.at(0)->getRoutes());
 			this->bestRoutes = this->ants.at(0)->getRoutes();
 
-			this->worseFitness
-					= this->ants.at(this->populationSize - 1)->calculateFitness();
-			this->worseRoutes
-					= this->ants.at(this->populationSize - 1)->getRoutes();
+			this->worseFitness = this->calculateFitness(
+					this->ants.at(this->populationSize - 1)->getRoutes());
+			this->worseRoutes =
+					this->ants.at(this->populationSize - 1)->getRoutes();
 		}
 		for (int i = 0; i < this->populationSize; i++) {
-			this->ants.at(i)->calculateFitness();
+			this->ants.at(i)->setFitness(
+					this->calculateFitness(this->ants.at(i)->getRoutes()));
 			if (this->ants.at(i)->getFitness() < this->bestFitness) {
 				this->bestFitness = this->ants.at(i)->getFitness();
 				this->bestRoutes = this->ants.at(i)->getRoutes();
@@ -137,6 +143,11 @@ void ACO::checkBestSolution() {
 			}
 		}
 	}
+}
+
+double ACO::calculateFitness(vector<vector<double> > routes) {
+	this->sistemaHidroeletrico->setVolumes(routes);
+	return this->sistemaHidroeletrico->calcularCustoTotal();
 }
 
 void ACO::pheromoneEvaporates() {
@@ -158,9 +169,9 @@ void ACO::updatePheromone() {
 				for (int v = 0; v < (this->valueSize - 1); v++) {
 					int interval = routes[p][i];
 					int value = routes[p][i + 1];
-
-					this->pheromoneLinks[p][interval][value]
-							+= (this->positiveConstant
+					cout << "OK OK OK" << endl;
+					this->pheromoneLinks[p][interval][value] +=
+							(this->positiveConstant
 									/ this->ants.at(a)->getFitness());
 				}
 			}

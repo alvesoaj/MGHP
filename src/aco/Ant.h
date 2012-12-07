@@ -23,7 +23,7 @@ public:
 	void addInRouteAtPositionValue(int routeIndex, int position, double value);
 	void initSearch();
 	double getFitness();
-	double calculateFitness();
+	void setFitness(double fitness);
 	vector<vector<double> > getRoutes();
 
 private:
