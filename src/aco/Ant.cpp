@@ -35,7 +35,8 @@ void Ant::initSearch() {
 	for (int p = 0; p < this->routeAmount; p++) {
 		vector<double> tempRoute;
 		for (int v = 0; v < this->routeSize; v++) {
-			tempRoute.push_back(0.0);
+			// Iniciar com o reservatório cheio, 100%
+			tempRoute.push_back(1.0);
 		}
 		tempRoutes.push_back(tempRoute);
 		tempPosition.push_back(0);

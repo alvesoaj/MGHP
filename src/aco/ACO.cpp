@@ -45,10 +45,6 @@ void ACO::calculateSolution() {
 void ACO::initializeAnts() {
 	for (int i = 0; i < this->populationSize; i++) {
 		Ant *a = new Ant(i, this->plantSize, this->intervalSize);
-		// Iniciar com o reservatório cheio, 100%
-		for (int p = 0; p < this->plantSize; p++) {
-			a->routes[p][0] = this->getValue(this->valueSize);
-		}
 		// adicionar a formiga ao aray de formigas
 		this->ants.push_back(a);
 	}
@@ -76,7 +72,7 @@ void ACO::buildSolutions() {
 		// para cada usina
 		for (int p = 0; p < this->plantSize; p++) {
 			// Enquanto não passar por todos os intervalos
-			while (ants.at(a)->getPosition(p) < this->intervalSize) {
+			while (ants.at(a)->getPosition(p) < (this->intervalSize - 1)) {
 				int position = ants.at(a)->getPosition(p);
 
 				double transition_probability[this->valueSize];
@@ -101,7 +97,7 @@ void ACO::buildSolutions() {
 				for (int v = 0; v < this->valueSize; v++) {
 					major += transition_probability[v];
 					if (roulette >= minor and roulette <= major) {
-						ants.at(a)->routes[p][position] = this->getValue(v);
+						ants.at(a)->routes[p][position + 1] = this->getValue(v);
 						ants.at(a)->increasePosition(p);
 						break;
 					} else {
