@@ -29,17 +29,12 @@ int Ant::getPosition() {
 	return this->position;
 }
 
-void Ant::addInRouteAtPositionValue(int routeIndex, int position,
-		double value) {
-	this->routes[routeIndex][position] = value;
-}
-
 void Ant::initSearch() {
 	vector<vector<double> > tempRoutes;
-	for (int i = 0; i < this->routeAmount; i++) {
+	for (int p = 0; p < this->routeAmount; p++) {
 		vector<double> tempRoute;
-		for (int j = 0; j < this->routeSize; j++) {
-			tempRoute.push_back(-1);
+		for (int v = 0; v < this->routeSize; v++) {
+			tempRoute.push_back(0.0);
 		}
 		tempRoutes.push_back(tempRoute);
 	}

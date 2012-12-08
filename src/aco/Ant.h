@@ -14,13 +14,15 @@ using std::vector;
 
 class Ant {
 public:
+	// Variáveis
+	vector<vector<double> > routes;
+
 	// Construtor
 	Ant(int id, int routeAmount, int routeSize);
 	// Métodos
 	int getID();
 	void incrasePosition();
 	int getPosition();
-	void addInRouteAtPositionValue(int routeIndex, int position, double value);
 	void initSearch();
 	double getFitness();
 	void setFitness(double fitness);
@@ -33,7 +35,6 @@ private:
 	int routeSize;
 	int position;
 	double fitness;
-	vector<vector<double> > routes;
 };
 
 #endif /* ANT_H_ */

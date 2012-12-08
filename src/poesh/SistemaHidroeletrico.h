@@ -36,6 +36,10 @@ public:
 
 	string getNomeUsina(unsigned int codigo);
 
+	double getVolumeMinimoOperativoUsina(unsigned int codigo);
+
+	double getVolumeMaximoOperativoUsina(unsigned int codigo);
+
 	void setVolumes(vector<vector<double> > volumes);
 
 	void setVazoes(vector<vector<double> > vazoes);

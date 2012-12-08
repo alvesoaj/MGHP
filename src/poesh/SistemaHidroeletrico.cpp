@@ -66,6 +66,26 @@ string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
 	return "Indefinido";
 }
 
+double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
+		unsigned int codigo) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			return this->usinas.at(i)->getVolumeMinimoOperativo();
+		}
+	}
+	return 0.0;
+}
+
+double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(
+		unsigned int codigo) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			return this->usinas.at(i)->getVolumeMaximoOperativo();
+		}
+	}
+	return 0.0;
+}
+
 void SistemaHidroeletrico::setVolumes(vector<vector<double> > volumes) {
 	this->volumes = volumes;
 }
@@ -134,7 +154,7 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 				indice_usina++) {
 
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
-					indice_usina + 1, this->volumes[indice_usina][intervalo],
+					indice_usina, this->volumes[indice_usina][intervalo],
 					this->vazoes[indice_usina][intervalo]);
 
 			geracao_hidraulica_total += geracao_hidraulica;

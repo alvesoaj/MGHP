@@ -61,6 +61,8 @@ private:
 	double calculateFitness(vector<vector<double> > routes);
 	void pheromoneEvaporates();
 	void updatePheromone();
+	double desnormalizarVolume(double valor, double volumeMinimo,
+			double volumeMaximo);
 };
 
 #endif /* ACO_H_ */

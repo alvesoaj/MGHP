@@ -26,9 +26,9 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 30
+#define POPULATION_SIZE 25
 #define DISCRETIZACAO 11
-#define MAX_ITERATIONS 30
+#define MAX_ITERATIONS 50
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.5
 #define POSITIVE_CONTS 0.75
@@ -38,6 +38,7 @@ Conversor conversor;
 vector<vector<double> > volumes;
 vector<vector<double> > vazoes;
 
+string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
 void carregar_valores();
 
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
 
 	// Configurando as usinas
 	// Itubiara
-	HidroeletricaReservatorio* itumbiara = new HidroeletricaReservatorio(1,
+	HidroeletricaReservatorio* itumbiara = new HidroeletricaReservatorio(0,
 			"Itumbiara");
 
 	ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradorasItumbiara =
@@ -94,7 +95,7 @@ int main(int argc, char *argv[]) {
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(itumbiara);
 
 	// Emborcação
-	HidroeletricaReservatorio* emborcacao = new HidroeletricaReservatorio(2,
+	HidroeletricaReservatorio* emborcacao = new HidroeletricaReservatorio(1,
 			"Emborcação");
 
 	ConjuntoUnidadesGeradoras* conjuntoUnidadesGeradorasEmborcacao =
@@ -147,15 +148,47 @@ int main(int argc, char *argv[]) {
 
 	aco->calculateSolution();
 
-	cout << "Pior Custo (ACO): " << aco->worseFitness << endl;
+	cout << "\nPior Custo (ACO): " << aco->worseFitness << endl;
+
+	string temp = "";
+	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+		for (int i = 0; i < INTERVALOS; i++) {
+			temp += number_to_String(aco->worseRoutes[u][i]);
+			if (i < (INTERVALOS - 1)) {
+				temp += ", ";
+			}
+		}
+		temp += "\n";
+	}
+
+	cout << "Pior rota (ACO):\n" << temp << endl;
 
 	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
+
+	temp = "";
+	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+		for (int i = 0; i < INTERVALOS; i++) {
+			temp += number_to_String(aco->bestRoutes[u][i]);
+			if (i < (INTERVALOS - 1)) {
+				temp += ", ";
+			}
+		}
+		temp += "\n";
+	}
+
+	cout << "Melhor rota (ACO):\n" << temp << endl;
 
 	cout << "\nTempo de execução (MGHP): "
 			<< calcular_tempo(time_start, clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
+}
+
+string number_to_String(double n) {
+	stringstream out;
+	out << n;
+	return out.str();
 }
 
 double calcular_tempo(clock_t start, clock_t end) {

@@ -21,7 +21,7 @@ public:
 
 	std::string double_para_string(double d);
 	double string_para_double(const std::string& s);
-	int get_random_number(int from, int to);
+	double get_random_number();
 };
 
 #endif /* CONVERSOR_H_ */
