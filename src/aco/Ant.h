@@ -21,8 +21,8 @@ public:
 	Ant(int id, int routeAmount, int routeSize);
 	// Métodos
 	int getID();
-	void incrasePosition();
-	int getPosition();
+	void incrasePosition(int plantIndex);
+	int getPosition(int plantIndex);
 	void initSearch();
 	double getFitness();
 	void setFitness(double fitness);
@@ -33,7 +33,7 @@ private:
 	int id;
 	int routeAmount;
 	int routeSize;
-	int position;
+	vector<int> position;
 	double fitness;
 };
 

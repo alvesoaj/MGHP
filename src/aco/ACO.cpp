@@ -73,39 +73,36 @@ void ACO::buildSolutions() {
 	// Para cada formiga
 	for (int a = 0; a < this->populationSize; a++) {
 		ants.at(a)->initSearch();
-		// Enquanto não passar por todos os intervalos
-		while (ants.at(a)->getPosition() < (this->intervalSize - 1)) {
-			int position = ants.at(a)->getPosition();
-			double transition_probability[this->plantSize][this->valueSize];
-			double link_rate_sum[this->plantSize];
-			// Somando as taxas de feromonio e heuristica
-			for (int p = 0; p < this->plantSize; p++) {
-				link_rate_sum[p] = 0.0;
-				for (int v = 0; v < this->valueSize; v++) {
-					link_rate_sum[p] += this->pheromoneLinks[p][position][v];
-				}
-			}
-			// Calculando a probabilidade de transição
-			for (int p = 0; p < this->plantSize; p++) {
-				for (int v = 0; v < this->valueSize; v++) {
-					transition_probability[p][v] =
-							this->pheromoneLinks[p][position][v]
-									/ link_rate_sum[p];
-				}
-			}
+		// para cada usina
+		for (int p = 0; p < this->plantSize; p++) {
+			// Enquanto não passar por todos os intervalos
+			while (ants.at(a)->getPosition(p) < this->intervalSize) {
+				int position = ants.at(a)->getPosition(p);
 
-			// Selecionando o próximo nó
-			for (int p = 0; p < this->plantSize; p++) {
+				double transition_probability[this->valueSize];
+				double link_rate_sum = 0.0;
+				// Somando as taxas de feromonio e heuristica
+				for (int v = 0; v < this->valueSize; v++) {
+					link_rate_sum += this->pheromoneLinks[p][position][v];
+				}
+				// Calculando a probabilidade de transição
+				for (int v = 0; v < this->valueSize; v++) {
+					transition_probability[v]
+							= this->pheromoneLinks[p][position][v]
+									/ link_rate_sum;
+				}
+
+				// Selecionando o próximo nó
 				// fazendo a roleta
 				double roulette = conversor.get_random_number();
 
 				double minor = 0.0;
 				double major = 0.0;
 				for (int v = 0; v < this->valueSize; v++) {
-					major += transition_probability[p][v];
+					major += transition_probability[v];
 					if (roulette >= minor and roulette <= major) {
 						ants.at(a)->routes[p][v] = this->getValue(v);
-						ants.at(a)->incrasePosition();
+						ants.at(a)->incrasePosition(p);
 						break;
 					} else {
 						minor = major;
@@ -129,8 +126,8 @@ void ACO::checkBestSolution() {
 
 			this->worseFitness = this->calculateFitness(
 					this->ants.at(this->populationSize - 1)->getRoutes());
-			this->worseRoutes =
-					this->ants.at(this->populationSize - 1)->getRoutes();
+			this->worseRoutes
+					= this->ants.at(this->populationSize - 1)->getRoutes();
 		}
 		for (int i = 0; i < this->populationSize; i++) {
 			this->ants.at(i)->setFitness(
@@ -157,6 +154,8 @@ double ACO::calculateFitness(vector<vector<double> > routes) {
 		for (int i = 0; i < this->intervalSize; i++) {
 			double volume = this->desnormalizarVolume(routes[p][i],
 					volumeMinimo, volumeMaximo);
+			cout << volume << endl;
+			cout << volume << endl;
 			tempRoute.push_back(volume);
 		}
 		desnormalizedRoutes.push_back(tempRoute);

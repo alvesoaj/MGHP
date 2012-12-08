@@ -21,26 +21,28 @@ int Ant::getID() {
 	return this->id;
 }
 
-void Ant::incrasePosition() {
-	this->position += 1;
+void Ant::incrasePosition(int plantIndex) {
+	this->position[plantIndex] += 1;
 }
 
-int Ant::getPosition() {
-	return this->position;
+int Ant::getPosition(int plantIndex) {
+	return this->position[plantIndex];
 }
 
 void Ant::initSearch() {
 	vector<vector<double> > tempRoutes;
+	vector<int> tempPosition;
 	for (int p = 0; p < this->routeAmount; p++) {
 		vector<double> tempRoute;
 		for (int v = 0; v < this->routeSize; v++) {
 			tempRoute.push_back(0.0);
 		}
 		tempRoutes.push_back(tempRoute);
+		tempPosition.push_back(0);
 	}
 	this->routes = tempRoutes;
 	this->fitness = 0.0;
-	this->position = 0;
+	this->position = tempPosition;
 }
 
 double Ant::getFitness() {
