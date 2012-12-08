@@ -21,7 +21,7 @@ public:
 	Ant(int id, int routeAmount, int routeSize);
 	// Métodos
 	int getID();
-	void incrasePosition(int plantIndex);
+	void increasePosition(int plantIndex);
 	int getPosition(int plantIndex);
 	void initSearch();
 	double getFitness();

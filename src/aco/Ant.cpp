@@ -21,7 +21,7 @@ int Ant::getID() {
 	return this->id;
 }
 
-void Ant::incrasePosition(int plantIndex) {
+void Ant::increasePosition(int plantIndex) {
 	this->position[plantIndex] += 1;
 }
 

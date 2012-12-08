@@ -26,7 +26,7 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 25
+#define POPULATION_SIZE 30
 #define DISCRETIZACAO 11
 #define MAX_ITERATIONS 50
 #define PHEROMONE_RATE 0.1

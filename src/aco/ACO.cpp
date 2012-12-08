@@ -101,8 +101,8 @@ void ACO::buildSolutions() {
 				for (int v = 0; v < this->valueSize; v++) {
 					major += transition_probability[v];
 					if (roulette >= minor and roulette <= major) {
-						ants.at(a)->routes[p][v] = this->getValue(v);
-						ants.at(a)->incrasePosition(p);
+						ants.at(a)->routes[p][position] = this->getValue(v);
+						ants.at(a)->increasePosition(p);
 						break;
 					} else {
 						minor = major;
@@ -154,8 +154,6 @@ double ACO::calculateFitness(vector<vector<double> > routes) {
 		for (int i = 0; i < this->intervalSize; i++) {
 			double volume = this->desnormalizarVolume(routes[p][i],
 					volumeMinimo, volumeMaximo);
-			cout << volume << endl;
-			cout << volume << endl;
 			tempRoute.push_back(volume);
 		}
 		desnormalizedRoutes.push_back(tempRoute);
