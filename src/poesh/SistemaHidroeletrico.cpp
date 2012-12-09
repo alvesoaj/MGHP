@@ -86,6 +86,15 @@ double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(
 	return 0.0;
 }
 
+HidroeletricaReservatorio* SistemaHidroeletrico::getUsina(unsigned int codigo) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			return this->usinas.at(i);
+		}
+	}
+	return NULL;
+}
+
 void SistemaHidroeletrico::setVolumes(vector<vector<double> > volumes) {
 	this->volumes = volumes;
 }
@@ -145,30 +154,60 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
 }
 
 double SistemaHidroeletrico::calcularCustoTotal() {
-	double geracao_hidraulica_intervalos[this->intervalos];
+	double geracaoHidraulicaIntervalos[this->intervalos];
 
-	for (int intervalo = 0; intervalo < this->intervalos; intervalo++) {
-		double geracao_hidraulica_total = 0.0;
+	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
+		double geracaoHidraulicaTotal = 0.0;
 
-		for (unsigned int indice_usina = 0; indice_usina < this->usinas.size();
-				indice_usina++) {
+		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size();
+				indiceUsina++) {
 
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
-					indice_usina, this->volumes[indice_usina][intervalo],
-					this->vazoes[indice_usina][intervalo]);
+					indiceUsina, this->volumes[indiceUsina][intervalo],
+					this->calcularVazaoAfluente(indiceUsina, intervalo));
 
-			geracao_hidraulica_total += geracao_hidraulica;
+			geracaoHidraulicaTotal += geracao_hidraulica;
 		}
-
-		geracao_hidraulica_intervalos[intervalo] = geracao_hidraulica_total;
+		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
+		//cout << "I(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
 	double needSum = 0.0;
 	for (int i = 0; i < this->intervalos; i++) {
-		if (this->demanda > geracao_hidraulica_intervalos[i]) {
-			needSum += pow(this->demanda - geracao_hidraulica_intervalos[i], 2);
+		if (this->demanda > geracaoHidraulicaIntervalos[i]) {
+			needSum += pow(this->demanda - geracaoHidraulicaIntervalos[i], 2);
 		}
 	}
 
 	return needSum / 2.0;
+}
+
+double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
+		int intervalo) {
+	double vazaoAfluente = 0.0;
+	UsinaHidroeletrica* usina = this->getUsina(indiceUsina);
+	vector<UsinaHidroeletrica*> usinasMontante = usina->getUsinasMontante();
+
+	if (usinasMontante.size() == 0) {
+		vazaoAfluente = this->vazoes[indiceUsina][intervalo - 1];
+	} else {
+		double vazaoNaturalMontante = 0.0;
+		double vazaoDefluenteMontante = 0.0;
+		for (unsigned int i = 0; i < usinasMontante.size(); i++) {
+			usina = usinasMontante.at(i);
+			int indiceUsinaMontante = usina->getCodigo();
+			vazaoNaturalMontante += this->vazoes[indiceUsinaMontante][intervalo
+					- 1];
+			double temp = this->volumes[indiceUsinaMontante][intervalo - 1]
+					- this->volumes[indiceUsinaMontante][intervalo];
+			if (temp > 0.0) {
+				vazaoDefluenteMontante += temp;
+			}
+		}
+		double vazaoIncremental = this->vazoes[indiceUsina][intervalo - 1]
+				- vazaoNaturalMontante;
+		vazaoAfluente = vazaoIncremental + vazaoDefluenteMontante;
+	}
+	cout << vazaoAfluente << endl;
+	return vazaoAfluente;
 }

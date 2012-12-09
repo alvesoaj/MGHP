@@ -8,6 +8,7 @@
 #ifndef SISTEMAHIDROELETRICO_H_
 #define SISTEMAHIDROELETRICO_H_
 // Importando bibliotecas úteis
+#include <iostream> // Biblioteca  padrão de I/O
 #include <vector> // Para trabalhar com vetores
 #include "../ferramentas/Conversor.h"
 #include "HidroeletricaReservatorio.h"
@@ -40,6 +41,8 @@ public:
 
 	double getVolumeMaximoOperativoUsina(unsigned int codigo);
 
+	HidroeletricaReservatorio* getUsina(unsigned int codigo);
+
 	void setVolumes(vector<vector<double> > volumes);
 
 	void setVazoes(vector<vector<double> > vazoes);
@@ -54,6 +57,8 @@ public:
 			double vazaoDefluente);
 
 	double calcularCustoTotal();
+
+	double calcularVazaoAfluente(int indiceUsina, int intervalo);
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */

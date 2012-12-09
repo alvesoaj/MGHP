@@ -54,8 +54,8 @@ PolinomioJusante* UsinaHidroeletrica::getPolinomioJusante() {
 	return polinomioJusante;
 }
 
-UsinaHidroeletrica* UsinaHidroeletrica::getUsinaMontante() {
-	return usinaMontante;
+vector<UsinaHidroeletrica*> UsinaHidroeletrica::getUsinasMontante() {
+	return usinasMontante;
 }
 
 void UsinaHidroeletrica::setCodigo(unsigned int codigo) {
@@ -108,12 +108,13 @@ void UsinaHidroeletrica::setPolinomioJusante(
 
 }
 
-void UsinaHidroeletrica::setUsinaMontante(UsinaHidroeletrica* usinaMontante) {
-	this->usinaMontante = usinaMontante;
+void UsinaHidroeletrica::adicionarUsinaMontante(
+		UsinaHidroeletrica* usinaMontante) {
+	this->usinasMontante.push_back(usinaMontante);
 }
 
 bool UsinaHidroeletrica::temUsinaMontante() {
-	if (this->usinaMontante == NULL) {
+	if (this->usinasMontante.size() > 0) {
 		return true;
 	} else {
 		return false;

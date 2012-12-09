@@ -22,7 +22,7 @@
 using namespace std;
 
 // Constantes POSH
-#define INTERVALOS 60
+#define INTERVALOS 61
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
@@ -134,12 +134,13 @@ int main(int argc, char *argv[]) {
 	emborcacao->setCoeficientePerdaCargaHidraulica(0.0127);
 	emborcacao->setCoeficienteProdutibilidadeEspecifica(0.008731);
 
-	emborcacao->setUsinaMontante(itumbiara);
+	emborcacao->adicionarUsinaMontante(itumbiara);
 
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
+	cout.precision(11);
 	cout << "Custo Total (Arquivos): " << custo << endl;
 
 	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
@@ -198,7 +199,7 @@ double calcular_tempo(clock_t start, clock_t end) {
 void carregar_valores() {
 	string line;
 
-	ifstream itumbiara_volumes_file("./assets/6-Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_volumes_file("./assets/1-Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -214,7 +215,8 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	ifstream itumbiara_vazoes_file("./assets/6-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_vazoes_file(
+			"./assets/Itumbiara-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -230,7 +232,7 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	ifstream emborcacao_volumes_file("./assets/6-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_volumes_file("./assets/1-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -246,7 +248,8 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	ifstream emborcacao_vazoes_file("./assets/6-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_vazoes_file(
+			"./assets/Emborcacao-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua

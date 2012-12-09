@@ -10,8 +10,11 @@
 
 // Importando bibliotecas úteis
 #include <string> // Para trabalhar com strings
+#include <vector>
 #include "CasaDeMaquinas.h"
 #include "PolinomioJusante.h"
+
+using std::vector;
 
 class UsinaHidroeletrica {
 protected:
@@ -27,7 +30,7 @@ protected:
 	double coeficienteProdutibilidadeEspecifica;
 	CasaDeMaquinas* casaDeMaquinas;
 	PolinomioJusante* polinomioJusante;
-	UsinaHidroeletrica* usinaMontante;
+	vector<UsinaHidroeletrica*> usinasMontante;
 
 public:
 	// Métodos da classe Usina
@@ -44,7 +47,7 @@ public:
 	double getCoeficienteProdutibilidadeEspecifica();
 	CasaDeMaquinas* getCasaDeMaquinas();
 	PolinomioJusante* getPolinomioJusante();
-	UsinaHidroeletrica* getUsinaMontante();
+	vector<UsinaHidroeletrica*> getUsinasMontante();
 	void setCodigo(unsigned int codigo);
 	void setNome(std::string nome);
 	void setVolumeMorto(double volumeMorto);
@@ -58,7 +61,7 @@ public:
 			double coeficientePerdaCargaHidraulica);
 	void setCasaDeMaquinas(CasaDeMaquinas* casaDeMaquinas);
 	void setPolinomioJusante(PolinomioJusante* polinomioJusante);
-	void setUsinaMontante(UsinaHidroeletrica* usinaMontante);
+	void adicionarUsinaMontante(UsinaHidroeletrica* usinaMontante);
 
 	bool temUsinaMontante();
 	double calcularVazaoDefluente(double volumeAnterior, double volumeAtual);
