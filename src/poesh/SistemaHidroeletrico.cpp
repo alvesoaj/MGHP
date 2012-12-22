@@ -198,15 +198,15 @@ double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
 			int indiceUsinaMontante = usina->getCodigo();
 			vazaoNaturalMontante += this->vazoes[indiceUsinaMontante][intervalo
 					- 1];
-			double temp = this->volumes[indiceUsinaMontante][intervalo - 1]
-					- this->volumes[indiceUsinaMontante][intervalo];
-			if (temp > 0.0) {
-				vazaoDefluenteMontante += temp;
-			}
+			// double temp = this->volumes[indiceUsinaMontante][intervalo - 1] - this->volumes[indiceUsinaMontante][intervalo];
+			vazaoDefluenteMontante += this->calcularVazaoAfluente(
+					indiceUsinaMontante, intervalo);
 		}
 		double vazaoIncremental = this->vazoes[indiceUsina][intervalo - 1]
 				- vazaoNaturalMontante;
-		vazaoAfluente = vazaoIncremental + vazaoDefluenteMontante;
+		vazaoAfluente = vazaoIncremental + vazaoDefluenteMontante
+				- (this->volumes[indiceUsina][intervalo - 1]
+						- this->volumes[indiceUsina][intervalo]) / 2.628;
 	}
 	return vazaoAfluente;
 }
