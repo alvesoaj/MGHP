@@ -164,6 +164,9 @@ int main(int argc, char *argv[]) {
 
 	cout << "Pior rota (ACO):\n" << temp << endl;
 
+	sistemaHidroeletrico->setVolumes(aco->worseRoutes);
+	sistemaHidroeletrico->calcularCustoTotal();
+
 	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
 
 	temp = "";
@@ -179,8 +182,11 @@ int main(int argc, char *argv[]) {
 
 	cout << "Melhor rota (ACO):\n" << temp << endl;
 
-	cout << "\nTempo de execução (MGHP): "
-			<< calcular_tempo(time_start, clock()) << " ms" << endl;
+	sistemaHidroeletrico->setVolumes(aco->bestRoutes);
+	sistemaHidroeletrico->calcularCustoTotal();
+
+	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
+			clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
