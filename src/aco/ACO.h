@@ -63,6 +63,7 @@ private:
 	void updatePheromone();
 	double desnormalizarVolume(double valor, double volumeMinimo,
 			double volumeMaximo);
+	void desnormalizarRotas();
 };
 
 #endif /* ACO_H_ */

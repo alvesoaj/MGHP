@@ -39,6 +39,7 @@ void ACO::calculateSolution() {
 		this->updatePheromone();
 		iteration++;
 	}
+	this->desnormalizarRotas();
 }
 
 // Métodos privados
@@ -186,4 +187,21 @@ void ACO::updatePheromone() {
 double ACO::desnormalizarVolume(double valor, double volumeMinimo,
 		double volumeMaximo) {
 	return valor * (volumeMaximo - volumeMinimo) + volumeMinimo;
+}
+
+void ACO::desnormalizarRotas() {
+	for (int p = 0; p < this->plantSize; p++) {
+		double volumeMinimo =
+				this->sistemaHidroeletrico->getVolumeMinimoOperativoUsina(p);
+		double volumeMaximo =
+				this->sistemaHidroeletrico->getVolumeMaximoOperativoUsina(p);
+		for (int i = 0; i < this->intervalSize; i++) {
+			double volume = this->desnormalizarVolume(bestRoutes[p][i],
+					volumeMinimo, volumeMaximo);
+			bestRoutes[p][i] = volume;
+			volume = this->desnormalizarVolume(worseRoutes[p][i], volumeMinimo,
+					volumeMaximo);
+			worseRoutes[p][i] = volume;
+		}
+	}
 }
