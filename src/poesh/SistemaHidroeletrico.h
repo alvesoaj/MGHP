@@ -15,6 +15,7 @@
 
 using std::vector;
 
+#define Fc 2628000 // Fc = 10⁶/deltaT (Duração em segundos)
 class SistemaHidroeletrico {
 private:
 	int intervalos;
@@ -50,6 +51,9 @@ public:
 	double calcularAlturaQuedaLiquidaUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);
 
+	double calcularAlturaQuedaLiquidaMediaUsina(unsigned int codigo,
+			double volumeMedio);
+
 	double calcularEngolimentoUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);
 
@@ -59,6 +63,8 @@ public:
 	double calcularCustoTotal();
 
 	double calcularVazaoAfluente(int indiceUsina, int intervalo);
+
+	double calcularEnergiaArmazenadaSistema(int intervalo);
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */

@@ -123,6 +123,30 @@ double SistemaHidroeletrico::calcularAlturaQuedaLiquidaUsina(
 	return 0.0;
 }
 
+double SistemaHidroeletrico::calcularAlturaQuedaLiquidaMediaUsina(
+		unsigned int codigo, double volumeMedio) {
+	for (unsigned int i = 0; i < this->usinas.size(); i++) {
+		if (this->usinas.at(i)->getCodigo() == codigo) {
+			double nivelMontanteMedio =
+					this->usinas.at(i)->calcularNivelMontante(volumeMedio);
+
+			double nivelJusanteMedio =
+					this->usinas.at(i)->getNivelMedioJusante();
+
+			double altuaraQuedaBrutaMedia =
+					this->usinas.at(i)->calcularAlturaQuedaBruta(
+							nivelMontanteMedio, nivelJusanteMedio);
+
+			double perdaCargaMedia = this->usinas.at(i)->calcularPerdaCarga(
+					altuaraQuedaBrutaMedia);
+
+			return this->usinas.at(i)->calcularAlturaQuedaLiquida(
+					altuaraQuedaBrutaMedia, perdaCargaMedia);
+		}
+	}
+	return 0.0;
+}
+
 double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 		double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
@@ -155,12 +179,14 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
 		double geracaoHidraulicaTotal = 0.0;
 
-		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
+		double energiaArmazenadaSistema = calcularEnergiaArmazenadaSistema(
+				intervalo);
 
+		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
+			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
+					+ this->volumes[indiceUsina][intervalo]) / 2.0;
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
-					indiceUsina,
-					((this->volumes[indiceUsina][intervalo - 1]
-							+ this->volumes[indiceUsina][intervalo]) / 2.0),
+					indiceUsina, volumeMedio,
 					this->calcularVazaoAfluente(indiceUsina, intervalo));
 
 			geracaoHidraulicaTotal += geracao_hidraulica;
@@ -211,4 +237,27 @@ double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
 						- this->volumes[indiceUsina][intervalo]) / 2.628;
 	}
 	return vazaoAfluente;
+}
+
+double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
+	UsinaHidroeletrica* usina;
+	double somaProdutividadeMedia = 0.0;
+
+	for (unsigned int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
+		usina = this->getUsina(indiceUsina);
+
+		double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
+				+ this->volumes[indiceUsina][intervalo]) / 2.0;
+
+		double alturaQuedaLiquidaMedia = calcularAlturaQuedaLiquidaMediaUsina(
+				indiceUsina, volumeMedio);
+
+		double produtividadeMedia =
+				usina->getCoeficienteProdutibilidadeEspecifica()
+						* alturaQuedaLiquidaMedia;
+
+		somaProdutividadeMedia += produtividadeMedia * ();
+	}
+
+	return Fc * somaProdutividadeMedia;
 }
