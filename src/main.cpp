@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 	cout.precision(11);
 	cout << "Custo Total (Arquivos): " << custo << endl;
 
-	cin.get();
+	// cin.get();
 
 	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
 			DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
