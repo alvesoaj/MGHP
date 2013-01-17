@@ -15,7 +15,7 @@
 
 using std::vector;
 
-#define Fc 2628000 // Fc = 10⁶/deltaT (Duração em segundos)
+#define Fc 0.380517504 // Fc = 10⁶/2628000
 class SistemaHidroeletrico {
 private:
 	int intervalos;

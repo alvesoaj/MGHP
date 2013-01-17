@@ -24,8 +24,7 @@ bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool existe = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			existe = true;
 			break;
 		}
@@ -43,8 +42,7 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -66,8 +64,7 @@ string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
 	return "Indefinido";
 }
 
-double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
-		unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMinimoOperativo();
@@ -76,8 +73,7 @@ double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
 	return 0.0;
 }
 
-double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(
-		unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMaximoOperativo();
@@ -134,15 +130,25 @@ double SistemaHidroeletrico::calcularAlturaQuedaLiquidaMediaUsina(
 			double nivelMontanteMedio =
 					this->usinas.at(i)->calcularNivelMontante(volumeMedio);
 
+			cout.precision(11);
+			cout << "hm[med](" << codigo << "): " << nivelMontanteMedio << endl;
+
 			double nivelJusanteMedio =
 					this->usinas.at(i)->getNivelMedioJusante();
+
+			cout << "hj[med](" << codigo << "): " << nivelJusanteMedio << endl;
 
 			double altuaraQuedaBrutaMedia =
 					this->usinas.at(i)->calcularAlturaQuedaBruta(
 							nivelMontanteMedio, nivelJusanteMedio);
 
+			cout << "hb[med](" << codigo << "): " << altuaraQuedaBrutaMedia
+					<< endl;
+
 			double perdaCargaMedia = this->usinas.at(i)->calcularPerdaCarga(
 					altuaraQuedaBrutaMedia);
+
+			cout << "kp[med](" << codigo << "): " << perdaCargaMedia << endl;
 
 			return this->usinas.at(i)->calcularAlturaQuedaLiquida(
 					altuaraQuedaBrutaMedia, perdaCargaMedia);
@@ -162,8 +168,8 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
-		double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
@@ -186,10 +192,10 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		double energiaArmazenadaSistema = calcularEnergiaArmazenadaSistema(
 				intervalo);
 
-		// cout << "EAS(" << intervalo << "): "<< energiaArmazenadaSistema << endl;
+		cout << "EAS(" << intervalo << "): " << energiaArmazenadaSistema
+				<< endl;
 
-		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size();
-				indiceUsina++) {
+		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
@@ -249,25 +255,44 @@ double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
 double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 	HidroeletricaReservatorio* usina;
 	double somaProdutividadeMedia = 0.0;
+	double produto = 0.0;
 
-	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0;
-			indiceUsina--) {
+	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
 		usina = this->getUsina(indiceUsina);
 
 		double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 				+ this->volumes[indiceUsina][intervalo]) / 2.0;
 
 		double alturaQuedaLiquidaMedia = calcularAlturaQuedaLiquidaMediaUsina(
-				indiceUsina, volumeMedio);
+				usina->getCodigo(), volumeMedio);
+
+		cout.precision(11);
+		cout << "hl[med](" << indiceUsina << "): " << alturaQuedaLiquidaMedia
+				<< endl;
 
 		double produtividadeMedia =
 				usina->getCoeficienteProdutibilidadeEspecifica()
 						* alturaQuedaLiquidaMedia;
 
-		somaProdutividadeMedia += produtividadeMedia
-				* (this->volumes[indiceUsina][intervalo]
-						- usina->getVolumeMinimoOperativo());
+		cout << "pM(" << indiceUsina << "): " << produtividadeMedia << endl;
+
+		somaProdutividadeMedia += produtividadeMedia;
+
+		cout << "pMA(" << indiceUsina << "): " << somaProdutividadeMedia << endl;
+
+
+		double diferenca = this->volumes[indiceUsina][intervalo]
+				- usina->getVolumeMinimoOperativo();
+
+		cout << "dife(" << indiceUsina << "): " << diferenca << " -> "
+				<< usina->getVolumeMinimoOperativo() << endl;
+
+		produto += somaProdutividadeMedia * diferenca;
+
+		cout << "prod(" << indiceUsina << "): " << produto << endl;
 	}
 
-	return Fc * somaProdutividadeMedia;
+	// cin.get();
+
+	return Fc * produto;
 }
