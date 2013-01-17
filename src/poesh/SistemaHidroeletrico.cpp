@@ -22,14 +22,15 @@ SistemaHidroeletrico::SistemaHidroeletrico(int intervalos, int demanda,
 
 bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
-	bool exists = false;
+	bool existe = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
-			exists = true;
+		if (this->usinas.at(i)->getCodigo()
+				== usinaHidroeletrica->getCodigo()) {
+			existe = true;
 			break;
 		}
 	}
-	if (!exists) {
+	if (!existe) {
 		this->usinas.push_back(usinaHidroeletrica);
 		return true;
 	} else {
@@ -42,7 +43,8 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo()
+				== usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -64,7 +66,8 @@ string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
 	return "Indefinido";
 }
 
-double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
+		unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMinimoOperativo();
@@ -73,7 +76,8 @@ double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(unsigned int codigo) 
 	return 0.0;
 }
 
-double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(
+		unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMaximoOperativo();
@@ -158,8 +162,8 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
-		unsigned int codigo, double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
+		double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
@@ -182,7 +186,10 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		double energiaArmazenadaSistema = calcularEnergiaArmazenadaSistema(
 				intervalo);
 
-		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
+		// cout << "EAS(" << intervalo << "): "<< energiaArmazenadaSistema << endl;
+
+		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size();
+				indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
@@ -240,10 +247,11 @@ double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
 }
 
 double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
-	UsinaHidroeletrica* usina;
+	HidroeletricaReservatorio* usina;
 	double somaProdutividadeMedia = 0.0;
 
-	for (unsigned int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
+	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0;
+			indiceUsina--) {
 		usina = this->getUsina(indiceUsina);
 
 		double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
@@ -256,7 +264,9 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 				usina->getCoeficienteProdutibilidadeEspecifica()
 						* alturaQuedaLiquidaMedia;
 
-		somaProdutividadeMedia += produtividadeMedia * ();
+		somaProdutividadeMedia += produtividadeMedia
+				* (this->volumes[indiceUsina][intervalo]
+						- usina->getVolumeMinimoOperativo());
 	}
 
 	return Fc * somaProdutividadeMedia;
