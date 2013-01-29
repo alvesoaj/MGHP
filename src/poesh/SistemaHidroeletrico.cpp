@@ -130,25 +130,15 @@ double SistemaHidroeletrico::calcularAlturaQuedaLiquidaMediaUsina(
 			double nivelMontanteMedio =
 					this->usinas.at(i)->calcularNivelMontante(volumeMedio);
 
-			cout.precision(11);
-			cout << "hm[med](" << codigo << "): " << nivelMontanteMedio << endl;
-
 			double nivelJusanteMedio =
 					this->usinas.at(i)->getNivelMedioJusante();
-
-			cout << "hj[med](" << codigo << "): " << nivelJusanteMedio << endl;
 
 			double altuaraQuedaBrutaMedia =
 					this->usinas.at(i)->calcularAlturaQuedaBruta(
 							nivelMontanteMedio, nivelJusanteMedio);
 
-			cout << "hb[med](" << codigo << "): " << altuaraQuedaBrutaMedia
-					<< endl;
-
 			double perdaCargaMedia = this->usinas.at(i)->calcularPerdaCarga(
 					altuaraQuedaBrutaMedia);
-
-			cout << "kp[med](" << codigo << "): " << perdaCargaMedia << endl;
 
 			return this->usinas.at(i)->calcularAlturaQuedaLiquida(
 					altuaraQuedaBrutaMedia, perdaCargaMedia);
@@ -189,12 +179,6 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
 		double geracaoHidraulicaTotal = 0.0;
 
-		double energiaArmazenadaSistema = calcularEnergiaArmazenadaSistema(
-				intervalo);
-
-		cout << "EAS(" << intervalo << "): " << energiaArmazenadaSistema
-				<< endl;
-
 		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
@@ -216,7 +200,6 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		} else {
 			geracaoComplementar = 0.0;
 		}
-		//cout << "Ct(" << i << "): " << geracaoComplementar << endl;
 		needSum += geracaoComplementar;
 	}
 
@@ -266,33 +249,17 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 		double alturaQuedaLiquidaMedia = calcularAlturaQuedaLiquidaMediaUsina(
 				usina->getCodigo(), volumeMedio);
 
-		cout.precision(11);
-		cout << "hl[med](" << indiceUsina << "): " << alturaQuedaLiquidaMedia
-				<< endl;
-
 		double produtividadeMedia =
 				usina->getCoeficienteProdutibilidadeEspecifica()
 						* alturaQuedaLiquidaMedia;
 
-		cout << "pM(" << indiceUsina << "): " << produtividadeMedia << endl;
-
 		somaProdutividadeMedia += produtividadeMedia;
-
-		cout << "pMA(" << indiceUsina << "): " << somaProdutividadeMedia << endl;
-
 
 		double diferenca = this->volumes[indiceUsina][intervalo]
 				- usina->getVolumeMinimoOperativo();
 
-		cout << "dife(" << indiceUsina << "): " << diferenca << " -> "
-				<< usina->getVolumeMinimoOperativo() << endl;
-
 		produto += somaProdutividadeMedia * diferenca;
-
-		cout << "prod(" << indiceUsina << "): " << produto << endl;
 	}
-
-	// cin.get();
 
 	return Fc * produto;
 }

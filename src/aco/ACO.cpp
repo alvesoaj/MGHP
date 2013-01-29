@@ -22,6 +22,105 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->bestFitness = INVALID;
 	this->worseFitness = INVALID;
 	this->sistemaHidroeletrico = sistemaHidroeletrico;
+
+	this->fuzzy = new Fuzzy();
+
+	// FuzzyInput
+	this->valorEAS = new FuzzyInput(1);
+
+	this->muitoBaixa = new FuzzySet(0, 0, 1000, 2000);
+	this->valorEAS->addFuzzySet(this->muitoBaixa);
+	this->baixa = new FuzzySet(1500, 2500, 2500, 3500);
+	this->valorEAS->addFuzzySet(this->baixa);
+	this->media = new FuzzySet(3000, 4000, 4000, 5000);
+	this->valorEAS->addFuzzySet(this->media);
+	this->alta = new FuzzySet(4500, 5500, 5500, 6500);
+	this->valorEAS->addFuzzySet(this->alta);
+	this->muitoAlta = new FuzzySet(5000, 6000, 7000, 7000);
+	this->valorEAS->addFuzzySet(this->muitoAlta);
+
+	this->fuzzy->addFuzzyInput(this->valorEAS);
+
+	// FuzzyOutput
+	this->output1 = new FuzzyOutput(1);
+
+	this->powerOf1 = new FuzzySet(0, 10, 10, 20);
+	this->output1->addFuzzySet(this->powerOf1);
+
+	// this->output2 = new FuzzyOutput(2);
+
+	this->powerOf2 = new FuzzySet(20, 30, 30, 40);
+	this->output1->addFuzzySet(this->powerOf2);
+
+	// this->output3 = new FuzzyOutput(3);
+
+	this->powerOf3 = new FuzzySet(40, 50, 50, 60);
+	this->output1->addFuzzySet(this->powerOf3);
+
+	// this->output4 = new FuzzyOutput(4);
+
+	this->powerOf4 = new FuzzySet(60, 70, 70, 80);
+	this->output1->addFuzzySet(this->powerOf4);
+
+	// this->output5 = new FuzzyOutput(5);
+
+	this->powerOf5 = new FuzzySet(80, 90, 90, 100);
+	this->output1->addFuzzySet(this->powerOf5);
+
+	this->fuzzy->addFuzzyOutput(this->output1);
+	// this->fuzzy->addFuzzyOutput(this->output2);
+	// this->fuzzy->addFuzzyOutput(this->output3);
+	// this->fuzzy->addFuzzyOutput(this->output4);
+	// this->fuzzy->addFuzzyOutput(this->output5);
+
+	this->ifEASMuitoBaixa = new FuzzyRuleAntecedent();
+	this->ifEASMuitoBaixa->joinSingle(this->muitoBaixa);
+
+	this->thenSetPowerOf1 = new FuzzyRuleConsequent();
+	this->thenSetPowerOf1->addOutput(this->powerOf1);
+
+	this->fuzzyRule1 = new FuzzyRule(1, this->ifEASMuitoBaixa,
+			this->thenSetPowerOf1);
+	this->fuzzy->addFuzzyRule(fuzzyRule1);
+
+	this->ifEASBaixa = new FuzzyRuleAntecedent();
+	this->ifEASBaixa->joinSingle(this->baixa);
+
+	this->thenSetPowerOf2 = new FuzzyRuleConsequent();
+	this->thenSetPowerOf2->addOutput(this->powerOf2);
+
+	this->fuzzyRule2
+			= new FuzzyRule(2, this->ifEASBaixa, this->thenSetPowerOf2);
+	this->fuzzy->addFuzzyRule(fuzzyRule2);
+
+	this->ifEASMedia = new FuzzyRuleAntecedent();
+	this->ifEASMedia->joinSingle(this->media);
+
+	this->thenSetPowerOf3 = new FuzzyRuleConsequent();
+	this->thenSetPowerOf3->addOutput(this->powerOf3);
+
+	this->fuzzyRule3
+			= new FuzzyRule(3, this->ifEASMedia, this->thenSetPowerOf3);
+	this->fuzzy->addFuzzyRule(fuzzyRule3);
+
+	this->ifEASAlta = new FuzzyRuleAntecedent();
+	this->ifEASAlta->joinSingle(this->alta);
+
+	this->thenSetPowerOf4 = new FuzzyRuleConsequent();
+	this->thenSetPowerOf4->addOutput(this->powerOf4);
+
+	this->fuzzyRule4 = new FuzzyRule(4, this->ifEASAlta, this->thenSetPowerOf4);
+	this->fuzzy->addFuzzyRule(fuzzyRule4);
+
+	this->ifEASMuitoAlta = new FuzzyRuleAntecedent();
+	this->ifEASMuitoAlta->joinSingle(this->muitoAlta);
+
+	this->thenSetPowerOf5 = new FuzzyRuleConsequent();
+	this->thenSetPowerOf5->addOutput(this->powerOf5);
+
+	this->fuzzyRule5 = new FuzzyRule(5, this->ifEASMuitoAlta,
+			this->thenSetPowerOf5);
+	this->fuzzy->addFuzzyRule(fuzzyRule5);
 }
 
 // Métodos públicos
@@ -40,6 +139,10 @@ void ACO::calculateSolution() {
 		iteration++;
 	}
 	this->desnormalizarRotas();
+}
+
+double ACO::calcularVolumeDessfuzificado() {
+
 }
 
 // Métodos privados
@@ -75,6 +178,26 @@ void ACO::buildSolutions() {
 			// Enquanto não passar por todos os intervalos
 			while (ants.at(a)->getPosition(p) < (this->intervalSize - 1)) {
 				int position = ants.at(a)->getPosition(p);
+
+				double
+						energiaArmazenadaSistema =
+								this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+										position);
+
+				cout << "EAS(" << position << "): " << energiaArmazenadaSistema
+						<< endl;
+
+				this->fuzzy->setInput(1, energiaArmazenadaSistema);
+				this->fuzzy->fuzzify();
+				this->fuzzy->defuzzify(1);
+
+				cout << "P1: " << this->powerOf1->getPertinence() << endl;
+				cout << "P2: " << this->powerOf2->getPertinence() << endl;
+				cout << "P3: " << this->powerOf3->getPertinence() << endl;
+				cout << "P4: " << this->powerOf4->getPertinence() << endl;
+				cout << "P5: " << this->powerOf5->getPertinence() << endl;
+
+				cin.get();
 
 				double transition_probability[this->valueSize];
 				double link_rate_sum = 0.0;
