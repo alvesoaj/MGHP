@@ -28,6 +28,8 @@ using std::vector;
 
 // Constantes
 #define INVALID -1
+#define ALFA 1
+#define BETA 2
 
 class ACO {
 public:
@@ -70,14 +72,13 @@ public:
 	FuzzyRule* fuzzyRule5;
 
 	// Construtor
-	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
-			int maxIterationSize, double pheromoneRate, double evaporationRate,
-			double positiveConstant,
-			SistemaHidroeletrico* sistemaHidroeletrico);
+			ACO(int populationSize, int plantSize, int intervalSize,
+					int valueSize, int maxIterationSize, double pheromoneRate,
+					double evaporationRate, double positiveConstant,
+					SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();
-	double calcularVolumeDessfuzificado();
 
 private:
 	// Variáveis privadas
@@ -93,7 +94,8 @@ private:
 	vector<Ant*> ants;
 	Conversor conversor;
 	SistemaHidroeletrico* sistemaHidroeletrico;
-
+	double a[2][5];
+	double b[2][5];
 	// Métodos privados
 	void initializeAnts();
 	void seedInitialPheromone();
@@ -106,6 +108,9 @@ private:
 	double desnormalizarVolume(double valor, double volumeMinimo,
 			double volumeMaximo);
 	void desnormalizarRotas();
+	double calcularVolumeHeuristica(int usinaIndice,
+			double energiaArmazenadaSistemaNormalizada);
+	int getPosicao(double value);
 };
 
 #endif /* ACO_H_ */

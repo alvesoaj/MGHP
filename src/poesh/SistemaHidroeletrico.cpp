@@ -263,3 +263,35 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 
 	return Fc * produto;
 }
+
+double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMaxima() {
+	HidroeletricaReservatorio* usina;
+	double somaProdutividadeMedia = 0.0;
+	double produto = 0.0;
+
+	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
+		usina = this->getUsina(indiceUsina);
+
+		double volumeMedio = usina->getVolumeMaximoOperativo();
+
+		double alturaQuedaLiquidaMedia = calcularAlturaQuedaLiquidaMediaUsina(
+				usina->getCodigo(), volumeMedio);
+
+		double produtividadeMedia =
+				usina->getCoeficienteProdutibilidadeEspecifica()
+						* alturaQuedaLiquidaMedia;
+
+		somaProdutividadeMedia += produtividadeMedia;
+
+		double diferenca = usina->getVolumeMaximoOperativo()
+				- usina->getVolumeMinimoOperativo();
+
+		produto += somaProdutividadeMedia * diferenca;
+	}
+
+	return Fc * produto;
+}
+
+double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMinima() {
+	return 0.0;
+}

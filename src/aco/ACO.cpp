@@ -28,15 +28,15 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	// FuzzyInput
 	this->valorEAS = new FuzzyInput(1);
 
-	this->muitoBaixa = new FuzzySet(0, 0, 1000, 2000);
+	this->muitoBaixa = new FuzzySet(0.0, 0.0, 0.1, 0.3);
 	this->valorEAS->addFuzzySet(this->muitoBaixa);
-	this->baixa = new FuzzySet(1500, 2500, 2500, 3500);
+	this->baixa = new FuzzySet(0.1, 0.3, 0.3, 0.5);
 	this->valorEAS->addFuzzySet(this->baixa);
-	this->media = new FuzzySet(3000, 4000, 4000, 5000);
+	this->media = new FuzzySet(0.3, 0.5, 0.5, 0.7);
 	this->valorEAS->addFuzzySet(this->media);
-	this->alta = new FuzzySet(4500, 5500, 5500, 6500);
+	this->alta = new FuzzySet(0.5, 0.7, 0.7, 0.9);
 	this->valorEAS->addFuzzySet(this->alta);
-	this->muitoAlta = new FuzzySet(5000, 6000, 7000, 7000);
+	this->muitoAlta = new FuzzySet(0.7, 0.9, 1.0, 1.0);
 	this->valorEAS->addFuzzySet(this->muitoAlta);
 
 	this->fuzzy->addFuzzyInput(this->valorEAS);
@@ -121,6 +121,30 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->fuzzyRule5 = new FuzzyRule(5, this->ifEASMuitoAlta,
 			this->thenSetPowerOf5);
 	this->fuzzy->addFuzzyRule(fuzzyRule5);
+
+	this->a[0][0] = 0.1026;
+	this->a[0][1] = 0.9093;
+	this->a[0][2] = 1.4882;
+	this->a[0][3] = 1.3235;
+	this->a[0][4] = 1.4533;
+
+	this->b[0][0] = -0.0044;
+	this->b[0][1] = -0.2129;
+	this->b[0][2] = -0.4469;
+	this->b[0][3] = -0.3404;
+	this->b[0][4] = -0.4440;
+
+	this->a[1][0] = 1.1396;
+	this->a[1][1] = 2.3585;
+	this->a[1][2] = 0.4784;
+	this->a[1][3] = 0.5209;
+	this->a[1][4] = 0.6147;
+
+	this->b[1][0] = -0.0284;
+	this->b[1][1] = -0.2611;
+	this->b[1][2] = 0.5234;
+	this->b[1][3] = 0.4924;
+	this->b[1][4] = 0.4121;
 }
 
 // Métodos públicos
@@ -139,10 +163,6 @@ void ACO::calculateSolution() {
 		iteration++;
 	}
 	this->desnormalizarRotas();
-}
-
-double ACO::calcularVolumeDessfuzificado() {
-
 }
 
 // Métodos privados
@@ -170,6 +190,13 @@ void ACO::seedInitialPheromone() {
 }
 
 void ACO::buildSolutions() {
+	double
+			energiaArmazenadaSistemaMaxima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double
+			energiaArmazenadaSistemaMinima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+
 	// Para cada formiga
 	for (int a = 0; a < this->populationSize; a++) {
 		ants.at(a)->initSearch();
@@ -184,32 +211,52 @@ void ACO::buildSolutions() {
 								this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
 										position);
 
-				cout << "EAS(" << position << "): " << energiaArmazenadaSistema
-						<< endl;
+				double energiaArmazenadaSistemaNormalizada =
+						(energiaArmazenadaSistema
+								- energiaArmazenadaSistemaMinima)
+								/ (energiaArmazenadaSistemaMaxima
 
-				this->fuzzy->setInput(1, energiaArmazenadaSistema);
-				this->fuzzy->fuzzify();
-				this->fuzzy->defuzzify(1);
+								- energiaArmazenadaSistemaMinima);
 
-				cout << "P1: " << this->powerOf1->getPertinence() << endl;
-				cout << "P2: " << this->powerOf2->getPertinence() << endl;
-				cout << "P3: " << this->powerOf3->getPertinence() << endl;
-				cout << "P4: " << this->powerOf4->getPertinence() << endl;
-				cout << "P5: " << this->powerOf5->getPertinence() << endl;
+				double volumeHeuristica = calcularVolumeHeuristica(p,
+						energiaArmazenadaSistemaNormalizada);
 
-				cin.get();
+				int posicaoHeuristica = this->getPosicao(volumeHeuristica);
+
+				double sugestoes[this->valueSize];
+				double val = 1.0;
+				for (int i = posicaoHeuristica; i < this->valueSize; i++) {
+					sugestoes[i] = val;
+					if (val > 0.0) {
+						val -= 0.34;
+					}
+					if (val < 0.0) {
+						val = 0.0;
+					}
+				}
+				val = 1.0;
+				for (int i = posicaoHeuristica; i >= 0; i--) {
+					sugestoes[i] = val;
+					if (val > 0.0) {
+						val -= 0.34;
+					}
+					if (val < 0.0) {
+						val = 0.0;
+					}
+				}
 
 				double transition_probability[this->valueSize];
 				double link_rate_sum = 0.0;
 				// Somando as taxas de feromonio e heuristica
 				for (int v = 0; v < this->valueSize; v++) {
-					link_rate_sum += this->pheromoneLinks[p][position][v];
+					link_rate_sum += pow(this->pheromoneLinks[p][position][v],
+							ALFA) * pow(sugestoes[v], BETA);
 				}
 				// Calculando a probabilidade de transição
 				for (int v = 0; v < this->valueSize; v++) {
-					transition_probability[v]
-							= this->pheromoneLinks[p][position][v]
-									/ link_rate_sum;
+					transition_probability[v] = (pow(
+							this->pheromoneLinks[p][position][v], ALFA) * pow(
+							sugestoes[v], BETA)) / link_rate_sum;
 				}
 
 				// Selecionando o próximo nó
@@ -327,4 +374,66 @@ void ACO::desnormalizarRotas() {
 			worseRoutes[p][i] = volume;
 		}
 	}
+}
+
+double ACO::calcularVolumeHeuristica(int usinaIndice,
+		double energiaArmazenadaSistemaNormalizada) {
+	double produtoSoma = 0.0;
+	double pertinenciaSoma = 0.0;
+
+	this->fuzzy->setInput(1, energiaArmazenadaSistemaNormalizada);
+	this->fuzzy->fuzzify();
+	// this->fuzzy->defuzzify(1);
+
+	if (this->powerOf1->getPertinence() > 0) {
+		double saida = this->a[usinaIndice][0]
+				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][0];
+		produtoSoma += this->powerOf2->getPertinence() * saida;
+		pertinenciaSoma += this->powerOf2->getPertinence();
+	}
+	if (this->powerOf2->getPertinence() > 0) {
+		double saida = this->a[usinaIndice][1]
+				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][1];
+		produtoSoma += this->powerOf2->getPertinence() * saida;
+		pertinenciaSoma += this->powerOf2->getPertinence();
+	}
+	if (this->powerOf3->getPertinence() > 0) {
+		double saida = this->a[usinaIndice][2]
+				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][2];
+		produtoSoma += this->powerOf3->getPertinence() * saida;
+		pertinenciaSoma += this->powerOf3->getPertinence();
+	}
+	if (this->powerOf4->getPertinence() > 0) {
+		double saida = this->a[usinaIndice][3]
+				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][3];
+		produtoSoma += this->powerOf4->getPertinence() * saida;
+		pertinenciaSoma += this->powerOf4->getPertinence();
+	}
+	if (this->powerOf5->getPertinence() > 0) {
+		double saida = this->a[usinaIndice][4]
+				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][4];
+		produtoSoma += this->powerOf5->getPertinence() * saida;
+		pertinenciaSoma += this->powerOf5->getPertinence();
+	}
+
+	return produtoSoma / pertinenciaSoma;
+}
+
+int ACO::getPosicao(double value) {
+	if (value < 0.0) {
+		return 0;
+	} else if (value > 1.0) {
+		return this->valueSize - 1;
+	} else {
+		for (int i = (0 + 1); i < this->valueSize; i++) {
+			if (this->getValue(i - 1) >= value && this->getValue(i) < value) {
+				if (value - this->getValue(i - 1) < this->getValue(i) - value) {
+					return (i - 1);
+				} else {
+					return i;
+				}
+			}
+		}
+	}
+	return this->valueSize - 1;
 }

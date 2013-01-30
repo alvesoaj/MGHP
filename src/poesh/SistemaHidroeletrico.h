@@ -65,6 +65,10 @@ public:
 	double calcularVazaoAfluente(int indiceUsina, int intervalo);
 
 	double calcularEnergiaArmazenadaSistema(int intervalo);
+
+	double calcularEnergiaArmazenadaSistemaMaxima();
+
+	double calcularEnergiaArmazenadaSistemaMinima();
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */
