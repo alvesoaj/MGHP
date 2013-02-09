@@ -36,6 +36,7 @@ public:
 	// Variáveis públicas
 	double bestFitness;
 	vector<vector<double> > bestRoutes;
+	int indexBestAnt;
 	double worseFitness;
 	vector<vector<double> > worseRoutes;
 	Fuzzy* fuzzy;
