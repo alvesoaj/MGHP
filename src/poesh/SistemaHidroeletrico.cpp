@@ -189,6 +189,8 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 			geracaoHidraulicaTotal += geracao_hidraulica;
 		}
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
+
+		cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
 	double needSum = 0.0;

@@ -89,8 +89,8 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->thenSetPowerOf2 = new FuzzyRuleConsequent();
 	this->thenSetPowerOf2->addOutput(this->powerOf2);
 
-	this->fuzzyRule2 = new FuzzyRule(2, this->ifEASBaixa,
-			this->thenSetPowerOf2);
+	this->fuzzyRule2
+			= new FuzzyRule(2, this->ifEASBaixa, this->thenSetPowerOf2);
 	this->fuzzy->addFuzzyRule(fuzzyRule2);
 
 	this->ifEASMedia = new FuzzyRuleAntecedent();
@@ -99,8 +99,8 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->thenSetPowerOf3 = new FuzzyRuleConsequent();
 	this->thenSetPowerOf3->addOutput(this->powerOf3);
 
-	this->fuzzyRule3 = new FuzzyRule(3, this->ifEASMedia,
-			this->thenSetPowerOf3);
+	this->fuzzyRule3
+			= new FuzzyRule(3, this->ifEASMedia, this->thenSetPowerOf3);
 	this->fuzzy->addFuzzyRule(fuzzyRule3);
 
 	this->ifEASAlta = new FuzzyRuleAntecedent();
@@ -122,29 +122,29 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 			this->thenSetPowerOf5);
 	this->fuzzy->addFuzzyRule(fuzzyRule5);
 
-	this->a[0][0] = 0.1026;
-	this->a[0][1] = 0.9093;
-	this->a[0][2] = 1.4882;
-	this->a[0][3] = 1.3235;
-	this->a[0][4] = 1.4533;
+	this->a[0][0] = 0.9286;
+	this->a[0][1] = 1.0500;
+	this->a[0][2] = 1.1898;
+	this->a[0][3] = 1.1999;
+	this->a[0][4] = 1.2115;
 
-	this->b[0][0] = -0.0044;
-	this->b[0][1] = -0.2129;
-	this->b[0][2] = -0.4469;
-	this->b[0][3] = -0.3404;
-	this->b[0][4] = -0.4440;
+	this->b[0][0] = -0.0976;
+	this->b[0][1] = -0.1328;
+	this->b[0][2] = -0.1964;
+	this->b[0][3] = -0.2033;
+	this->b[0][4] = -0.2126;
 
-	this->a[1][0] = 1.1396;
-	this->a[1][1] = 2.3585;
-	this->a[1][2] = 0.4784;
-	this->a[1][3] = 0.5209;
-	this->a[1][4] = 0.6147;
+	this->a[1][0] = 1.4355;
+	this->a[1][1] = 0.9878;
+	this->a[1][2] = 0.4386;
+	this->a[1][3] = 0.2391;
+	this->a[1][4] = 0.1044;
 
-	this->b[1][0] = -0.0284;
-	this->b[1][1] = -0.2611;
-	this->b[1][2] = 0.5234;
-	this->b[1][3] = 0.4924;
-	this->b[1][4] = 0.4121;
+	this->b[1][0] = 0.3022;
+	this->b[1][1] = 0.4225;
+	this->b[1][2] = 0.6676;
+	this->b[1][3] = 0.7921;
+	this->b[1][4] = 0.9002;
 }
 
 // Métodos públicos
@@ -190,10 +190,12 @@ void ACO::seedInitialPheromone() {
 }
 
 void ACO::buildSolutions() {
-	double energiaArmazenadaSistemaMaxima =
-			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
-	double energiaArmazenadaSistemaMinima =
-			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+	double
+			energiaArmazenadaSistemaMaxima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double
+			energiaArmazenadaSistemaMinima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
 
 	// Para cada formiga
 	for (int a = 0; a < this->populationSize; a++) {
@@ -204,9 +206,10 @@ void ACO::buildSolutions() {
 			while (ants.at(a)->getPosition(p) < (this->intervalSize - 1)) {
 				int position = ants.at(a)->getPosition(p);
 
-				double energiaArmazenadaSistema =
-						this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
-								position);
+				double
+						energiaArmazenadaSistema =
+								this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+										position);
 
 				double energiaArmazenadaSistemaNormalizada =
 						(energiaArmazenadaSistema
@@ -222,7 +225,7 @@ void ACO::buildSolutions() {
 
 				double sugestoes[this->valueSize];
 				double val = 1.0;
-				double drop = 0.17;
+				double drop = 0.30;
 				for (int i = posicaoHeuristica; i < this->valueSize; i++) {
 					sugestoes[i] = val;
 					if (val > 0.0) {
@@ -253,8 +256,8 @@ void ACO::buildSolutions() {
 				// Calculando a probabilidade de transição
 				for (int v = 0; v < this->valueSize; v++) {
 					transition_probability[v] = (pow(
-							this->pheromoneLinks[p][position][v], ALFA)
-							* pow(sugestoes[v], BETA)) / link_rate_sum;
+							this->pheromoneLinks[p][position][v], ALFA) * pow(
+							sugestoes[v], BETA)) / link_rate_sum;
 				}
 
 				// Selecionando o próximo nó
@@ -291,8 +294,8 @@ void ACO::checkBestSolution() {
 
 			this->worseFitness = this->calculateFitness(
 					this->ants.at(this->populationSize - 1)->getRoutes());
-			this->worseRoutes =
-					this->ants.at(this->populationSize - 1)->getRoutes();
+			this->worseRoutes
+					= this->ants.at(this->populationSize - 1)->getRoutes();
 		}
 		for (int i = 0; i < this->populationSize; i++) {
 			this->ants.at(i)->setFitness(
