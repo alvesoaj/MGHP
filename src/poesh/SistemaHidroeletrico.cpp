@@ -164,6 +164,11 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
 					vazaoDefluente);
+			/*
+			 if (i == 1) {
+			 cout << "U(" << i << ") q: " << engolimento << endl;
+			 }
+			 */
 			double alturaQuedaLiquida = this->calcularAlturaQuedaLiquidaUsina(
 					codigo, volume, vazaoDefluente);
 			return this->usinas.at(i)->calcularGeracaoHidraulica(
@@ -182,9 +187,24 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
+
+			double vazaoDefluente = this->calcularVazaoAfluente(indiceUsina,
+					intervalo);
+			/*
+			 if (indiceUsina == 1) {
+			 cout << "U(" << indiceUsina << ") I(" << intervalo << ") u: "
+			 << vazaoDefluente << endl;
+			 }
+			 */
+
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
-					indiceUsina, volumeMedio,
-					this->calcularVazaoAfluente(indiceUsina, intervalo));
+					indiceUsina, volumeMedio, vazaoDefluente);
+			/*
+			 if (indiceUsina == 1) {
+			 cout << "U(" << indiceUsina << ") I(" << intervalo << ") GH: "
+			 << geracao_hidraulica << endl;
+			 }
+			 */
 
 			geracaoHidraulicaTotal += geracao_hidraulica;
 		}
