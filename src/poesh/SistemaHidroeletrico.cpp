@@ -184,13 +184,13 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
 					indiceUsina, volumeMedio,
-					this->calcularVazaoAfluente(indiceUsina, intervalo));
+					this->calcularVazaoDefluente(indiceUsina, intervalo));
 
 			geracaoHidraulicaTotal += geracao_hidraulica;
 		}
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
 
-		cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
+		// cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
 	double needSum = 0.0;
@@ -202,39 +202,57 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		} else {
 			geracaoComplementar = 0.0;
 		}
+		// cout << "GC(" << i << "): " << geracaoComplementar << endl;
 		needSum += geracaoComplementar;
 	}
 
 	return needSum / 2.0;
 }
 
-double SistemaHidroeletrico::calcularVazaoAfluente(int indiceUsina,
+double SistemaHidroeletrico::calcularVazaoAfluenteIncremental(int indiceUsina,
 		int intervalo) {
-	double vazaoAfluente = 0.0;
+	double vazaoAfluenteIncremental = 0.0;
+	double vazaoNaturalMontante = 0.0;
 	UsinaHidroeletrica* usina = this->getUsina(indiceUsina);
 	vector<UsinaHidroeletrica*> usinasMontante = usina->getUsinasMontante();
 
-	if (usinasMontante.size() == 0) {
-		vazaoAfluente = this->vazoes[indiceUsina][intervalo - 1];
-	} else {
-		double vazaoNaturalMontante = 0.0;
-		double vazaoDefluenteMontante = 0.0;
-		for (unsigned int i = 0; i < usinasMontante.size(); i++) {
-			usina = usinasMontante.at(i);
-			int indiceUsinaMontante = usina->getCodigo();
-			vazaoNaturalMontante += this->vazoes[indiceUsinaMontante][intervalo
-					- 1];
-			// double temp = this->volumes[indiceUsinaMontante][intervalo - 1] - this->volumes[indiceUsinaMontante][intervalo];
-			vazaoDefluenteMontante += this->calcularVazaoAfluente(
-					indiceUsinaMontante, intervalo);
-		}
-		double vazaoIncremental = this->vazoes[indiceUsina][intervalo - 1]
-				- vazaoNaturalMontante;
-		vazaoAfluente = vazaoIncremental + vazaoDefluenteMontante
-				- (this->volumes[indiceUsina][intervalo - 1]
-						- this->volumes[indiceUsina][intervalo]) / 2.628;
+	for (unsigned int i = 0; i < usinasMontante.size(); i++) {
+		usina = usinasMontante.at(i);
+		int indiceUsinaMontante = usina->getCodigo();
+		vazaoNaturalMontante
+				+= this->vazoes[indiceUsinaMontante][intervalo - 1];
 	}
-	return vazaoAfluente;
+	vazaoAfluenteIncremental = this->vazoes[indiceUsina][intervalo - 1]
+			- vazaoNaturalMontante;
+
+	//cout << "yINC(" << intervalo << ", " << indiceUsina << "): " << vazaoAfluenteIncremental << endl;
+	return vazaoAfluenteIncremental;
+}
+
+double SistemaHidroeletrico::calcularVazaoDefluente(int indiceUsina,
+		int intervalo) {
+	double vazaoDefluente = 0.0;
+	double vazaoDefluenteMontante = 0.0;
+	UsinaHidroeletrica* usina = this->getUsina(indiceUsina);
+	vector<UsinaHidroeletrica*> usinasMontante = usina->getUsinasMontante();
+
+	for (unsigned int i = 0; i < usinasMontante.size(); i++) {
+		usina = usinasMontante.at(i);
+		int indiceUsinaMontante = usina->getCodigo();
+		vazaoDefluenteMontante += this->calcularVazaoDefluente(
+				indiceUsinaMontante, intervalo);
+	}
+
+	double vazaoAfluenteIncremental = this->calcularVazaoAfluenteIncremental(
+			indiceUsina, intervalo);
+
+	vazaoDefluente = vazaoAfluenteIncremental + vazaoDefluenteMontante
+			- (this->volumes[indiceUsina][intervalo - 1]
+					- this->volumes[indiceUsina][intervalo]) / 2.628;
+
+	cout << "u(" << intervalo << ", " << indiceUsina << "): " << vazaoDefluente
+			<< endl;
+	return vazaoDefluente;
 }
 
 double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {

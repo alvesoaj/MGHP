@@ -62,7 +62,9 @@ public:
 
 	double calcularCustoTotal();
 
-	double calcularVazaoAfluente(int indiceUsina, int intervalo);
+	double calcularVazaoAfluenteIncremental(int indiceUsina, int intervalo);
+
+	double calcularVazaoDefluente(int indiceUsina, int intervalo);
 
 	double calcularEnergiaArmazenadaSistema(int intervalo);
 
