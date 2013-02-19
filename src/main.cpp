@@ -28,7 +28,7 @@ using namespace std;
 // Constantes ACO
 #define POPULATION_SIZE 30
 #define DISCRETIZACAO 21
-#define MAX_ITERATIONS 1000
+#define MAX_ITERATIONS 2500
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.5
 #define POSITIVE_CONTS 0.75
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 	cout.precision(11);
 	cout << "Custo Total (Arquivos): " << custo << endl;
 
-	cin.get();
+	// cin.get();
 
 	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
 			DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,

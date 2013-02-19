@@ -187,15 +187,39 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
+
+			double vazaoDefluente = this->calcularVazaoAfluente(indiceUsina,
+					intervalo);
+			/*
+			 if (indiceUsina == 1) {
+			 cout << "U(" << indiceUsina << ") I(" << intervalo << ") u: "
+			 << vazaoDefluente << endl;
+			 }
+			 */
+
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
+<<<<<<< HEAD
 					indiceUsina, volumeMedio,
 					this->calcularVazaoDefluente(indiceUsina, intervalo));
+=======
+					indiceUsina, volumeMedio, vazaoDefluente);
+			/*
+			 if (indiceUsina == 1) {
+			 cout << "U(" << indiceUsina << ") I(" << intervalo << ") GH: "
+			 << geracao_hidraulica << endl;
+			 }
+			 */
+>>>>>>> e7d27acaa981170fb5cf5558c792b67a2ec32cc5
 
 			geracaoHidraulicaTotal += geracao_hidraulica;
 		}
+		// cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
+<<<<<<< HEAD
 
 		// cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
+=======
+>>>>>>> e7d27acaa981170fb5cf5558c792b67a2ec32cc5
 	}
 
 	double needSum = 0.0;
