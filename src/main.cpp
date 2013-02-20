@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 	cout.precision(11);
 	cout << "Custo Total (Arquivos): " << custo << endl;
 
-	// cin.get();
+	cin.get();
 
 	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
 			DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
@@ -187,8 +187,8 @@ int main(int argc, char *argv[]) {
 	sistemaHidroeletrico->setVolumes(aco->bestRoutes);
 	sistemaHidroeletrico->calcularCustoTotal();
 
-	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
-			clock()) << " ms" << endl;
+	cout << "\nTempo de execução (MGHP): "
+			<< calcular_tempo(time_start, clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
@@ -225,7 +225,7 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	//ifstream emborcacao_vazoes_file("./assets/Emborcacao-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
-	ifstream emborcacao_vazoes_file("./assets/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_vazoes_file("./assets/0-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -260,7 +260,7 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	// ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
-	ifstream itumbiara_vazoes_file("./assets/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_vazoes_file("./assets/0-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua

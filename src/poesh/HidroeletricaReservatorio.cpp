@@ -72,8 +72,6 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 	double tolerancia = 1.0;
 	double nivelMontante = this->calcularNivelMontante(volume);
 	double vazaoDefluenteBase = vazaoDefluente;
-	// double vazaoTurbinada = engolimentoEfetivo;
-	// double vazaoVertida = 0.0;
 	double nivelJusante = this->calcularNivelJusante(vazaoDefluente);
 	double altuaraQuedaBruta = this->calcularAlturaQuedaBruta(nivelMontante,
 			nivelJusante);
@@ -86,14 +84,16 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 	double engolimentoMaximoAtual =
 			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 					alturaQuedaLiquida);
+	double vazaoTurbinada = engolimentoEfetivo;
+	double vazaoVertida = 0.0;
 
 	do {
-		if (engolimentoMaximoAtual >= vazaoDefluenteBase) {
-			vazaoDefluente = engolimentoMaximoAtual;
-			// vazaoTurbinada = engolimentoMaximoAtual;
+		if (vazaoDefluenteBase > engolimentoMaximoAtual) {
+			vazaoTurbinada = engolimentoMaximoAtual;
+			vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		} else {
-			// vazaoTurbinada = engolimentoMaximoAtual;
-			// vazaoVertida = vazaoDefluente - vazaoTurbinada;
+			vazaoDefluente = engolimentoMaximoAtual;
+			vazaoTurbinada = vazaoDefluente;
 		}
 
 		nivelMontante = this->calcularNivelMontante(volume);
