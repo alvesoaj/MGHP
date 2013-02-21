@@ -235,11 +235,12 @@ double SistemaHidroeletrico::calcularVazaoAfluenteIncremental(int indiceUsina,
 	vazaoAfluenteIncremental = this->vazoes[indiceUsina][intervalo - 1]
 			- vazaoNaturalMontante;
 	/*
-	 if (indiceUsina == 1) {
+	 if (indiceUsina > -1) {
 	 cout << "yINC(" << intervalo << ", " << indiceUsina << "): "
 	 << vazaoAfluenteIncremental << endl;
 	 }
 	 */
+
 	return vazaoAfluenteIncremental;
 }
 
@@ -263,10 +264,12 @@ double SistemaHidroeletrico::calcularVazaoDefluente(int indiceUsina,
 	vazaoDefluente = vazaoAfluenteIncremental + vazaoDefluenteMontante
 			- (this->volumes[indiceUsina][intervalo - 1]
 					- this->volumes[indiceUsina][intervalo]) / 2.628;
-	if (indiceUsina == 1) {
-		cout << "u(" << intervalo << ", " << indiceUsina << "): "
-				<< vazaoDefluente << endl;
-	}
+	/*
+	 if (indiceUsina > -1) {
+	 cout << "u(" << intervalo << ", " << indiceUsina << "): "
+	 << vazaoDefluente << endl;
+	 }
+	 */
 	return vazaoDefluente;
 }
 

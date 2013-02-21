@@ -138,9 +138,14 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
+	cout.precision(11);
+	/*
+	 double engolimento = emborcacao->calcularEngolimento(8000, 600);
+	 cout << "qMAX: " << engolimento << endl;
+	 cin.get();
+	 */
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
-	cout.precision(11);
 	cout << "Custo Total (Arquivos): " << custo << endl;
 
 	cin.get();
@@ -213,6 +218,7 @@ void carregar_valores() {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
 		vector<double> temp_array;
+		temp_array.push_back(17190.0);
 		while (!emborcacao_volumes_file.eof()) {
 			getline(emborcacao_volumes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = conversor.string_para_double(line);
@@ -248,6 +254,7 @@ void carregar_valores() {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
 		vector<double> temp_array;
+		temp_array.push_back(17027.0);
 		while (!itumbiara_volumes_file.eof()) {
 			getline(itumbiara_volumes_file, line); // como foi aberto em modo texto(padrão), e não binário(ios::bin) pega cada linha
 			double d = conversor.string_para_double(line);

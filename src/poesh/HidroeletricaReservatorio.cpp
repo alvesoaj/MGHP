@@ -93,7 +93,7 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 			vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		} else {
 			vazaoDefluente = engolimentoMaximoAtual;
-			vazaoTurbinada = vazaoDefluente;
+			vazaoTurbinada = engolimentoMaximoAtual;
 		}
 
 		nivelMontante = this->calcularNivelMontante(volume);
