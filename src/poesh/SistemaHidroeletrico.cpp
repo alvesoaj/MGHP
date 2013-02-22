@@ -24,8 +24,7 @@ bool SistemaHidroeletrico::adicionarUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	bool existe = false;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			existe = true;
 			break;
 		}
@@ -43,8 +42,7 @@ bool SistemaHidroeletrico::removerUsinaHidroeletrica(
 		HidroeletricaReservatorio* usinaHidroeletrica) {
 	int toDelete = -1;
 	for (unsigned int i; i < this->usinas.size(); i++) {
-		if (this->usinas.at(i)->getCodigo()
-				== usinaHidroeletrica->getCodigo()) {
+		if (this->usinas.at(i)->getCodigo() == usinaHidroeletrica->getCodigo()) {
 			toDelete = i;
 			break;
 		}
@@ -66,8 +64,7 @@ string SistemaHidroeletrico::getNomeUsina(unsigned int codigo) {
 	return "Indefinido";
 }
 
-double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
-		unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMinimoOperativo();
@@ -76,8 +73,7 @@ double SistemaHidroeletrico::getVolumeMinimoOperativoUsina(
 	return 0.0;
 }
 
-double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(
-		unsigned int codigo) {
+double SistemaHidroeletrico::getVolumeMaximoOperativoUsina(unsigned int codigo) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
 			return this->usinas.at(i)->getVolumeMaximoOperativo();
@@ -162,15 +158,22 @@ double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
-		double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
-			double engolimento = this->calcularEngolimentoUsina(codigo, volume,
-					vazaoDefluente);
+			double engolimentoMaximo = this->calcularEngolimentoUsina(codigo,
+					volume, vazaoDefluente);
+			double engolimento = 0.0;
+
+			if (engolimentoMaximo >= vazaoDefluente) {
+				engolimento = vazaoDefluente;
+			} else {
+				engolimento = engolimentoMaximo;
+			}
 			/*
-			 if (i == 1) {
-			 cout << "U(" << i << ") q: " << engolimento << endl;
+			 if (i > -1) {
+			 cout << "q(" << i << "): " << engolimento << endl;
 			 }
 			 */
 			double alturaQuedaLiquida = this->calcularAlturaQuedaLiquidaUsina(
@@ -188,8 +191,7 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
 		double geracaoHidraulicaTotal = 0.0;
 
-		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size();
-				indiceUsina++) {
+		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size(); indiceUsina++) {
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
 			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
@@ -197,10 +199,12 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 					this->calcularVazaoDefluente(indiceUsina, intervalo));
 
 			geracaoHidraulicaTotal += geracao_hidraulica;
+
+			// cout << "gh(" << intervalo << ", " << indiceUsina << "): " << geracao_hidraulica << endl;
 		}
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
 
-		// cout << "GH(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
+		// cout << "ghTOT(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
 	double needSum = 0.0;
@@ -229,8 +233,8 @@ double SistemaHidroeletrico::calcularVazaoAfluenteIncremental(int indiceUsina,
 	for (unsigned int i = 0; i < usinasMontante.size(); i++) {
 		usina = usinasMontante.at(i);
 		int indiceUsinaMontante = usina->getCodigo();
-		vazaoNaturalMontante +=
-				this->vazoes[indiceUsinaMontante][intervalo - 1];
+		vazaoNaturalMontante
+				+= this->vazoes[indiceUsinaMontante][intervalo - 1];
 	}
 	vazaoAfluenteIncremental = this->vazoes[indiceUsina][intervalo - 1]
 			- vazaoNaturalMontante;
@@ -240,7 +244,6 @@ double SistemaHidroeletrico::calcularVazaoAfluenteIncremental(int indiceUsina,
 	 << vazaoAfluenteIncremental << endl;
 	 }
 	 */
-
 	return vazaoAfluenteIncremental;
 }
 
@@ -262,8 +265,8 @@ double SistemaHidroeletrico::calcularVazaoDefluente(int indiceUsina,
 			indiceUsina, intervalo);
 
 	vazaoDefluente = vazaoAfluenteIncremental + vazaoDefluenteMontante
-			- (this->volumes[indiceUsina][intervalo - 1]
-					- this->volumes[indiceUsina][intervalo]) / 2.628;
+			+ ((this->volumes[indiceUsina][intervalo - 1]
+					- this->volumes[indiceUsina][intervalo]) / 2.628);
 	/*
 	 if (indiceUsina > -1) {
 	 cout << "u(" << intervalo << ", " << indiceUsina << "): "
@@ -278,8 +281,7 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 	double somaProdutividadeMedia = 0.0;
 	double produto = 0.0;
 
-	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0;
-			indiceUsina--) {
+	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
 		usina = this->getUsina(indiceUsina);
 
 		double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
@@ -308,8 +310,7 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMaxima() {
 	double somaProdutividadeMedia = 0.0;
 	double produto = 0.0;
 
-	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0;
-			indiceUsina--) {
+	for (int indiceUsina = (this->usinas.size() - 1); indiceUsina >= 0; indiceUsina--) {
 		usina = this->getUsina(indiceUsina);
 
 		double volumeMedio = usina->getVolumeMaximoOperativo();
