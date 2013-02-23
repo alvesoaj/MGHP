@@ -42,7 +42,7 @@ public:
 	double calcularPerdaCarga(double alturaQuedaBruta);
 	double calcularAlturaQuedaLiquida(double alturaQuedaBruta,
 			double perdaCarga);
-	double calcularEngolimento(double volume, double vazaoDefluente);
+	double calcularEngolimentoMaximo(double volume, double vazaoDefluente);
 	double calcularGeracaoHidraulica(double alturaQuedaLiquida, double vazao,
 			double engolimento);
 };

@@ -27,7 +27,7 @@ using namespace std;
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
 #define POPULATION_SIZE 30
-#define DISCRETIZACAO 21
+#define DISCRETIZACAO 11
 #define MAX_ITERATIONS 4000
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.5
@@ -139,11 +139,13 @@ int main(int argc, char *argv[]) {
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
 	cout.precision(11);
+
 	/*
-	 double engolimento = emborcacao->calcularEngolimento(8000, 600);
+	 double engolimento = emborcacao->calcularEngolimentoMaximo(8000, 600);
 	 cout << "qMAX: " << engolimento << endl;
 	 cin.get();
 	 */
+
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
 	cout << "Custo Total (Arquivos): " << custo << endl;

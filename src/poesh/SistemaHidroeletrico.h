@@ -54,7 +54,7 @@ public:
 	double calcularAlturaQuedaLiquidaMediaUsina(unsigned int codigo,
 			double volumeMedio);
 
-	double calcularEngolimentoUsina(unsigned int codigo, double volume,
+	double calcularEngolimentoMaximoUsina(unsigned int codigo, double volume,
 			double vazaoDefluente);
 
 	double calcularGeracaoHidraulicaUsina(unsigned int codigo, double volume,

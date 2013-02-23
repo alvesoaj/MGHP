@@ -66,7 +66,7 @@ double HidroeletricaReservatorio::calcularAlturaQuedaLiquida(
 	return alturaQuedaBruta - perdaCarga;
 }
 
-double HidroeletricaReservatorio::calcularEngolimento(double volume,
+double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 		double vazaoDefluente) {
 	bool convergencia = false;
 	double tolerancia = 1.0;
@@ -85,18 +85,19 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 					alturaQuedaLiquida);
 	double vazaoTurbinada = engolimentoEfetivo;
-	double vazaoVertida = 0.0;
+	double vazaoVertida;
 
 	do {
-		if (vazaoDefluenteBase > engolimentoMaximoAtual) {
-			vazaoTurbinada = engolimentoMaximoAtual;
-			vazaoVertida = vazaoDefluente - vazaoTurbinada;
-		} else {
+		if (engolimentoMaximoAtual >= vazaoDefluenteBase) {
 			vazaoDefluente = engolimentoMaximoAtual;
 			vazaoTurbinada = engolimentoMaximoAtual;
+			vazaoVertida = 0.0;
+		} else {
+			vazaoTurbinada = vazaoDefluente;
+			vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		}
 
-		nivelMontante = this->calcularNivelMontante(volume);
+		// nivelMontante = this->calcularNivelMontante(volume);
 
 		nivelJusante = this->calcularNivelJusante(vazaoDefluente);
 
@@ -105,11 +106,11 @@ double HidroeletricaReservatorio::calcularEngolimento(double volume,
 
 		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
 
-		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
-				perdaCarga);
+		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(
+				altuaraQuedaBruta, perdaCarga);
 
-		engolimentoMaximoAtual =
-				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+		engolimentoMaximoAtual
+				= this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 						alturaQuedaLiquida);
 
 		// Teste de Convergência

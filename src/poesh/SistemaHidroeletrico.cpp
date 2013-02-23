@@ -147,11 +147,11 @@ double SistemaHidroeletrico::calcularAlturaQuedaLiquidaMediaUsina(
 	return 0.0;
 }
 
-double SistemaHidroeletrico::calcularEngolimentoUsina(unsigned int codigo,
-		double volume, double vazaoDefluente) {
+double SistemaHidroeletrico::calcularEngolimentoMaximoUsina(
+		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
-			return this->usinas.at(i)->calcularEngolimento(volume,
+			return this->usinas.at(i)->calcularEngolimentoMaximo(volume,
 					vazaoDefluente);
 		}
 	}
@@ -162,8 +162,8 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
 		unsigned int codigo, double volume, double vazaoDefluente) {
 	for (unsigned int i = 0; i < this->usinas.size(); i++) {
 		if (this->usinas.at(i)->getCodigo() == codigo) {
-			double engolimentoMaximo = this->calcularEngolimentoUsina(codigo,
-					volume, vazaoDefluente);
+			double engolimentoMaximo = this->calcularEngolimentoMaximoUsina(
+					codigo, volume, vazaoDefluente);
 			double engolimento = 0.0;
 
 			if (engolimentoMaximo >= vazaoDefluente) {
