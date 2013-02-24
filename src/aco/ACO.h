@@ -73,10 +73,10 @@ public:
 	FuzzyRule* fuzzyRule5;
 
 	// Construtor
-			ACO(int populationSize, int plantSize, int intervalSize,
-					int valueSize, int maxIterationSize, double pheromoneRate,
-					double evaporationRate, double positiveConstant,
-					SistemaHidroeletrico* sistemaHidroeletrico);
+	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
+			int maxIterationSize, double pheromoneRate, double evaporationRate,
+			double positiveConstant,
+			SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();

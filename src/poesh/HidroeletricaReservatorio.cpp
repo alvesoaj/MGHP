@@ -93,7 +93,7 @@ double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 			vazaoTurbinada = engolimentoMaximoAtual;
 			vazaoVertida = 0.0;
 		} else {
-			vazaoTurbinada = vazaoDefluente;
+			vazaoTurbinada = engolimentoMaximoAtual;
 			vazaoVertida = vazaoDefluente - vazaoTurbinada;
 		}
 
@@ -106,11 +106,11 @@ double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 
 		perdaCarga = this->calcularPerdaCarga(altuaraQuedaBruta);
 
-		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(
-				altuaraQuedaBruta, perdaCarga);
+		alturaQuedaLiquida = this->calcularAlturaQuedaLiquida(altuaraQuedaBruta,
+				perdaCarga);
 
-		engolimentoMaximoAtual
-				= this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
+		engolimentoMaximoAtual =
+				this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 						alturaQuedaLiquida);
 
 		// Teste de Convergência
@@ -123,6 +123,7 @@ double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 		}
 	} while (convergencia == false);
 
+	// return vazaoTurbinada;
 	return engolimentoMaximoAtual;
 }
 
