@@ -172,7 +172,8 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
 				engolimento = engolimentoMaximo;
 			}
 			/*
-			 if (i > -1) {
+			 if (true) {
+			 cout << "qMax(" << i << "): " << engolimentoMaximo << endl;
 			 cout << "q(" << i << "): " << engolimento << endl;
 			 }
 			 */
@@ -208,7 +209,7 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 	}
 
 	double needSum = 0.0;
-	for (int i = 0; i < this->intervalos; i++) {
+	for (int i = 1; i < this->intervalos; i++) {
 		double geracaoComplementar;
 		if (this->demanda >= geracaoHidraulicaIntervalos[i]) {
 			geracaoComplementar = pow(

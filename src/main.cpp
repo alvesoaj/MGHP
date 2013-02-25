@@ -22,13 +22,13 @@
 using namespace std;
 
 // Constantes POSH
-#define INTERVALOS 62
+#define INTERVALOS 13
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 30
-#define DISCRETIZACAO 11
-#define MAX_ITERATIONS 4000
+#define POPULATION_SIZE 100
+#define DISCRETIZACAO 26
+#define MAX_ITERATIONS 8000
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.5
 #define POSITIVE_CONTS 0.75
@@ -146,6 +146,12 @@ int main(int argc, char *argv[]) {
 	 cin.get();
 	 */
 
+	/*
+	 double geracao = sistemaHidroeletrico->calcularGeracaoHidraulicaUsina(1, 17027.0, 3090.97297780);
+	 cout << "g: " << geracao << endl;
+	 cin.get();
+	 */
+
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
 	cout << "Custo Total (Arquivos): " << custo << endl;
@@ -214,8 +220,8 @@ double calcular_tempo(clock_t start, clock_t end) {
 void carregar_valores() {
 	string line;
 
-	ifstream emborcacao_volumes_file("./assets/0-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
-	// ifstream emborcacao_volumes_file("./assets/Emborcacao-Volumes-Completos.txt");
+	// ifstream emborcacao_volumes_file("./assets/0-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_volumes_file("./assets/Emborcacao-Volumes-Completos.txt");
 	if (emborcacao_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -250,8 +256,8 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 
-	ifstream itumbiara_volumes_file("./assets/0-Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
-	// ifstream itumbiara_volumes_file("./assets/Itumbiara-Volumes-Completos.txt");
+	// ifstream itumbiara_volumes_file("./assets/0-Itumbiara-Volumes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_volumes_file("./assets/Itumbiara-Volumes-Completos.txt");
 	if (itumbiara_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua

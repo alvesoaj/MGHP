@@ -225,7 +225,7 @@ void ACO::buildSolutions() {
 
 				double sugestoes[this->valueSize];
 				double val = 1.0;
-				double drop = 0.33;
+				double drop = 0.20;
 				for (int i = posicaoHeuristica; i < this->valueSize; i++) {
 					sugestoes[i] = val;
 					if (val > 0.0) {
