@@ -23,6 +23,7 @@ private:
 	Conversor conversor;
 	vector<vector<double> > volumes;
 	vector<vector<double> > vazoes;
+	vector<double> geracoesTotais;
 	vector<HidroeletricaReservatorio*> usinas;
 
 public:
@@ -71,6 +72,8 @@ public:
 	double calcularEnergiaArmazenadaSistemaMaxima();
 
 	double calcularEnergiaArmazenadaSistemaMinima();
+
+	vector<double> getGeracoesTotais();
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */

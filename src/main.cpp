@@ -179,8 +179,8 @@ int main(int argc, char *argv[]) {
 
 	cout << "Pior rota (ACO):\n" << temp << endl;
 
-	sistemaHidroeletrico->setVolumes(aco->worseRoutes);
-	sistemaHidroeletrico->calcularCustoTotal();
+	// sistemaHidroeletrico->setVolumes(aco->worseRoutes);
+	// sistemaHidroeletrico->calcularCustoTotal();
 
 	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
 
@@ -199,6 +199,17 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico->setVolumes(aco->bestRoutes);
 	sistemaHidroeletrico->calcularCustoTotal();
+
+	vector<double> geracoes = sistemaHidroeletrico->getGeracoesTotais();
+
+	temp = "";
+	for (int i = 0; i < geracoes.size(); i++) {
+		temp += number_to_String(geracoes[i]);
+		if (i < (INTERVALOS - 1)) {
+			temp += ", ";
+		}
+	}
+	cout << "\nGerações (Melhor Solução):\n" << temp << endl;
 
 	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
 			clock()) << " ms" << endl;
@@ -221,7 +232,8 @@ void carregar_valores() {
 	string line;
 
 	// ifstream emborcacao_volumes_file("./assets/0-Emborcacao-Volumes.txt"); // ifstream = padrão ios:in
-	ifstream emborcacao_volumes_file("./assets/Emborcacao-Volumes-Completos.txt");
+	ifstream emborcacao_volumes_file(
+			"./assets/Emborcacao-Volumes-Completos.txt");
 	if (emborcacao_volumes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua

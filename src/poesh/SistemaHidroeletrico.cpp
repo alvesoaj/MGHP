@@ -188,6 +188,7 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(
 
 double SistemaHidroeletrico::calcularCustoTotal() {
 	double geracaoHidraulicaIntervalos[this->intervalos];
+	geracoesTotais.clear();
 
 	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
 		double geracaoHidraulicaTotal = 0.0;
@@ -204,7 +205,7 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 			// cout << "gh(" << intervalo << ", " << indiceUsina << "): " << geracao_hidraulica << endl;
 		}
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
-
+		geracoesTotais.push_back(geracaoHidraulicaTotal);
 		// cout << "ghTOT(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
@@ -336,4 +337,8 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMaxima() {
 
 double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMinima() {
 	return 0.0;
+}
+
+vector<double> SistemaHidroeletrico::getGeracoesTotais() {
+	return this->geracoesTotais;
 }
