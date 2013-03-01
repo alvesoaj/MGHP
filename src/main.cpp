@@ -26,9 +26,9 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 50
-#define DISCRETIZACAO 41
-#define MAX_ITERATIONS 4000
+#define POPULATION_SIZE 30
+#define DISCRETIZACAO 21
+#define MAX_ITERATIONS 1000
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.5
 #define POSITIVE_CONTS 0.75
@@ -44,6 +44,7 @@ void carregar_valores();
 
 int main(int argc, char *argv[]) {
 	clock_t time_start = clock();
+
 	// Carregar arquivos
 	carregar_valores();
 
@@ -145,6 +146,12 @@ int main(int argc, char *argv[]) {
 	 cin.get();
 	 */
 
+	/*
+	 double geracao = sistemaHidroeletrico->calcularGeracaoHidraulicaUsina(1, 17027.0, 3090.97297780);
+	 cout << "g: " << geracao << endl;
+	 cin.get();
+	 */
+
 	double custo = sistemaHidroeletrico->calcularCustoTotal();
 
 	cout << "Custo Total (Arquivos): " << custo << endl;
@@ -172,8 +179,8 @@ int main(int argc, char *argv[]) {
 
 	cout << "Pior rota (ACO):\n" << temp << endl;
 
-	sistemaHidroeletrico->setVolumes(aco->worseRoutes);
-	sistemaHidroeletrico->calcularCustoTotal();
+	// sistemaHidroeletrico->setVolumes(aco->worseRoutes);
+	// sistemaHidroeletrico->calcularCustoTotal();
 
 	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
 
@@ -193,8 +200,31 @@ int main(int argc, char *argv[]) {
 	sistemaHidroeletrico->setVolumes(aco->bestRoutes);
 	sistemaHidroeletrico->calcularCustoTotal();
 
-	cout << "\nTempo de execução (MGHP): "
-			<< calcular_tempo(time_start, clock()) << " ms" << endl;
+	vector<double> geracoes = sistemaHidroeletrico->getGeracoesTotais();
+
+	temp = "";
+	for (int i = 0; i < geracoes.size(); i++) {
+		temp += number_to_String(geracoes[i]);
+		if (i < (geracoes.size() - 1)) {
+			temp += ", ";
+		}
+	}
+	cout << "\nGerações (Melhor Solução):\n" << temp << endl;
+
+	temp = "";
+	for (int i = 1; i < INTERVALOS; i++) {
+		string res = number_to_String(
+				sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(i));
+		if (i < (INTERVALOS - 1)) {
+			temp += "I(" + number_to_String(i) + ") " + res + ", ";
+		} else {
+			temp += "I(" + number_to_String(i) + ") " + res;
+		}
+	}
+	cout << "\nEAS (Melhor Solução):\n" << temp << endl;
+
+	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
+			clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
