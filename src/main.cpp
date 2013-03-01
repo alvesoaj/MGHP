@@ -22,16 +22,16 @@
 using namespace std;
 
 // Constantes POSH
-#define INTERVALOS 13
+#define INTERVALOS 61
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
 #define POPULATION_SIZE 30
-#define DISCRETIZACAO 26
-#define MAX_ITERATIONS 2000
+#define DISCRETIZACAO 21
+#define MAX_ITERATIONS 1000
 #define PHEROMONE_RATE 0.1
-#define EVAPORATION_RATE 0.2
-#define POSITIVE_CONTS 1
+#define EVAPORATION_RATE 0.5
+#define POSITIVE_CONTS 0.75
 
 // Variáveis
 Conversor conversor;
