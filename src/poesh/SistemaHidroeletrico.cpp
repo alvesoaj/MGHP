@@ -298,8 +298,7 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistema(int intervalo) {
 
 		somaProdutividadeMedia += produtividadeMedia;
 
-		double diferenca = this->volumes[indiceUsina][intervalo]
-				- usina->getVolumeMinimoOperativo();
+		double diferenca = volumeMedio - usina->getVolumeMinimoOperativo();
 
 		produto += somaProdutividadeMedia * diferenca;
 	}

@@ -28,7 +28,7 @@ using std::vector;
 
 // Constantes
 #define INVALID -1
-#define ALFA 4
+#define ALFA 2
 #define BETA 1
 
 class ACO {

@@ -26,12 +26,12 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 100
+#define POPULATION_SIZE 30
 #define DISCRETIZACAO 26
-#define MAX_ITERATIONS 8000
+#define MAX_ITERATIONS 2000
 #define PHEROMONE_RATE 0.1
-#define EVAPORATION_RATE 0.5
-#define POSITIVE_CONTS 0.75
+#define EVAPORATION_RATE 0.2
+#define POSITIVE_CONTS 1
 
 // Variáveis
 Conversor conversor;
@@ -205,11 +205,23 @@ int main(int argc, char *argv[]) {
 	temp = "";
 	for (int i = 0; i < geracoes.size(); i++) {
 		temp += number_to_String(geracoes[i]);
-		if (i < (INTERVALOS - 1)) {
+		if (i < (geracoes.size() - 1)) {
 			temp += ", ";
 		}
 	}
 	cout << "\nGerações (Melhor Solução):\n" << temp << endl;
+
+	temp = "";
+	for (int i = 1; i < INTERVALOS; i++) {
+		string res = number_to_String(
+				sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(i));
+		if (i < (INTERVALOS - 1)) {
+			temp += "I(" + number_to_String(i) + ") " + res + ", ";
+		} else {
+			temp += "I(" + number_to_String(i) + ") " + res;
+		}
+	}
+	cout << "\nEAS (Melhor Solução):\n" << temp << endl;
 
 	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
 			clock()) << " ms" << endl;
