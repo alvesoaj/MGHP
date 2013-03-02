@@ -161,10 +161,9 @@ void ACO::calculateSolution() {
 		this->checkBestSolution();
 		this->pheromoneEvaporates();
 		this->updatePheromone();
-		cout << "-------------------------------------------------- "
-				<< iteration << endl;
+		cout << "---------------------- " << iteration << endl;
 
-		if (iteration % 250 == 0) {
+		if (iteration % 1000 == 0) {
 			for (unsigned int p = 0; p < pheromoneLinks.size(); p++) {
 				vector<vector<double> > tempPheUsi;
 				tempPheUsi = pheromoneLinks[p];
