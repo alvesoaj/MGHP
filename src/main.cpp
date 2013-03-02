@@ -28,9 +28,9 @@ using namespace std;
 // Constantes ACO
 #define POPULATION_SIZE 30
 #define DISCRETIZACAO 21
-#define MAX_ITERATIONS 1000
+#define MAX_ITERATIONS 8000
 #define PHEROMONE_RATE 0.1
-#define EVAPORATION_RATE 0.5
+#define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.75
 
 // Variáveis
@@ -223,8 +223,8 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "\nEAS (Melhor Solução):\n" << temp << endl;
 
-	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
-			clock()) << " ms" << endl;
+	cout << "\nTempo de execução (MGHP): "
+			<< calcular_tempo(time_start, clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;

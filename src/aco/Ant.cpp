@@ -39,7 +39,8 @@ void Ant::initSearch() {
 			tempRoute.push_back(1.0);
 		}
 		tempRoutes.push_back(tempRoute);
-		tempPosition.push_back(0);
+		// a busca inicia na posição 1
+		tempPosition.push_back(1);
 	}
 	this->routes = tempRoutes;
 	this->fitness = 0.0;
