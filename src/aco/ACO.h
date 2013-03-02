@@ -28,8 +28,8 @@ using std::vector;
 
 // Constantes
 #define INVALID -1
-#define ALFA 3
-#define BETA 1
+#define ALFA 1
+#define BETA 2
 
 class ACO {
 public:
@@ -73,10 +73,10 @@ public:
 	FuzzyRule* fuzzyRule5;
 
 	// Construtor
-	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
-			int maxIterationSize, double pheromoneRate, double evaporationRate,
-			double positiveConstant,
-			SistemaHidroeletrico* sistemaHidroeletrico);
+			ACO(int populationSize, int plantSize, int intervalSize,
+					int valueSize, int maxIterationSize, double pheromoneRate,
+					double evaporationRate, double positiveConstant,
+					SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();

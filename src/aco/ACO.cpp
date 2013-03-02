@@ -90,8 +90,8 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->thenSetPowerOf2 = new FuzzyRuleConsequent();
 	this->thenSetPowerOf2->addOutput(this->powerOf2);
 
-	this->fuzzyRule2 = new FuzzyRule(2, this->ifEASBaixa,
-			this->thenSetPowerOf2);
+	this->fuzzyRule2
+			= new FuzzyRule(2, this->ifEASBaixa, this->thenSetPowerOf2);
 	this->fuzzy->addFuzzyRule(fuzzyRule2);
 
 	this->ifEASMedia = new FuzzyRuleAntecedent();
@@ -100,8 +100,8 @@ ACO::ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
 	this->thenSetPowerOf3 = new FuzzyRuleConsequent();
 	this->thenSetPowerOf3->addOutput(this->powerOf3);
 
-	this->fuzzyRule3 = new FuzzyRule(3, this->ifEASMedia,
-			this->thenSetPowerOf3);
+	this->fuzzyRule3
+			= new FuzzyRule(3, this->ifEASMedia, this->thenSetPowerOf3);
 	this->fuzzy->addFuzzyRule(fuzzyRule3);
 
 	this->ifEASAlta = new FuzzyRuleAntecedent();
@@ -163,7 +163,7 @@ void ACO::calculateSolution() {
 		this->updatePheromone();
 		cout << "---------------------- " << iteration << endl;
 
-		if (iteration % 1000 == 0) {
+		if (iteration % 1 == 0) {
 			for (unsigned int p = 0; p < pheromoneLinks.size(); p++) {
 				vector<vector<double> > tempPheUsi;
 				tempPheUsi = pheromoneLinks[p];
@@ -177,6 +177,7 @@ void ACO::calculateSolution() {
 				}
 			}
 		}
+		//cin.get();
 		iteration++;
 	}
 	this->desnormalizarRotas();
@@ -197,8 +198,8 @@ void ACO::seedInitialPheromone() {
 		for (int i = 0; i < this->intervalSize; i++) {
 			vector<double> tempValueArray;
 			for (int v = 0; v < this->valueSize; v++) {
-				double r = conversor.get_random_number();
-				tempValueArray.push_back(r);
+				// double r = conversor.get_random_number();
+				tempValueArray.push_back(this->pheromoneRate);
 			}
 			tempIntervalArray.push_back(tempValueArray);
 		}
@@ -207,10 +208,12 @@ void ACO::seedInitialPheromone() {
 }
 
 void ACO::buildSolutions() {
-	double energiaArmazenadaSistemaMaxima =
-			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
-	double energiaArmazenadaSistemaMinima =
-			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+	double
+			energiaArmazenadaSistemaMaxima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double
+			energiaArmazenadaSistemaMinima =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
 
 	// Para cada formiga
 	for (int a = 0; a < this->populationSize; a++) {
@@ -223,9 +226,10 @@ void ACO::buildSolutions() {
 			while (ants.at(a)->getPosition(p) < (this->intervalSize - 1)) {
 				int position = ants.at(a)->getPosition(p);
 
-				double energiaArmazenadaSistema =
-						this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
-								position);
+				double
+						energiaArmazenadaSistema =
+								this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+										position);
 
 				double energiaArmazenadaSistemaNormalizada =
 						(energiaArmazenadaSistema
@@ -239,9 +243,11 @@ void ACO::buildSolutions() {
 
 				int posicaoHeuristica = this->getPosicao(volumeHeuristica);
 
+				// cout << "xH: " << volumeHeuristica << ", pH:" << posicaoHeuristica << endl;
+
 				double sugestoes[this->valueSize];
 				double val = 1.0;
-				double drop = 0.20;
+				double drop = 0.10;
 				for (int i = posicaoHeuristica; i < this->valueSize; i++) {
 					sugestoes[i] = val;
 					if (val > 0.0) {
@@ -272,8 +278,8 @@ void ACO::buildSolutions() {
 				// Calculando a probabilidade de transição
 				for (int v = 0; v < this->valueSize; v++) {
 					transition_probability[v] = (pow(
-							this->pheromoneLinks[p][position][v], ALFA)
-							* pow(sugestoes[v], BETA)) / link_rate_sum;
+							this->pheromoneLinks[p][position][v], ALFA) * pow(
+							sugestoes[v], BETA)) / link_rate_sum;
 				}
 
 				// Selecionando o próximo nó
@@ -303,16 +309,16 @@ double ACO::getValue(int position) {
 
 void ACO::checkBestSolution() {
 	if (this->ants.size() > 0) {
-		if (this->bestFitness == INVALID and this->worseFitness == INVALID) {
-			this->bestFitness = this->calculateFitness(
-					this->ants.at(0)->getRoutes());
-			this->bestRoutes = this->ants.at(0)->getRoutes();
+		// if (this->bestFitness == INVALID and this->worseFitness == INVALID) {
+		this->bestFitness = this->calculateFitness(
+				this->ants.at(0)->getRoutes());
+		this->bestRoutes = this->ants.at(0)->getRoutes();
 
-			this->worseFitness = this->calculateFitness(
-					this->ants.at(this->populationSize - 1)->getRoutes());
-			this->worseRoutes =
-					this->ants.at(this->populationSize - 1)->getRoutes();
-		}
+		this->worseFitness = this->calculateFitness(
+				this->ants.at(this->populationSize - 1)->getRoutes());
+		this->worseRoutes
+				= this->ants.at(this->populationSize - 1)->getRoutes();
+		// }
 		for (int a = 0; a < this->populationSize; a++) {
 			this->ants.at(a)->setFitness(
 					this->calculateFitness(this->ants.at(a)->getRoutes()));
@@ -368,18 +374,45 @@ void ACO::pheromoneEvaporates() {
 }
 
 void ACO::updatePheromone() {
+	double maxPheromone = 0.0;
+	double minPheromone = 1000000.0;
 	for (int a = 0; a < this->populationSize; a++) {
 		vector<vector<double> > routes = this->ants.at(a)->getRoutes();
 		for (int p = 0; p < this->plantSize; p++) {
 			for (int i = 0; i < this->intervalSize; i++) {
 				for (int v = 0; v < (this->valueSize - 1); v++) {
 					if (getPosicao(routes[p][i]) == v) {
-						this->pheromoneLinks[p][i][v] += (this->positiveConstant
-								/ (this->ants.at(a)->getFitness()
-										/ (250000.0 * this->intervalSize)));
+						double valor = (this->ants.at(a)->getFitness()
+								- this->bestFitness) / (this->worseFitness
+								- this->bestFitness);
+						this->pheromoneLinks[p][i][v]
+								+= (this->positiveConstant / 1 + valor);
 
 					}
 				}
+			}
+		}
+	}
+	for (int p = 0; p < this->plantSize; p++) {
+		for (int i = 0; i < this->intervalSize; i++) {
+			for (int v = 0; v < (this->valueSize - 1); v++) {
+				// Pegar valores máx e min de feromônio
+				if (this->pheromoneLinks[p][i][v] < minPheromone) {
+					minPheromone = this->pheromoneLinks[p][i][v];
+				}
+
+				if (this->pheromoneLinks[p][i][v] > maxPheromone) {
+					maxPheromone = this->pheromoneLinks[p][i][v];
+				}
+			}
+		}
+	}
+	// Normalizando o feromônio
+	for (int p = 0; p < this->plantSize; p++) {
+		for (int i = 0; i < this->intervalSize; i++) {
+			for (int v = 0; v < (this->valueSize - 1); v++) {
+				this->pheromoneLinks[p][i][v] = (this->pheromoneLinks[p][i][v]
+						- minPheromone) / (maxPheromone - minPheromone);
 			}
 		}
 	}

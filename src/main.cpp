@@ -22,15 +22,15 @@
 using namespace std;
 
 // Constantes POSH
-#define INTERVALOS 61
+#define INTERVALOS 13
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 100
-#define DISCRETIZACAO 31
-#define MAX_ITERATIONS 15000
-#define PHEROMONE_RATE 0.1
-#define EVAPORATION_RATE 0.5
+#define POPULATION_SIZE 50
+#define DISCRETIZACAO 17
+#define MAX_ITERATIONS 1000
+#define PHEROMONE_RATE 1
+#define EVAPORATION_RATE 0.05
 #define POSITIVE_CONTS 1
 
 // Variáveis
@@ -223,8 +223,8 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "\nEAS (Melhor Solução):\n" << temp << endl;
 
-	cout << "\nTempo de execução (MGHP): "
-			<< calcular_tempo(time_start, clock()) << " ms" << endl;
+	cout << "\nTempo de execução (MGHP): " << calcular_tempo(time_start,
+			clock()) << " ms" << endl;
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;
