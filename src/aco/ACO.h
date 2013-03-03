@@ -11,6 +11,7 @@
 // Importando bibliotecas necessárias
 #include <iostream> // Biblioteca  padrão de I/O
 #include <vector>
+#include <string> // Para trabalhar fácil com strings
 #include "Ant.h"
 #include "../ferramentas/Conversor.h"
 #include "../poesh/SistemaHidroeletrico.h"
@@ -29,7 +30,9 @@ using std::vector;
 // Constantes
 #define INVALID -1
 #define ALFA 1
-#define BETA 2
+#define BETA 1
+#define MIN_PHEROMONE 0.01
+#define MAX_PHEROMONE 1.0
 
 class ACO {
 public:
@@ -73,16 +76,18 @@ public:
 	FuzzyRule* fuzzyRule5;
 
 	// Construtor
-			ACO(int populationSize, int plantSize, int intervalSize,
-					int valueSize, int maxIterationSize, double pheromoneRate,
-					double evaporationRate, double positiveConstant,
-					SistemaHidroeletrico* sistemaHidroeletrico);
+	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
+			int maxIterationSize, double pheromoneRate, double evaporationRate,
+			double positiveConstant,
+			SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();
 
 private:
 	// Variáveis privadas
+	int iteration;
+	int bestRouteAt;
 	int populationSize;
 	int plantSize;
 	int intervalSize;
