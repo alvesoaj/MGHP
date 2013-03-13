@@ -29,7 +29,7 @@ using std::vector;
 
 // Constantes
 #define INVALID -1
-#define ALFA 3
+#define ALFA 2
 #define BETA 1
 #define MIN_PHEROMONE 0.01
 #define MAX_PHEROMONE 1.0
