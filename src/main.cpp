@@ -26,12 +26,12 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 35
-#define DISCRETIZACAO 100
-#define MAX_ITERATIONS 15000
+#define POPULATION_SIZE 100
+#define DISCRETIZACAO 10
+#define MAX_ITERATIONS 1000
 #define PHEROMONE_RATE 0.1
-#define EVAPORATION_RATE 0.10
-#define POSITIVE_CONTS 0.75
+#define EVAPORATION_RATE 0.25
+#define POSITIVE_CONTS 0.01
 
 // Variáveis
 Conversor conversor;

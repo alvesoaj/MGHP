@@ -189,6 +189,7 @@ void ACO::calculateSolution() {
 		this->checkBestSolution();
 		this->pheromoneEvaporates();
 		this->updatePheromone();
+		this->resetBestRoute();
 
 		// cin.get();
 		iteration++;
@@ -265,6 +266,7 @@ void ACO::buildSolutions() {
 				double sugestoes[this->valueSize];
 				double val = 1.0;
 				double drop = val / this->valueSize;
+				// double drop = 0.20;
 				for (int i = posicaoHeuristica; i < this->valueSize; i++) {
 					sugestoes[i] = val;
 					if (val > 0.0) {
@@ -469,6 +471,23 @@ void ACO::desnormalizarRotas() {
 	}
 }
 
+void ACO::resetBestRoute() {
+	vector<vector<double> > desnormalizedRoutes;
+	for (int p = 0; p < this->plantSize; p++) {
+		vector<double> tempRoute;
+		double volumeMinimo =
+				this->sistemaHidroeletrico->getVolumeMinimoOperativoUsina(p);
+		double volumeMaximo =
+				this->sistemaHidroeletrico->getVolumeMaximoOperativoUsina(p);
+		for (int i = 0; i < this->intervalSize; i++) {
+			double volume = this->desnormalizarVolume(bestRoutes[p][i],
+					volumeMinimo, volumeMaximo);
+			tempRoute.push_back(volume);
+		}
+	}
+	this->sistemaHidroeletrico->setVolumes(desnormalizedRoutes);
+}
+
 double ACO::calcularVolumeHeuristica(int usinaIndice,
 		double energiaArmazenadaSistemaNormalizada) {
 	double produtoSoma = 0.0;
@@ -478,30 +497,38 @@ double ACO::calcularVolumeHeuristica(int usinaIndice,
 	this->fuzzy->fuzzify();
 	// this->fuzzy->defuzzify(1);
 
+	// cout << "EAS: " << energiaArmazenadaSistemaNormalizada << endl;
+	// cout << "U: " << usinaIndice << endl;
+
+	// cout << "p1: " << this->powerOf1->getPertinence() << endl;
 	if (this->powerOf1->getPertinence() > 0) {
 		double saida = this->a[usinaIndice][0]
 				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][0];
 		produtoSoma += this->powerOf1->getPertinence() * saida;
 		pertinenciaSoma += this->powerOf1->getPertinence();
 	}
+	// cout << "p2: " << this->powerOf2->getPertinence() << endl;
 	if (this->powerOf2->getPertinence() > 0) {
 		double saida = this->a[usinaIndice][1]
 				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][1];
 		produtoSoma += this->powerOf2->getPertinence() * saida;
 		pertinenciaSoma += this->powerOf2->getPertinence();
 	}
+	// cout << "p3: " << this->powerOf3->getPertinence() << endl;
 	if (this->powerOf3->getPertinence() > 0) {
 		double saida = this->a[usinaIndice][2]
 				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][2];
 		produtoSoma += this->powerOf3->getPertinence() * saida;
 		pertinenciaSoma += this->powerOf3->getPertinence();
 	}
+	// cout << "p4: " << this->powerOf4->getPertinence() << endl;
 	if (this->powerOf4->getPertinence() > 0) {
 		double saida = this->a[usinaIndice][3]
 				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][3];
 		produtoSoma += this->powerOf4->getPertinence() * saida;
 		pertinenciaSoma += this->powerOf4->getPertinence();
 	}
+	// cout << "p5: " << this->powerOf5->getPertinence() << endl;
 	if (this->powerOf5->getPertinence() > 0) {
 		double saida = this->a[usinaIndice][4]
 				* energiaArmazenadaSistemaNormalizada + b[usinaIndice][4];
@@ -509,7 +536,11 @@ double ACO::calcularVolumeHeuristica(int usinaIndice,
 		pertinenciaSoma += this->powerOf5->getPertinence();
 	}
 
-	return produtoSoma / pertinenciaSoma;
+	double response = produtoSoma / pertinenciaSoma;
+	// cout << "res: " << response << endl;
+	// cin.get();
+
+	return response;
 }
 
 double ACO::getValue(int position) {

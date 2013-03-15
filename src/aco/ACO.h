@@ -32,7 +32,7 @@ using std::vector;
 #define ALFA 2
 #define BETA 1
 #define MIN_PHEROMONE 0.01
-#define MAX_PHEROMONE 1.0
+#define MAX_PHEROMONE 100.0
 
 class ACO {
 public:
@@ -76,10 +76,10 @@ public:
 	FuzzyRule* fuzzyRule5;
 
 	// Construtor
-	ACO(int populationSize, int plantSize, int intervalSize, int valueSize,
-			int maxIterationSize, double pheromoneRate, double evaporationRate,
-			double positiveConstant,
-			SistemaHidroeletrico* sistemaHidroeletrico);
+			ACO(int populationSize, int plantSize, int intervalSize,
+					int valueSize, int maxIterationSize, double pheromoneRate,
+					double evaporationRate, double positiveConstant,
+					SistemaHidroeletrico* sistemaHidroeletrico);
 
 	// Métodos públicos
 	void calculateSolution();
@@ -114,6 +114,7 @@ private:
 	double desnormalizarVolume(double valor, double volumeMinimo,
 			double volumeMaximo);
 	void desnormalizarRotas();
+	void resetBestRoute();
 	double calcularVolumeHeuristica(int usinaIndice,
 			double energiaArmazenadaSistemaNormalizada);
 	int getPosicao(double value);
