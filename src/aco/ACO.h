@@ -32,15 +32,17 @@ using std::vector;
 #define ALFA 2
 #define BETA 1
 #define MIN_PHEROMONE 0.01
-#define MAX_PHEROMONE 100.0
+#define MAX_PHEROMONE 1.0
 
 class ACO {
 public:
 	// Variáveis públicas
 	double bestFitness;
+	double iteractionBestFitness;
 	vector<vector<double> > bestRoutes;
 	int indexBestAnt;
 	double worseFitness;
+	double iteractionWorseFitness;
 	vector<vector<double> > worseRoutes;
 	Fuzzy* fuzzy;
 	FuzzyInput* valorEAS;
