@@ -21,7 +21,7 @@ using namespace std;
 
 // Constantes
 #define INVALID -1
-#define ALFA 2
+#define ALFA 1
 #define BETA 1
 #define MIN_PHEROMONE 0.01
 #define MAX_PHEROMONE 1.0

@@ -13,12 +13,15 @@ BCO::BCO(int populationSize, int maxNumCycles, int plantSize, int intervalSize,
 	this->maxNumCycles = maxNumCycles;
 	this->plantSize = plantSize;
 	this->intervalSize = intervalSize;
+	this->intervalToModify = (intervalSize / 10) + 1;
 	this->sistemaHidroeletrico = sistemaHidroeletrico;
 
 	this->foodSourcesSize = this->populationSize / 2;
 	this->limit = (this->populationSize * this->intervalSize) / 2;
 
 	this->bestSolutionAt = INVALID;
+
+	this->sugeno = Sugeno();
 }
 
 // Métodos públicos
@@ -28,7 +31,9 @@ void BCO::calculateSolution() {
 	this->initializeSources();
 	// Iniciar ciclos de busca
 	while (cycle < this->maxNumCycles) {
-		cout << "---------------------- " << cycle << endl;
+		if (cycle % 100 == 0) {
+			cout << "---------------------- " << cycle << endl;
+		}
 		sendEmployedBees();
 		calculateProbabilities();
 		sendOnlookerBees();
@@ -36,7 +41,7 @@ void BCO::calculateSolution() {
 		calculateAllFitness();
 		getBestSource();
 
-		if (cycle % 100 == 0) {
+		if (cycle % 1000 == 0) {
 			string temp = "Ciclo(" + conversor.double_para_string(cycle)
 					+ ")->\n";
 			for (int p = 0; p < this->plantSize; p++) {
@@ -132,36 +137,63 @@ void BCO::sendEmployedBees() {
 	int neighbour = 0;
 	double r = 0.0;
 
+	double energiaArmazenadaSistemaMaxima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double energiaArmazenadaSistemaMinima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+
 	for (int i = 0; i < this->foodSourcesSize; i++) {
-		r = conversor.get_random_number();
-		int param_to_modify = (int) (r * this->intervalSize);
-
-		/* Selecionando uma outra solução para servir de influênica */
-		do {
-			r = conversor.get_random_number();
-			neighbour = (int) (r * this->foodSourcesSize);
-		} while (neighbour == i); // Impedindo que seja a mesma solução
-
 		/* copiar solução atual */
 		newSolutions = this->sources[i]->solutions;
 
-		for (int p = 0; p < this->plantSize; p++) {
-			/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
+		for (int j = 0; j < this->intervalToModify; j++) {
 			r = conversor.get_random_number();
-			double newValue =
-					newSolutions[p][param_to_modify]
-							+ (newSolutions[p][param_to_modify]
-									- this->sources[neighbour]->solutions[p][param_to_modify])
-									* (r - 0.5) * 2;
+			int param_to_modify = (int) (r * this->intervalSize);
 
-			if (newValue > 1) {
-				newValue = 1.0;
-			}
-			if (newValue < 0) {
-				newValue = 0.0;
-			}
+			/* Selecionando uma outra solução para servir de influênica */
+			/*
+			 do {
+			 r = conversor.get_random_number();
+			 neighbour = (int) (r * this->foodSourcesSize);
+			 } while (neighbour == i); // Impedindo que seja a mesma solução
+			 */
 
-			newSolutions[p][param_to_modify] = newValue;
+			double energiaArmazenadaSistema =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+							param_to_modify);
+
+			// cout << "EAS: " << energiaArmazenadaSistema << endl;
+
+			double energiaArmazenadaSistemaNormalizada =
+					(energiaArmazenadaSistema - energiaArmazenadaSistemaMinima)
+							/ (energiaArmazenadaSistemaMaxima
+
+							- energiaArmazenadaSistemaMinima);
+
+			// cout << "EASn: " << energiaArmazenadaSistemaNormalizada << endl;
+
+			for (int p = 0; p < this->plantSize; p++) {
+				double volumeHeuristica = sugeno.calcularVolumeHeuristica(p,
+						energiaArmazenadaSistemaNormalizada);
+
+				// cout << "H: " << volumeHeuristica << endl;
+				// cout << "nsV: " << newSolutions[p][param_to_modify] << endl;
+
+				/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
+				r = conversor.get_random_number();
+				double newValue = newSolutions[p][param_to_modify]
+						+ (volumeHeuristica - newSolutions[p][param_to_modify])
+								* (r - 0.5);
+
+				if (newValue > 1) {
+					newValue = 1.0;
+				}
+				if (newValue < 0) {
+					newValue = 0.0;
+				}
+
+				newSolutions[p][param_to_modify] = newValue;
+			}
 		}
 
 		double newSolutionFitness = this->calculateFitness(newSolutions);
@@ -194,42 +226,74 @@ void BCO::sendOnlookerBees() {
 	int neighbour = 0;
 	double r = 0.0;
 
+	double energiaArmazenadaSistemaMaxima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double energiaArmazenadaSistemaMinima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+
 	while (transitorIndex < this->foodSourcesSize) {
-		r = conversor.get_random_number();
-		/* Escolhendo uma fonte de comida, depende da probabilidade */
-		// cout << "r: " << r << ", p: " << this->sources[foodSourceIndex]->getProbabilitie() << endl;
-		if (this->sources[foodSourceIndex]->getProbabilitie() > r) {
-			transitorIndex++;
+		/* copiar solução atual */
+		newSolutions = this->sources[foodSourceIndex]->solutions;
 
+		for (int j = 0; j < this->intervalToModify; j++) {
 			r = conversor.get_random_number();
-			int param_to_modify = (int) (r * this->intervalSize);
+			/* Escolhendo uma fonte de comida, depende da probabilidade */
+			// cout << "r: " << r << ", p: " << this->sources[foodSourceIndex]->getProbabilitie() << endl;
+			if (this->sources[foodSourceIndex]->getProbabilitie() > r) {
+				transitorIndex++;
 
-			/* Selecionando uma outra solução para servir de influênica */
-			do {
 				r = conversor.get_random_number();
-				neighbour = (int) (r * this->foodSourcesSize);
-			} while (neighbour == foodSourceIndex); // Impedindo que seja a mesma solução
-
-			/* copiar solução atual */
-			newSolutions = this->sources[foodSourceIndex]->solutions;
-
-			for (int p = 0; p < this->plantSize; p++) {
-				/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
-				r = conversor.get_random_number();
-				double newValue =
-						newSolutions[p][param_to_modify]
-								+ (newSolutions[p][param_to_modify]
-										- this->sources[neighbour]->solutions[p][param_to_modify])
-										* (r - 0.5) * 2;
-
-				if (newValue > 1) {
-					newValue = 1.0;
-				}
-				if (newValue < 0) {
-					newValue = 0.0;
+				int param_to_modify = (int) (r * this->intervalSize);
+				if (param_to_modify == 0) {
+					param_to_modify = 1;
 				}
 
-				newSolutions[p][param_to_modify] = newValue;
+				/* Selecionando uma outra solução para servir de influênica */
+				/*
+				 do {
+				 r = conversor.get_random_number();
+				 neighbour = (int) (r * this->foodSourcesSize);
+				 } while (neighbour == foodSourceIndex); // Impedindo que seja a mesma solução
+				 */
+
+				double energiaArmazenadaSistema =
+						this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+								param_to_modify);
+
+				// cout << "EAS: " << energiaArmazenadaSistema << endl;
+
+				double energiaArmazenadaSistemaNormalizada =
+						(energiaArmazenadaSistema
+								- energiaArmazenadaSistemaMinima)
+								/ (energiaArmazenadaSistemaMaxima
+
+								- energiaArmazenadaSistemaMinima);
+
+				// cout << "EASn: " << energiaArmazenadaSistemaNormalizada << endl;
+
+				for (int p = 0; p < this->plantSize; p++) {
+					double volumeHeuristica = sugeno.calcularVolumeHeuristica(p,
+							energiaArmazenadaSistemaNormalizada);
+
+					// cout << "H: " << volumeHeuristica << endl;
+					// cout << "nsV: " << newSolutions[p][param_to_modify] << endl;
+
+					/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
+					r = conversor.get_random_number();
+					double newValue = newSolutions[p][param_to_modify]
+							+ (volumeHeuristica
+									- newSolutions[p][param_to_modify])
+									* (r * 0.5);
+
+					if (newValue > 1) {
+						newValue = 1.0;
+					}
+					if (newValue < 0) {
+						newValue = 0.0;
+					}
+
+					newSolutions[p][param_to_modify] = newValue;
+				}
 			}
 
 			double newSolutionFitness = this->calculateFitness(newSolutions);

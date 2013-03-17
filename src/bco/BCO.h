@@ -41,12 +41,14 @@ private:
 	int maxNumCycles;
 	int plantSize;
 	int intervalSize;
+	int intervalToModify;
 	int foodSourcesSize;
 	int limit;
 	int upperBound;
 	int lowerBound;
 	int bestSolutionAt;
 	Conversor conversor;
+	Sugeno sugeno;
 	vector<Source*> sources;
 	SistemaHidroeletrico* sistemaHidroeletrico;
 

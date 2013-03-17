@@ -32,10 +32,10 @@ using namespace std;
 #define MAX_ITERATIONS 1000
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.25
-#define POSITIVE_CONTS 0.01
+#define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 8
-#define MAX_NUM_CYCLES 5000
+#define BCO_POPULATION_SIZE 25
+#define MAX_NUM_CYCLES 100000
 
 // Variáveis
 Conversor conversor;
@@ -171,9 +171,10 @@ int main(int argc, char *argv[]) {
 
 	// --------------------------------------------------------------------------  ACO
 	/*
+	 string tec = "ACO";
 	 ACO aco = ACO(ACO_POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
 	 DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
-	 POSITIVE_CONTS, &sistemaHidroeletrico);
+	 POSITIVE_CONTS, sistemaHidroeletrico);
 
 	 aco.calculateSolution();
 
@@ -183,6 +184,7 @@ int main(int argc, char *argv[]) {
 	 pioresVolumes = aco.worseRoutes;
 	 */
 	// --------------------------------------------------------------------------  BCO
+	string tec = "BCO";
 	BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
 			INTERVALOS, sistemaHidroeletrico);
 
@@ -194,7 +196,7 @@ int main(int argc, char *argv[]) {
 	pioresVolumes = bco.worseSolutions;
 
 	// --------------------------------------------------------------------------
-	cout << "\nPior Custo (ACO): " << piorCusto << endl;
+	cout << "\nPior Custo (" + tec + "): " << piorCusto << endl;
 
 	string temp = "";
 	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
@@ -207,12 +209,12 @@ int main(int argc, char *argv[]) {
 		temp += "\n";
 	}
 
-	cout << "Pior rota (ACO):\n" << temp << endl;
+	cout << "Pior rota (" + tec + "):\n" << temp << endl;
 
 	// sistemaHidroeletrico->setVolumes(aco.worseRoutes);
 	// sistemaHidroeletrico->calcularCustoTotal();
 
-	cout << "Melhor Custo (ACO): " << melhorCusto << endl;
+	cout << "Melhor Custo (" + tec + "): " << melhorCusto << endl;
 
 	temp = "";
 	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
@@ -225,7 +227,7 @@ int main(int argc, char *argv[]) {
 		temp += "\n";
 	}
 
-	cout << "Melhor rota (ACO):\n" << temp << endl;
+	cout << "Melhor rota (" + tec + "):\n" << temp << endl;
 
 	sistemaHidroeletrico->setVolumes(melhoresVolumes);
 	sistemaHidroeletrico->calcularCustoTotal();
