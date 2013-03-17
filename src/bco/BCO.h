@@ -63,6 +63,7 @@ private:
 	void calculateProbabilities();
 	void sendOnlookerBees();
 	void sendScoutBees();
+	void resetBestRoute();
 	void desnormalizarRotasFinais();
 };
 

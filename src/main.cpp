@@ -34,8 +34,8 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 25
-#define MAX_NUM_CYCLES 100000
+#define BCO_POPULATION_SIZE 200
+#define MAX_NUM_CYCLES 10000
 
 // Variáveis
 Conversor conversor;
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 	emborcacao->setCoeficientePerdaCargaHidraulica(0.0127);
 	emborcacao->setCoeficienteProdutibilidadeEspecifica(0.008731);
 
-	// Itubiara
+	// Itumbiara
 	HidroeletricaReservatorio* itumbiara = new HidroeletricaReservatorio(1,
 			"Itumbiara");
 
