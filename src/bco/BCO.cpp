@@ -13,7 +13,7 @@ BCO::BCO(int populationSize, int maxNumCycles, int plantSize, int intervalSize,
 	this->maxNumCycles = maxNumCycles;
 	this->plantSize = plantSize;
 	this->intervalSize = intervalSize;
-	this->intervalToModify = (intervalSize / 10) + 1;
+	this->intervalToModify = (intervalSize / 5) + 1;
 	this->sistemaHidroeletrico = sistemaHidroeletrico;
 
 	this->foodSourcesSize = this->populationSize / 2;
