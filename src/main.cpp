@@ -18,6 +18,7 @@
 #include "poesh/HidroeletricaReservatorio.h"
 #include "ferramentas/Conversor.h"
 #include "aco/ACO.h"
+#include "bco/BCO.h"
 
 using namespace std;
 
@@ -26,17 +27,24 @@ using namespace std;
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
-#define POPULATION_SIZE 10
-#define DISCRETIZACAO 80
-#define MAX_ITERATIONS 50000
+#define ACO_POPULATION_SIZE 10
+#define DISCRETIZACAO 30
+#define MAX_ITERATIONS 1000
 #define PHEROMONE_RATE 0.1
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.01
+// Constantes BCO
+#define BCO_POPULATION_SIZE 8
+#define MAX_NUM_CYCLES 5000
 
 // Variáveis
 Conversor conversor;
 vector<vector<double> > volumes;
 vector<vector<double> > vazoes;
+double melhorCusto;
+double piorCusto;
+vector<vector<double> > melhoresVolumes;
+vector<vector<double> > pioresVolumes;
 
 string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
@@ -44,6 +52,9 @@ void carregar_valores();
 
 int main(int argc, char *argv[]) {
 	clock_t time_start = clock();
+
+	// Inicializando o gerador de números randômicos com um seed temporal
+	srand(time(0));
 
 	// Carregar arquivos
 	carregar_valores();
@@ -158,18 +169,37 @@ int main(int argc, char *argv[]) {
 
 	// cin.get();
 
-	ACO* aco = new ACO(POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
-			DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
-			POSITIVE_CONTS, sistemaHidroeletrico);
+	// --------------------------------------------------------------------------  ACO
+	/*
+	 ACO aco = ACO(ACO_POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
+	 DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
+	 POSITIVE_CONTS, &sistemaHidroeletrico);
 
-	aco->calculateSolution();
+	 aco.calculateSolution();
 
-	cout << "\nPior Custo (ACO): " << aco->worseFitness << endl;
+	 melhorCusto = aco.bestFitness;
+	 melhoresVolumes = aco.bestRoutes;
+	 piorCusto = aco.worseFitness;
+	 pioresVolumes = aco.worseRoutes;
+	 */
+	// --------------------------------------------------------------------------  BCO
+	BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
+			INTERVALOS, sistemaHidroeletrico);
+
+	bco.calculateSolution();
+
+	melhorCusto = bco.bestFitness;
+	melhoresVolumes = bco.bestSolutions;
+	piorCusto = bco.worseFitness;
+	pioresVolumes = bco.worseSolutions;
+
+	// --------------------------------------------------------------------------
+	cout << "\nPior Custo (ACO): " << piorCusto << endl;
 
 	string temp = "";
 	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 		for (int i = 0; i < INTERVALOS; i++) {
-			temp += number_to_String(aco->worseRoutes[u][i]);
+			temp += number_to_String(pioresVolumes[u][i]);
 			if (i < (INTERVALOS - 1)) {
 				temp += ", ";
 			}
@@ -179,15 +209,15 @@ int main(int argc, char *argv[]) {
 
 	cout << "Pior rota (ACO):\n" << temp << endl;
 
-	// sistemaHidroeletrico->setVolumes(aco->worseRoutes);
+	// sistemaHidroeletrico->setVolumes(aco.worseRoutes);
 	// sistemaHidroeletrico->calcularCustoTotal();
 
-	cout << "Melhor Custo (ACO): " << aco->bestFitness << endl;
+	cout << "Melhor Custo (ACO): " << melhorCusto << endl;
 
 	temp = "";
 	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 		for (int i = 0; i < INTERVALOS; i++) {
-			temp += number_to_String(aco->bestRoutes[u][i]);
+			temp += number_to_String(melhoresVolumes[u][i]);
 			if (i < (INTERVALOS - 1)) {
 				temp += ", ";
 			}
@@ -197,7 +227,7 @@ int main(int argc, char *argv[]) {
 
 	cout << "Melhor rota (ACO):\n" << temp << endl;
 
-	sistemaHidroeletrico->setVolumes(aco->bestRoutes);
+	sistemaHidroeletrico->setVolumes(melhoresVolumes);
 	sistemaHidroeletrico->calcularCustoTotal();
 
 	vector<double> geracoes = sistemaHidroeletrico->getGeracoesTotais();

@@ -8,8 +8,6 @@
 #include "Conversor.h"
 
 Conversor::Conversor() {
-	// Inicializando o gerador de números randômicos com um seed temporal
-	srand(time(0));
 }
 
 std::string Conversor::double_para_string(double d) {

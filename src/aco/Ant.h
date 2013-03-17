@@ -10,7 +10,7 @@
 
 // Importando bibliotecas necessárias
 #include <vector>
-using std::vector;
+using namespace std;
 
 class Ant {
 public:
