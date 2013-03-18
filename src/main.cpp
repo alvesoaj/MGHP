@@ -23,7 +23,7 @@
 using namespace std;
 
 // Constantes POSH
-#define INTERVALOS 13
+#define INTERVALOS 61
 #define DEMANDA 3472 // 3472 MW
 #define QUANTIDADE_USINAS 2
 // Constantes ACO
@@ -35,7 +35,7 @@ using namespace std;
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
 #define BCO_POPULATION_SIZE 200
-#define MAX_NUM_CYCLES 10000
+#define MAX_NUM_CYCLES 100000
 
 // Variáveis
 Conversor conversor;
