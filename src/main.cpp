@@ -34,8 +34,8 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 50
-#define MAX_NUM_CYCLES 1000
+#define BCO_POPULATION_SIZE 200
+#define MAX_NUM_CYCLES 5000
 
 // Variáveis
 Conversor conversor;
