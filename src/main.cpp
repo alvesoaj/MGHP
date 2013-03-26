@@ -189,8 +189,17 @@ int main(int argc, char *argv[]) {
 	 pioresVolumes = aco.worseRoutes;
 	 */
 
+	ofstream myfile;
+
+	string file_name = "assets/teste-" + number_to_String(NUMBER_OF_TESTS)
+			+ "_" + number_to_String(BCO_POPULATION_SIZE) + "abelhas-"
+			+ number_to_String(MAX_NUM_CYCLES) + "ciclos.txt";
+
+	myfile.open(file_name.c_str(), ios::out);
+
 	for (int nt = 0; nt < NUMBER_OF_TESTS; nt++) {
 		cout << "----- Teste: " << nt << endl;
+		myfile << "----- Teste: " << nt << endl;
 
 		// --------------------------------------------------------------------------  BCO
 		string tec = "BCO";
@@ -208,8 +217,13 @@ int main(int argc, char *argv[]) {
 		standard_deviation = bco.standard_deviation;
 
 		// --------------------------------------------------------------------------
-		cout << "\nMedia: " << average << ", Variância: " << variance
-				<< ", Desvio Padrão: " << standard_deviation << "\n" << endl;
+		myfile << setprecision(11) << "Melhor sulução encontrada em: "
+				<< bco.bestSolutionAt << endl;
+
+		// --------------------------------------------------------------------------
+		myfile << setprecision(11) << "\nMedia: " << average << ", Variância: "
+				<< variance << ", Desvio Padrão: " << standard_deviation
+				<< "\n" << endl;
 
 		// --------------------------------------------------------------------------
 		// cout << "\nPior Custo (" + tec + "): " << piorCusto << endl;
@@ -239,7 +253,7 @@ int main(int argc, char *argv[]) {
 		}
 		temp += "\n";
 
-		cout << "Evolução melhores custos (" + tec + "):\n" << temp << endl;
+		myfile << "Evolução melhores custos (" + tec + "):\n" << temp << endl;
 
 		// --------------------------------------------------------------------------
 
@@ -263,8 +277,8 @@ int main(int argc, char *argv[]) {
 			temp += "\n";
 		}
 
-		cout << "Gerações Individuais (Melhor Solução) (" + tec + "):\n" << temp
-				<< endl;
+		myfile << "Gerações Individuais (Melhor Solução) (" + tec + "):\n"
+				<< temp << endl;
 
 		// --------------------------------------------------------------------------
 		vector<double> geracoes = sistemaHidroeletrico->getGeracoes();
@@ -276,7 +290,7 @@ int main(int argc, char *argv[]) {
 				temp += ", ";
 			}
 		}
-		cout << "Gerações (Melhor Solução) (" + tec + "):\n" << temp << endl;
+		myfile << "Gerações (Melhor Solução) (" + tec + "):\n" << temp << endl;
 
 		// --------------------------------------------------------------------------
 		vector<double> geracoesComplementares =
@@ -289,7 +303,7 @@ int main(int argc, char *argv[]) {
 				temp += ", ";
 			}
 		}
-		cout << "\nGerações Complementares (Melhor Solução) (" + tec + "):\n"
+		myfile << "\nGerações Complementares (Melhor Solução) (" + tec + "):\n"
 				<< temp << endl;
 
 		// --------------------------------------------------------------------------
@@ -303,7 +317,7 @@ int main(int argc, char *argv[]) {
 				temp += res;
 			}
 		}
-		cout << "\nEAS (Melhor Solução) (" + tec + "):\n" << temp << endl;
+		myfile << "\nEAS (Melhor Solução) (" + tec + "):\n" << temp << endl;
 
 		// --------------------------------------------------------------------------
 		vector<vector<double> > vazoesDefluente =
@@ -322,8 +336,8 @@ int main(int argc, char *argv[]) {
 			temp += "\n";
 		}
 
-		cout << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n" << temp
-				<< endl;
+		myfile << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n"
+				<< temp << endl;
 
 		// --------------------------------------------------------------------------
 		temp = "";
@@ -341,7 +355,7 @@ int main(int argc, char *argv[]) {
 			temp += "\n";
 		}
 
-		cout << "Volume Médio (Melhor Solução) (" + tec + "):\n" << temp
+		myfile << "Volume Médio (Melhor Solução) (" + tec + "):\n" << temp
 				<< endl;
 
 		// --------------------------------------------------------------------------
@@ -358,17 +372,19 @@ int main(int argc, char *argv[]) {
 			temp += "\n";
 		}
 
-		cout << "Volume Final (Melhor Solução) (" + tec + "):\n" << temp
+		myfile << "Volume Final (Melhor Solução) (" + tec + "):\n" << temp
 				<< endl;
 
 		// --------------------------------------------------------------------------
 
-		cout << "Melhor Custo (" + tec + "): " << melhorCusto << endl;
+		myfile << "Melhor Custo (" + tec + "): " << melhorCusto << endl;
 	}
 
 	// --------------------------------------------------------------------------
-	cout << "\nTempo de execução (MGHP): "
+	myfile << setprecision(11) << "\nTempo de execução (MGHP): "
 			<< calcular_tempo(time_start, clock()) << " ms" << endl;
+
+	myfile.close();
 
 	//cin.get(); // aguarda por um novo caracter para então encerrar a aplicação
 	return 0;

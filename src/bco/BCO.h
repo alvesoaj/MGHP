@@ -28,6 +28,7 @@ public:
 	vector<vector<double> > worseSolutions;
 	double bestFitness;
 	double worseFitness;
+	int bestSolutionAt;
 
 	vector<double> bestFitnessArray;
 
@@ -53,7 +54,6 @@ private:
 	int limit;
 	int upperBound;
 	int lowerBound;
-	int bestSolutionAt;
 	// Objects
 	Conversor conversor;
 	Sugeno sugeno;
