@@ -36,9 +36,9 @@ using namespace std;
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
 #define BCO_POPULATION_SIZE 30
-#define MAX_NUM_CYCLES 1000
+#define MAX_NUM_CYCLES 5000
 // Constantes PROGRAMA
-#define NUMBER_OF_TESTS 30
+#define NUMBER_OF_TESTS 20
 
 // Variáveis
 Conversor conversor;
