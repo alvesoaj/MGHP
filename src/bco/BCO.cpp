@@ -21,6 +21,10 @@ BCO::BCO(int populationSize, int maxNumCycles, int plantSize, int intervalSize,
 
 	this->bestSolutionAt = INVALID;
 
+	this->average = 0.0;
+	this->variance = 0.0;
+	this->standard_deviation = 0.0;
+
 	this->sugeno = Sugeno();
 }
 
@@ -41,26 +45,29 @@ void BCO::calculateSolution() {
 		calculateAllFitness();
 		getBestSource();
 
-		if (cycle % 1000 == 0) {
-			string temp = "Ciclo(" + conversor.double_para_string(cycle)
-					+ ")->\n";
-			for (int p = 0; p < this->plantSize; p++) {
-				temp += "\t U(" + conversor.double_para_string(p) + "): ";
-				for (int i = 0; i < this->intervalSize; i++) {
-					temp += conversor.double_para_string(
-							this->bestSolutions[p][i]);
-					if (i < this->intervalSize - 1) {
-						temp += ", ";
-					}
-				}
-				temp += "\n";
-			}
-			cout << temp << endl;
-		}
+		/*
+		 if (cycle % 1000 == 0) {
+		 string temp = "Ciclo(" + conversor.double_para_string(cycle)
+		 + ")->\n";
+		 for (int p = 0; p < this->plantSize; p++) {
+		 temp += "\t U(" + conversor.double_para_string(p) + "): ";
+		 for (int i = 0; i < this->intervalSize; i++) {
+		 temp += conversor.double_para_string(
+		 this->bestSolutions[p][i]);
+		 if (i < this->intervalSize - 1) {
+		 temp += ", ";
+		 }
+		 }
+		 temp += "\n";
+		 }
+		 cout << temp << endl;
+		 }
+		 */
 
 		cycle++;
 		// cin.get();
 	}
+	this->calculateMetrics();
 	cout << "Melhor sulução encontrada em: " << this->bestSolutionAt << endl;
 	this->desnormalizarRotasFinais();
 }
@@ -83,7 +90,11 @@ void BCO::initializeSources() {
 }
 
 void BCO::getBestSource() {
+	double iterationBestFitness = this->sources[0]->getFitness();
 	for (int index = 0; index < this->foodSourcesSize; index++) {
+		if (this->sources[index]->getFitness() < iterationBestFitness) {
+			iterationBestFitness = this->sources[index]->getFitness();
+		}
 		if (this->sources[index]->getFitness() < this->bestFitness) {
 			this->bestSolutions = this->sources[index]->solutions;
 			this->bestFitness = this->sources[index]->getFitness();
@@ -93,6 +104,7 @@ void BCO::getBestSource() {
 			this->worseFitness = this->sources[index]->getFitness();
 		}
 	}
+	bestFitnessArray.push_back(iterationBestFitness);
 }
 
 double BCO::calculateFitness(vector<vector<double> > solutions) {
@@ -379,4 +391,21 @@ void BCO::desnormalizarRotasFinais() {
 			this->worseSolutions[p][i] = volume;
 		}
 	}
+}
+
+void BCO::calculateMetrics() {
+	// Calcular a média
+	double sum = 0;
+	for (int i = 0; i < this->cycle; i++) {
+		sum += this->bestFitnessArray[i];
+	}
+	this->average = (double) sum / (double) this->cycle;
+	// Calcuar a variância
+	sum = 0;
+	for (int i = 0; i < this->cycle; i++) {
+		sum += pow(this->bestFitnessArray[i] - average, 2);
+	}
+	this->variance = (double) sum / (double) this->cycle;
+	// Calculando o desvio padrão
+	this->standard_deviation = pow(variance, 0.5);
 }

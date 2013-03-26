@@ -29,6 +29,13 @@ public:
 	double bestFitness;
 	double worseFitness;
 
+	vector<double> bestFitnessArray;
+
+	// métricas
+	double average;
+	double variance;
+	double standard_deviation;
+
 	BCO(int populationSize, int maxNumCycles, int plantSize, int intervalSize,
 			SistemaHidroeletrico* sistemaHidroeletrico);
 
@@ -47,6 +54,7 @@ private:
 	int upperBound;
 	int lowerBound;
 	int bestSolutionAt;
+	// Objects
 	Conversor conversor;
 	Sugeno sugeno;
 	vector<Source*> sources;
@@ -65,6 +73,7 @@ private:
 	void sendScoutBees();
 	void resetBestRoute();
 	void desnormalizarRotasFinais();
+	void calculateMetrics();
 };
 
 #endif /* BCO_H_ */

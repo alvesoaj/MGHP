@@ -23,7 +23,11 @@ private:
 	Conversor conversor;
 	vector<vector<double> > volumes;
 	vector<vector<double> > vazoes;
-	vector<double> geracoesTotais;
+	vector<double> geracoes;
+	vector<double> geracoesComplementares;
+	vector<vector<double> > geracoesIndividuais;
+	vector<vector<double> > vazoesDefluente;
+	vector<vector<double> > vazoesTurbinada;
 	vector<HidroeletricaReservatorio*> usinas;
 
 public:
@@ -73,7 +77,15 @@ public:
 
 	double calcularEnergiaArmazenadaSistemaMinima();
 
-	vector<double> getGeracoesTotais();
+	vector<double> getGeracoes();
+
+	vector<double> getGeracoesComplementares();
+
+	vector<vector<double> > getGeracoesIndividuais();
+
+	vector<vector<double> > getVazoesDefluente();
+
+	vector<vector<double> > getVazoesTurbinada();
 };
 
 #endif /* SISTEMAHIDROELETRICO_H_ */

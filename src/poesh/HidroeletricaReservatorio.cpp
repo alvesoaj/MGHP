@@ -129,9 +129,11 @@ double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 
 double HidroeletricaReservatorio::calcularGeracaoHidraulica(
 		double alturaQuedaLiquida, double vazao, double engolimento) {
-	if (vazao < engolimento) {
-		engolimento = vazao;
-	}
+	/*
+	 if (vazao < engolimento) {
+	 engolimento = vazao;
+	 }
+	 */
 	double geracaoHidraulica = this->coeficienteProdutibilidadeEspecifica
 			* alturaQuedaLiquida * engolimento;
 	return geracaoHidraulica;

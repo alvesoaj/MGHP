@@ -11,6 +11,7 @@
 #include <fstream> // Para manipular arquivos
 #include <vector> // Para fácil uso de vetores
 #include <string> // Para trabalhar fácil com strings
+#include <iomanip>
 #include <sstream> // Para trabalhar fácil com strings
 #include <math.h> // Para ajudar em calculos matemáticos
 #include <time.h> // Calcular o tempo de execução
@@ -34,8 +35,10 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 200
-#define MAX_NUM_CYCLES 5000
+#define BCO_POPULATION_SIZE 30
+#define MAX_NUM_CYCLES 1000
+// Constantes PROGRAMA
+#define NUMBER_OF_TESTS 30
 
 // Variáveis
 Conversor conversor;
@@ -46,11 +49,18 @@ double piorCusto;
 vector<vector<double> > melhoresVolumes;
 vector<vector<double> > pioresVolumes;
 
+// métricas
+double average = 0.0;
+double variance = 0.0;
+double standard_deviation = 0.0;
+
 string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
 void carregar_valores();
 
 int main(int argc, char *argv[]) {
+	cout.precision(11);
+
 	clock_t time_start = clock();
 
 	// Inicializando o gerador de números randômicos com um seed temporal
@@ -149,8 +159,6 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
-	cout.precision(11);
-
 	/*
 	 double engolimento = emborcacao->calcularEngolimentoMaximo(8000, 600);
 	 cout << "qMAX: " << engolimento << endl;
@@ -163,12 +171,9 @@ int main(int argc, char *argv[]) {
 	 cin.get();
 	 */
 
-	double custo = sistemaHidroeletrico->calcularCustoTotal();
-
-	cout << "Custo Total (Arquivos): " << custo << endl;
-
+	// double custo = sistemaHidroeletrico->calcularCustoTotal();
+	// cout << "Custo Total (Arquivos): " << custo << endl;
 	// cin.get();
-
 	// --------------------------------------------------------------------------  ACO
 	/*
 	 string tec = "ACO";
@@ -183,78 +188,185 @@ int main(int argc, char *argv[]) {
 	 piorCusto = aco.worseFitness;
 	 pioresVolumes = aco.worseRoutes;
 	 */
-	// --------------------------------------------------------------------------  BCO
-	string tec = "BCO";
-	BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
-			INTERVALOS, sistemaHidroeletrico);
 
-	bco.calculateSolution();
+	for (int nt = 0; nt < NUMBER_OF_TESTS; nt++) {
+		cout << "----- Teste: " << nt << endl;
 
-	melhorCusto = bco.bestFitness;
-	melhoresVolumes = bco.bestSolutions;
-	piorCusto = bco.worseFitness;
-	pioresVolumes = bco.worseSolutions;
+		// --------------------------------------------------------------------------  BCO
+		string tec = "BCO";
+		BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
+				INTERVALOS, sistemaHidroeletrico);
+
+		bco.calculateSolution();
+
+		melhorCusto = bco.bestFitness;
+		melhoresVolumes = bco.bestSolutions;
+		piorCusto = bco.worseFitness;
+		pioresVolumes = bco.worseSolutions;
+		average = bco.average;
+		variance = bco.variance;
+		standard_deviation = bco.standard_deviation;
+
+		// --------------------------------------------------------------------------
+		cout << "\nMedia: " << average << ", Variância: " << variance
+				<< ", Desvio Padrão: " << standard_deviation << "\n" << endl;
+
+		// --------------------------------------------------------------------------
+		// cout << "\nPior Custo (" + tec + "): " << piorCusto << endl;
+
+		// --------------------------------------------------------------------------
+		string temp = "";
+		/*
+		 for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+		 for (int i = 0; i < INTERVALOS; i++) {
+		 temp += number_to_String(pioresVolumes[u][i]);
+		 if (i < (INTERVALOS - 1)) {
+		 temp += ", ";
+		 }
+		 }
+		 temp += "\n";
+		 }
+
+		 cout << "Pior rota (" + tec + "):\n" << temp << endl;
+		 */
+
+		// --------------------------------------------------------------------------
+		for (int i = 0; i < MAX_NUM_CYCLES; i++) {
+			temp += number_to_String(bco.bestFitnessArray[i]);
+			if (i < (MAX_NUM_CYCLES - 1)) {
+				temp += ", ";
+			}
+		}
+		temp += "\n";
+
+		cout << "Evolução melhores custos (" + tec + "):\n" << temp << endl;
+
+		// --------------------------------------------------------------------------
+
+		sistemaHidroeletrico->setVolumes(melhoresVolumes);
+
+		sistemaHidroeletrico->calcularCustoTotal();
+
+		// --------------------------------------------------------------------------
+		vector<vector<double> > geracoesIndividuais =
+				sistemaHidroeletrico->getGeracoesIndividuais();
+		temp = "";
+		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+			// temp += "\tU(" + number_to_String(u) + "): ";
+			temp += "\t";
+			for (int i = 0; i < INTERVALOS; i++) {
+				temp += number_to_String(geracoesIndividuais[u][i]);
+				if (i < (INTERVALOS - 1)) {
+					temp += ", ";
+				}
+			}
+			temp += "\n";
+		}
+
+		cout << "Gerações Individuais (Melhor Solução) (" + tec + "):\n" << temp
+				<< endl;
+
+		// --------------------------------------------------------------------------
+		vector<double> geracoes = sistemaHidroeletrico->getGeracoes();
+
+		temp = "\t";
+		for (int i = 0; i < geracoes.size(); i++) {
+			temp += number_to_String(geracoes[i]);
+			if (i < (geracoes.size() - 1)) {
+				temp += ", ";
+			}
+		}
+		cout << "Gerações (Melhor Solução) (" + tec + "):\n" << temp << endl;
+
+		// --------------------------------------------------------------------------
+		vector<double> geracoesComplementares =
+				sistemaHidroeletrico->getGeracoesComplementares();
+
+		temp = "\t";
+		for (int i = 0; i < geracoes.size(); i++) {
+			temp += number_to_String(geracoesComplementares[i]);
+			if (i < (geracoes.size() - 1)) {
+				temp += ", ";
+			}
+		}
+		cout << "\nGerações Complementares (Melhor Solução) (" + tec + "):\n"
+				<< temp << endl;
+
+		// --------------------------------------------------------------------------
+		temp = "\t";
+		for (int i = 1; i < INTERVALOS; i++) {
+			string res = number_to_String(
+					sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(i));
+			if (i < (INTERVALOS - 1)) {
+				temp += res + ", ";
+			} else {
+				temp += res;
+			}
+		}
+		cout << "\nEAS (Melhor Solução) (" + tec + "):\n" << temp << endl;
+
+		// --------------------------------------------------------------------------
+		vector<vector<double> > vazoesDefluente =
+				sistemaHidroeletrico->getVazoesDefluente();
+
+		temp = "";
+		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+			// temp += "\tU(" + number_to_String(u) + "): ";
+			temp += "\t";
+			for (int i = 0; i < INTERVALOS; i++) {
+				temp += number_to_String(vazoesDefluente[u][i]);
+				if (i < (INTERVALOS - 1)) {
+					temp += ", ";
+				}
+			}
+			temp += "\n";
+		}
+
+		cout << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n" << temp
+				<< endl;
+
+		// --------------------------------------------------------------------------
+		temp = "";
+		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+			// temp += "\tU(" + number_to_String(u) + "): ";
+			temp += "\t";
+			for (int i = 1; i < INTERVALOS; i++) {
+				double vol_med = (melhoresVolumes[u][i - 1]
+						+ melhoresVolumes[u][i]) / 2;
+				temp += number_to_String(vol_med);
+				if (i < (INTERVALOS - 1)) {
+					temp += ", ";
+				}
+			}
+			temp += "\n";
+		}
+
+		cout << "Volume Médio (Melhor Solução) (" + tec + "):\n" << temp
+				<< endl;
+
+		// --------------------------------------------------------------------------
+		temp = "";
+		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
+			// temp += "\tU(" + number_to_String(u) + "): ";
+			temp += "\t";
+			for (int i = 0; i < INTERVALOS; i++) {
+				temp += number_to_String(melhoresVolumes[u][i]);
+				if (i < (INTERVALOS - 1)) {
+					temp += ", ";
+				}
+			}
+			temp += "\n";
+		}
+
+		cout << "Volume Final (Melhor Solução) (" + tec + "):\n" << temp
+				<< endl;
+
+		// --------------------------------------------------------------------------
+
+		cout << "Melhor Custo (" + tec + "): " << melhorCusto << endl;
+	}
 
 	// --------------------------------------------------------------------------
-	cout << "\nPior Custo (" + tec + "): " << piorCusto << endl;
-
-	string temp = "";
-	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
-		for (int i = 0; i < INTERVALOS; i++) {
-			temp += number_to_String(pioresVolumes[u][i]);
-			if (i < (INTERVALOS - 1)) {
-				temp += ", ";
-			}
-		}
-		temp += "\n";
-	}
-
-	cout << "Pior rota (" + tec + "):\n" << temp << endl;
-
-	// sistemaHidroeletrico->setVolumes(aco.worseRoutes);
-	// sistemaHidroeletrico->calcularCustoTotal();
-
-	cout << "Melhor Custo (" + tec + "): " << melhorCusto << endl;
-
-	temp = "";
-	for (int u = 0; u < QUANTIDADE_USINAS; u++) {
-		for (int i = 0; i < INTERVALOS; i++) {
-			temp += number_to_String(melhoresVolumes[u][i]);
-			if (i < (INTERVALOS - 1)) {
-				temp += ", ";
-			}
-		}
-		temp += "\n";
-	}
-
-	cout << "Melhor rota (" + tec + "):\n" << temp << endl;
-
-	sistemaHidroeletrico->setVolumes(melhoresVolumes);
-	sistemaHidroeletrico->calcularCustoTotal();
-
-	vector<double> geracoes = sistemaHidroeletrico->getGeracoesTotais();
-
-	temp = "";
-	for (int i = 0; i < geracoes.size(); i++) {
-		temp += number_to_String(geracoes[i]);
-		if (i < (geracoes.size() - 1)) {
-			temp += ", ";
-		}
-	}
-	cout << "\nGerações (Melhor Solução):\n" << temp << endl;
-
-	temp = "";
-	for (int i = 1; i < INTERVALOS; i++) {
-		string res = number_to_String(
-				sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(i));
-		if (i < (INTERVALOS - 1)) {
-			temp += "I(" + number_to_String(i) + ") " + res + ", ";
-		} else {
-			temp += "I(" + number_to_String(i) + ") " + res;
-		}
-	}
-	cout << "\nEAS (Melhor Solução):\n" << temp << endl;
-
 	cout << "\nTempo de execução (MGHP): "
 			<< calcular_tempo(time_start, clock()) << " ms" << endl;
 
@@ -264,7 +376,7 @@ int main(int argc, char *argv[]) {
 
 string number_to_String(double n) {
 	stringstream out;
-	out << n;
+	out << setprecision(11) << n;
 	return out.str();
 }
 

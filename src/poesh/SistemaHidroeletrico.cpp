@@ -183,6 +183,7 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
 			 */
 			double alturaQuedaLiquida = this->calcularAlturaQuedaLiquidaUsina(
 					codigo, volume, vazaoDefluente);
+
 			return this->usinas.at(i)->calcularGeracaoHidraulica(
 					alturaQuedaLiquida, vazaoDefluente, engolimento);
 		}
@@ -192,25 +193,39 @@ double SistemaHidroeletrico::calcularGeracaoHidraulicaUsina(unsigned int codigo,
 
 double SistemaHidroeletrico::calcularCustoTotal() {
 	double geracaoHidraulicaIntervalos[this->intervalos];
-	geracoesTotais.clear();
+	geracoes.clear();
+	geracoesComplementares.clear();
+	geracoesIndividuais.clear();
+	vazoesDefluente.clear();
 
 	for (int intervalo = 1; intervalo < this->intervalos; intervalo++) {
 		double geracaoHidraulicaTotal = 0.0;
+		vector<double> tempGer;
+		vector<double> tempVarDef;
 
 		for (unsigned int indiceUsina = 0; indiceUsina < this->usinas.size();
 				indiceUsina++) {
+
 			double volumeMedio = (this->volumes[indiceUsina][intervalo - 1]
 					+ this->volumes[indiceUsina][intervalo]) / 2.0;
-			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
-					indiceUsina, volumeMedio,
-					this->calcularVazaoDefluente(indiceUsina, intervalo));
 
+			double vazaoDefluente = this->calcularVazaoDefluente(indiceUsina,
+					intervalo);
+
+			tempVarDef.push_back(vazaoDefluente);
+
+			double geracao_hidraulica = this->calcularGeracaoHidraulicaUsina(
+					indiceUsina, volumeMedio, vazaoDefluente);
+
+			tempGer.push_back(geracao_hidraulica);
 			geracaoHidraulicaTotal += geracao_hidraulica;
 
 			// cout << "gh(" << intervalo << ", " << indiceUsina << "): " << geracao_hidraulica << endl;
 		}
 		geracaoHidraulicaIntervalos[intervalo] = geracaoHidraulicaTotal;
-		geracoesTotais.push_back(geracaoHidraulicaTotal);
+		geracoes.push_back(geracaoHidraulicaTotal);
+		geracoesIndividuais.push_back(tempGer);
+		vazoesDefluente.push_back(tempVarDef);
 		// cout << "ghTOT(" << intervalo << "): " << geracaoHidraulicaTotal << endl;
 	}
 
@@ -223,6 +238,7 @@ double SistemaHidroeletrico::calcularCustoTotal() {
 		} else {
 			geracaoComplementar = 0.0;
 		}
+		geracoesComplementares.push_back(geracaoComplementar);
 		// cout << "GC(" << i << "): " << geracaoComplementar << endl;
 		needSum += geracaoComplementar;
 	}
@@ -344,6 +360,22 @@ double SistemaHidroeletrico::calcularEnergiaArmazenadaSistemaMinima() {
 	return 0.0;
 }
 
-vector<double> SistemaHidroeletrico::getGeracoesTotais() {
-	return this->geracoesTotais;
+vector<double> SistemaHidroeletrico::getGeracoes() {
+	return this->geracoes;
+}
+
+vector<double> SistemaHidroeletrico::getGeracoesComplementares() {
+	return this->geracoesComplementares;
+}
+
+vector<vector<double> > SistemaHidroeletrico::getGeracoesIndividuais() {
+	return this->geracoesIndividuais;
+}
+
+vector<vector<double> > SistemaHidroeletrico::getVazoesDefluente() {
+	return this->vazoesDefluente;
+}
+
+vector<vector<double> > SistemaHidroeletrico::getVazoesTurbinada() {
+	return this->vazoesTurbinada;
 }
