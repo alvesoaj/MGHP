@@ -35,10 +35,10 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 30
+#define BCO_POPULATION_SIZE 200
 #define MAX_NUM_CYCLES 5000
 // Constantes PROGRAMA
-#define NUMBER_OF_TESTS 20
+#define NUMBER_OF_TESTS 1
 
 // Variáveis
 Conversor conversor;
@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
 		standard_deviation = bco.standard_deviation;
 
 		// --------------------------------------------------------------------------
-		myfile << setprecision(11) << "Melhor sulução encontrada em: "
+		myfile << setprecision(11) << "Melhor solução encontrada em: "
 				<< bco.bestSolutionAt << endl;
 
 		// --------------------------------------------------------------------------
