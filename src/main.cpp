@@ -268,9 +268,9 @@ int main(int argc, char *argv[]) {
 		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 			// temp += "\tU(" + number_to_String(u) + "): ";
 			temp += "\t";
-			for (int i = 0; i < INTERVALOS; i++) {
+			for (int i = 0; i < geracoesIndividuais.size(); i++) {
 				temp += number_to_String(geracoesIndividuais[u][i]);
-				if (i < (INTERVALOS - 1)) {
+				if (i < (geracoesIndividuais.size() - 1)) {
 					temp += ", ";
 				}
 			}
@@ -327,9 +327,9 @@ int main(int argc, char *argv[]) {
 		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 			// temp += "\tU(" + number_to_String(u) + "): ";
 			temp += "\t";
-			for (int i = 0; i < INTERVALOS; i++) {
+			for (int i = 0; i < vazoesDefluente.size(); i++) {
 				temp += number_to_String(vazoesDefluente[u][i]);
-				if (i < (INTERVALOS - 1)) {
+				if (i < (vazoesDefluente.size() - 1)) {
 					temp += ", ";
 				}
 			}
