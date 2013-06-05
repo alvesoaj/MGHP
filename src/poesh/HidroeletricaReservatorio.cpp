@@ -85,9 +85,10 @@ double HidroeletricaReservatorio::calcularEngolimentoMaximo(double volume,
 			this->casaDeMaquinas->calcularEngolimentoMaximoTotal(
 					alturaQuedaLiquida);
 	double vazaoTurbinada = engolimentoEfetivo;
-	double vazaoVertida;
 
 	do {
+		double vazaoVertida;
+
 		if (engolimentoMaximoAtual >= vazaoDefluenteBase) {
 			vazaoDefluente = engolimentoMaximoAtual;
 			vazaoTurbinada = engolimentoMaximoAtual;

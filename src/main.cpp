@@ -35,7 +35,7 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 60
+#define BCO_POPULATION_SIZE 200
 #define MAX_NUM_CYCLES 5000
 // Constantes PROGRAMA
 #define NUMBER_OF_TESTS 10
@@ -161,36 +161,6 @@ int main(int argc, char *argv[]) {
 
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
-	/*
-	 double engolimento = emborcacao->calcularEngolimentoMaximo(8000, 600);
-	 cout << "qMAX: " << engolimento << endl;
-	 cin.get();
-	 */
-
-	/*
-	 double geracao = sistemaHidroeletrico->calcularGeracaoHidraulicaUsina(1, 17027.0, 3090.97297780);
-	 cout << "g: " << geracao << endl;
-	 cin.get();
-	 */
-
-	// double custo = sistemaHidroeletrico->calcularCustoTotal();
-	// cout << "Custo Total (Arquivos): " << custo << endl;
-	// cin.get();
-	// --------------------------------------------------------------------------  ACO
-	/*
-	 string tec = "ACO";
-	 ACO aco = ACO(ACO_POPULATION_SIZE, QUANTIDADE_USINAS, INTERVALOS,
-	 DISCRETIZACAO, MAX_ITERATIONS, PHEROMONE_RATE, EVAPORATION_RATE,
-	 POSITIVE_CONTS, sistemaHidroeletrico);
-
-	 aco.calculateSolution();
-
-	 melhorCusto = aco.bestFitness;
-	 melhoresVolumes = aco.bestRoutes;
-	 piorCusto = aco.worseFitness;
-	 pioresVolumes = aco.worseRoutes;
-	 */
-
 	ofstream myfile;
 
 	string file_name = "assets/testes/" + path + "/teste-"
@@ -198,7 +168,7 @@ int main(int argc, char *argv[]) {
 			+ number_to_String(BCO_POPULATION_SIZE) + "abelhas-"
 			+ number_to_String(MAX_NUM_CYCLES) + "ciclos.txt";
 
-	myfile.open(file_name.c_str(), ios::app);
+	myfile.open(file_name.c_str(), ios::out);
 
 	// --------------------------------------------------------------------------  BCO
 	string tec = "BCO";
