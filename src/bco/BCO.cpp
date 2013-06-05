@@ -19,13 +19,17 @@ BCO::BCO(int populationSize, int maxNumCycles, int plantSize, int intervalSize,
 	this->foodSourcesSize = this->populationSize / 2;
 	this->limit = (this->populationSize * this->intervalSize) / 2;
 
+	this->sugeno = Sugeno();
+
+	this->reset();
+}
+
+void BCO::reset() {
 	this->bestSolutionAt = INVALID;
 
 	this->average = 0.0;
 	this->variance = 0.0;
 	this->standard_deviation = 0.0;
-
-	this->sugeno = Sugeno();
 }
 
 // Métodos públicos
@@ -148,12 +152,10 @@ void BCO::sendEmployedBees() {
 	int neighbour = 0;
 	double r = 0.0;
 
-	double
-			energiaArmazenadaSistemaMaxima =
-					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
-	double
-			energiaArmazenadaSistemaMinima =
-					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+	double energiaArmazenadaSistemaMaxima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double energiaArmazenadaSistemaMinima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
 
 	for (int i = 0; i < this->foodSourcesSize; i++) {
 		/* copiar solução atual */
@@ -176,10 +178,9 @@ void BCO::sendEmployedBees() {
 			 } while (neighbour == i); // Impedindo que seja a mesma solução
 			 */
 			this->resetBestRoute();
-			double
-					energiaArmazenadaSistema =
-							this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
-									param_to_modify);
+			double energiaArmazenadaSistema =
+					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+							param_to_modify);
 			// cout << "EAS: " << energiaArmazenadaSistema << endl;
 
 			double energiaArmazenadaSistemaNormalizada =
@@ -202,12 +203,14 @@ void BCO::sendEmployedBees() {
 				/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
 				r = conversor.get_random_number();
 
-				double phi = (r - 0.5) * 2 * (1
-						- (this->sources[neighbour]->getTrail() / this->limit));
+				double phi = (r - 0.5) * 2
+						* (1
+								- (this->sources[neighbour]->getTrail()
+										/ this->limit));
 
-				double newValue =
-						newSolutions[p][param_to_modify] + ((volumeHeuristica
-								- newSolutions[p][param_to_modify]) * phi);
+				double newValue = newSolutions[p][param_to_modify]
+						+ ((volumeHeuristica - newSolutions[p][param_to_modify])
+								* phi);
 
 				if (newValue > 1) {
 					newValue = 1.0;
@@ -235,8 +238,9 @@ void BCO::sendEmployedBees() {
 void BCO::calculateProbabilities() {
 	// calcular a probabilidade de cada fonte de comida ser escolhida
 	for (int i = 0; i < this->foodSourcesSize; i++) {
-		double prob = (1
-				- (this->sources[i]->getFitness() / this->worseFitness)) + 0.01;
+		double prob =
+				(1 - (this->sources[i]->getFitness() / this->worseFitness))
+						+ 0.01;
 		// cout << "Prob: " << prob << endl;
 		this->sources[i]->setProbabilitie(prob);
 	}
@@ -249,12 +253,10 @@ void BCO::sendOnlookerBees() {
 	int neighbour = 0;
 	double r = 0.0;
 
-	double
-			energiaArmazenadaSistemaMaxima =
-					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
-	double
-			energiaArmazenadaSistemaMinima =
-					this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
+	double energiaArmazenadaSistemaMaxima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMaxima();
+	double energiaArmazenadaSistemaMinima =
+			this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistemaMinima();
 
 	while (transitorIndex < this->foodSourcesSize) {
 		/* copiar solução atual */
@@ -283,10 +285,9 @@ void BCO::sendOnlookerBees() {
 				 } while (neighbour == foodSourceIndex); // Impedindo que seja a mesma solução
 				 */
 				this->resetBestRoute();
-				double
-						energiaArmazenadaSistema =
-								this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
-										param_to_modify);
+				double energiaArmazenadaSistema =
+						this->sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+								param_to_modify);
 
 				// cout << "EAS: " << energiaArmazenadaSistema << endl;
 
@@ -300,8 +301,8 @@ void BCO::sendOnlookerBees() {
 				// cout << "EASn: " << energiaArmazenadaSistemaNormalizada << endl;
 
 				for (int p = 0; p < this->plantSize; p++) {
-					double volumeHeuristica = sugeno.calcularVolumeHeuristica(
-							p, energiaArmazenadaSistemaNormalizada);
+					double volumeHeuristica = sugeno.calcularVolumeHeuristica(p,
+							energiaArmazenadaSistemaNormalizada);
 
 					// cout << "H: " << volumeHeuristica << endl;
 					// cout << "nsV: " << newSolutions[p][param_to_modify] << endl;
@@ -309,9 +310,10 @@ void BCO::sendOnlookerBees() {
 					/* v_{ij}=x_{ij}+\phi_{ij}*(x_{kj}-x_{ij}) */
 					r = conversor.get_random_number();
 
-					double phi = (r) * (1
-							- (this->sources[neighbour]->getTrail()
-									/ this->limit));
+					double phi = (r)
+							* (1
+									- (this->sources[neighbour]->getTrail()
+											/ this->limit));
 
 					double newValue = newSolutions[p][param_to_modify]
 							+ ((volumeHeuristica
@@ -384,8 +386,8 @@ void BCO::desnormalizarRotasFinais() {
 		double volumeMaximo =
 				this->sistemaHidroeletrico->getVolumeMaximoOperativoUsina(p);
 		for (int i = 0; i < this->intervalSize; i++) {
-			double volume = this->desnormalizarVolume(
-					this->bestSolutions[p][i], volumeMinimo, volumeMaximo);
+			double volume = this->desnormalizarVolume(this->bestSolutions[p][i],
+					volumeMinimo, volumeMaximo);
 			this->bestSolutions[p][i] = volume;
 			volume = this->desnormalizarVolume(this->worseSolutions[p][i],
 					volumeMinimo, volumeMaximo);

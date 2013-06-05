@@ -42,6 +42,7 @@ public:
 
 	// Métodos públicos
 	void calculateSolution();
+	void reset();
 
 private:
 	int cycle;

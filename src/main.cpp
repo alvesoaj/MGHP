@@ -35,10 +35,10 @@ using namespace std;
 #define EVAPORATION_RATE 0.25
 #define POSITIVE_CONTS 0.1
 // Constantes BCO
-#define BCO_POPULATION_SIZE 200
+#define BCO_POPULATION_SIZE 60
 #define MAX_NUM_CYCLES 5000
 // Constantes PROGRAMA
-#define NUMBER_OF_TESTS 1
+#define NUMBER_OF_TESTS 10
 
 // Variáveis
 Conversor conversor;
@@ -57,6 +57,8 @@ double standard_deviation = 0.0;
 string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
 void carregar_valores();
+
+string path = "1936-1941";
 
 int main(int argc, char *argv[]) {
 	cout.precision(11);
@@ -191,21 +193,24 @@ int main(int argc, char *argv[]) {
 
 	ofstream myfile;
 
-	string file_name = "assets/teste-" + number_to_String(NUMBER_OF_TESTS)
-			+ "_" + number_to_String(BCO_POPULATION_SIZE) + "abelhas-"
+	string file_name = "assets/testes/" + path + "/teste-"
+			+ number_to_String(NUMBER_OF_TESTS) + "_"
+			+ number_to_String(BCO_POPULATION_SIZE) + "abelhas-"
 			+ number_to_String(MAX_NUM_CYCLES) + "ciclos.txt";
 
-	myfile.open(file_name.c_str(), ios::out);
+	myfile.open(file_name.c_str(), ios::app);
+
+	// --------------------------------------------------------------------------  BCO
+	string tec = "BCO";
+	BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
+			INTERVALOS, sistemaHidroeletrico);
 
 	for (int nt = 0; nt < NUMBER_OF_TESTS; nt++) {
 		cout << "----- Teste: " << nt << endl;
 		myfile << "----- Teste: " << nt << endl;
 
 		// --------------------------------------------------------------------------  BCO
-		string tec = "BCO";
-		BCO bco = BCO(BCO_POPULATION_SIZE, MAX_NUM_CYCLES, QUANTIDADE_USINAS,
-				INTERVALOS, sistemaHidroeletrico);
-
+		bco.reset();
 		bco.calculateSolution();
 
 		melhorCusto = bco.bestFitness;
@@ -222,8 +227,8 @@ int main(int argc, char *argv[]) {
 
 		// --------------------------------------------------------------------------
 		myfile << setprecision(11) << "\nMedia: " << average << ", Variância: "
-				<< variance << ", Desvio Padrão: " << standard_deviation
-				<< "\n" << endl;
+				<< variance << ", Desvio Padrão: " << standard_deviation << "\n"
+				<< endl;
 
 		// --------------------------------------------------------------------------
 		// cout << "\nPior Custo (" + tec + "): " << piorCusto << endl;
@@ -268,7 +273,7 @@ int main(int argc, char *argv[]) {
 		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 			// temp += "\tU(" + number_to_String(u) + "): ";
 			temp += "\t";
-			for (int i = 0; i < geracoesIndividuais.size(); i++) {
+			for (unsigned int i = 0; i < geracoesIndividuais.size(); i++) {
 				temp += number_to_String(geracoesIndividuais[u][i]);
 				if (i < (geracoesIndividuais.size() - 1)) {
 					temp += ", ";
@@ -284,7 +289,7 @@ int main(int argc, char *argv[]) {
 		vector<double> geracoes = sistemaHidroeletrico->getGeracoes();
 
 		temp = "\t";
-		for (int i = 0; i < geracoes.size(); i++) {
+		for (unsigned int i = 0; i < geracoes.size(); i++) {
 			temp += number_to_String(geracoes[i]);
 			if (i < (geracoes.size() - 1)) {
 				temp += ", ";
@@ -297,7 +302,7 @@ int main(int argc, char *argv[]) {
 				sistemaHidroeletrico->getGeracoesComplementares();
 
 		temp = "\t";
-		for (int i = 0; i < geracoes.size(); i++) {
+		for (unsigned int i = 0; i < geracoes.size(); i++) {
 			temp += number_to_String(geracoesComplementares[i]);
 			if (i < (geracoes.size() - 1)) {
 				temp += ", ";
@@ -327,7 +332,7 @@ int main(int argc, char *argv[]) {
 		for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 			// temp += "\tU(" + number_to_String(u) + "): ";
 			temp += "\t";
-			for (int i = 0; i < vazoesDefluente.size(); i++) {
+			for (unsigned int i = 0; i < vazoesDefluente.size(); i++) {
 				temp += number_to_String(vazoesDefluente[u][i]);
 				if (i < (vazoesDefluente.size() - 1)) {
 					temp += ", ";
@@ -336,8 +341,8 @@ int main(int argc, char *argv[]) {
 			temp += "\n";
 		}
 
-		myfile << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n"
-				<< temp << endl;
+		myfile << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n" << temp
+				<< endl;
 
 		// --------------------------------------------------------------------------
 		temp = "";
@@ -422,8 +427,8 @@ void carregar_valores() {
 	} else {
 		cout << "Impossivel abrir o arquivo!";
 	}
-	//ifstream emborcacao_vazoes_file("./assets/Emborcacao-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
-	ifstream emborcacao_vazoes_file("./assets/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream emborcacao_vazoes_file(
+			"./assets/testes/1936-1941/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -459,7 +464,8 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	// ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
-	ifstream itumbiara_vazoes_file("./assets/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+	ifstream itumbiara_vazoes_file(
+			"./assets/testes/1936-1941/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
