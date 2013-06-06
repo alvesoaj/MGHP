@@ -62,7 +62,7 @@ string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
 void carregar_valores();
 
-string path = "1951-1956";
+string path = "1980-1985";
 
 int main(int argc, char *argv[]) {
 	cout.precision(11);
@@ -166,7 +166,12 @@ int main(int argc, char *argv[]) {
 	sistemaHidroeletrico->adicionarUsinaHidroeletrica(emborcacao);
 
 	for (int ps = 0; ps < BCO_P_SIZE; ps++) {
+		cout << ">>>>>>>>>>>>> Teste com " << bco_population_size[ps] << " abelhas"
+				<< endl;
 		for (int nc = 0; nc < M_NUM_CY; nc++) {
+			cout << ">>>>>> Teste em " << max_num_cycles[nc] << " ciclos"
+					<< endl;
+
 			ofstream myfile;
 
 			string file_name = "assets/testes/" + path + "/teste-"
@@ -250,8 +255,7 @@ int main(int argc, char *argv[]) {
 				for (int u = 0; u < QUANTIDADE_USINAS; u++) {
 					// temp += "\tU(" + number_to_String(u) + "): ";
 					temp += "\t";
-					for (unsigned int i = 0; i < geracoesIndividuais.size();
-							i++) {
+					for (unsigned int i = 0; i < geracoesIndividuais.size(); i++) {
 						temp += number_to_String(geracoesIndividuais[u][i]);
 						if (i < (geracoesIndividuais.size() - 1)) {
 							temp += ", ";
@@ -260,9 +264,8 @@ int main(int argc, char *argv[]) {
 					temp += "\n";
 				}
 
-				myfile
-						<< "Gerações Individuais (Melhor Solução) (" + tec
-								+ "):\n" << temp << endl;
+				myfile << "Gerações Individuais (Melhor Solução) (" + tec
+						+ "):\n" << temp << endl;
 
 				// --------------------------------------------------------------------------
 				vector<double> geracoes = sistemaHidroeletrico->getGeracoes();
@@ -288,17 +291,17 @@ int main(int argc, char *argv[]) {
 						temp += ", ";
 					}
 				}
-				myfile
-						<< "\nGerações Complementares (Melhor Solução) (" + tec
-								+ "):\n" << temp << endl;
+				myfile << "\nGerações Complementares (Melhor Solução) (" + tec
+						+ "):\n" << temp << endl;
 
 				// --------------------------------------------------------------------------
 				temp = "\t";
 				for (int i = 1; i < INTERVALOS; i++) {
-					string res =
-							number_to_String(
-									sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
-											i));
+					string
+							res =
+									number_to_String(
+											sistemaHidroeletrico->calcularEnergiaArmazenadaSistema(
+													i));
 					if (i < (INTERVALOS - 1)) {
 						temp += res + ", ";
 					} else {
@@ -325,8 +328,8 @@ int main(int argc, char *argv[]) {
 					temp += "\n";
 				}
 
-				myfile << "\nVazões Defluente (Melhor Solução) (" + tec + "):\n"
-						<< temp << endl;
+				myfile << "\nVazões Defluente (Melhor Solução) (" + tec
+						+ "):\n" << temp << endl;
 
 				// --------------------------------------------------------------------------
 				temp = "";
@@ -413,7 +416,7 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	ifstream emborcacao_vazoes_file(
-			"./assets/testes/1951-1956/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+			"./assets/testes/1980-1985/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -450,7 +453,7 @@ void carregar_valores() {
 	}
 	// ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
 	ifstream itumbiara_vazoes_file(
-			"./assets/testes/1951-1956/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+			"./assets/testes/1980-1985/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
