@@ -62,7 +62,7 @@ string number_to_String(double n);
 double calcular_tempo(clock_t start, clock_t end);
 void carregar_valores();
 
-string path = "1980-1985";
+string path = "2000-2005";
 
 int main(int argc, char *argv[]) {
 	cout.precision(11);
@@ -416,7 +416,7 @@ void carregar_valores() {
 		cout << "Impossivel abrir o arquivo!";
 	}
 	ifstream emborcacao_vazoes_file(
-			"./assets/testes/1980-1985/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
+			"./assets/testes/2000-2005/X-Emborcacao-Vazoes.txt"); // ifstream = padrão ios:in
 	if (emborcacao_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
@@ -453,7 +453,7 @@ void carregar_valores() {
 	}
 	// ifstream itumbiara_vazoes_file("./assets/Itumbiara-Vazoes-Naturais-1936-1941.txt"); // ifstream = padrão ios:in
 	ifstream itumbiara_vazoes_file(
-			"./assets/testes/1980-1985/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
+			"./assets/testes/2000-2005/X-Itumbiara-Vazoes.txt"); // ifstream = padrão ios:in
 	if (itumbiara_vazoes_file.is_open()) {
 		int contador_interacao = 0;
 		//enquanto end of file for false continua
