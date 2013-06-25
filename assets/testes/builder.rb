@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'writeexcel'
 
 def read_file(file_name)
@@ -51,13 +50,23 @@ end
 
 def save_data()
 
-	folders = ["1936-1941", "1951-1956", "1971-1976", "1980-1985", "2000-2005"]
-	archives = ["teste-10_30abelhas-1000ciclos", "teste-10_30abelhas-2000ciclos", 
-		"teste-10_30abelhas-5000ciclos", "teste-10_60abelhas-1000ciclos",
-		"teste-10_60abelhas-2000ciclos", "teste-10_60abelhas-5000ciclos",
-		"teste-10_120abelhas-1000ciclos", "teste-10_120abelhas-2000ciclos",
-		"teste-10_120abelhas-5000ciclos", "teste-10_200abelhas-1000ciclos",
-		"teste-10_200abelhas-2000ciclos", "teste-10_200abelhas-5000ciclos"]
+	#folders = ["1936-1941", "1951-1956", "1971-1976", "1980-1985", "2000-2005"]
+	folders = ["MLT"]
+	
+	#archives = ["teste-10_30abelhas-1000ciclos", "teste-10_30abelhas-2000ciclos", 
+	#	"teste-10_30abelhas-5000ciclos", "teste-10_60abelhas-1000ciclos",
+	#	"teste-10_60abelhas-2000ciclos", "teste-10_60abelhas-5000ciclos",
+	#	"teste-10_120abelhas-1000ciclos", "teste-10_120abelhas-2000ciclos",
+	#	"teste-10_120abelhas-5000ciclos", "teste-10_200abelhas-1000ciclos",
+	#	"teste-10_200abelhas-2000ciclos", "teste-10_200abelhas-5000ciclos"]
+
+	archives = ["teste-20_30abelhas-1000ciclos", "teste-20_30abelhas-2000ciclos", 
+		"teste-20_30abelhas-5000ciclos", "teste-20_60abelhas-1000ciclos",
+		"teste-20_60abelhas-2000ciclos", "teste-20_60abelhas-5000ciclos",
+		"teste-20_120abelhas-1000ciclos", "teste-20_120abelhas-2000ciclos",
+		"teste-20_120abelhas-5000ciclos", "teste-20_200abelhas-1000ciclos",
+		"teste-20_200abelhas-2000ciclos", "teste-20_200abelhas-5000ciclos"]
+	
 	usinas = ["Emborcação", "Itumbiara"]
 
 	folders.each do |folder|
