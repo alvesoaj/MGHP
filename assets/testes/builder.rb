@@ -174,6 +174,4 @@ def save_data()
 	end
 end
 
-path = "./1936-1941/teste-10_30abelhas-1000ciclos.txt"
-
 save_data()
